@@ -1,0 +1,153 @@
+name: build_compile_deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_compile:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-20.04, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies for Ubuntu
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev pkg-config build-essential curl
+
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install app dependencies for production
+        run: npm ci --production
+
+      - name: Build the app Windows
+        if: matrix.platform == 'windows-latest'
+        run: |
+          rustup target add i686-pc-windows-msvc
+          rustup target add x86_64-pc-windows-msvc
+          npm run tauri build -- --target i686-pc-windows-msvc
+          npm run tauri build -- --target x86_64-pc-windows-msvc
+        env: 
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+          
+      - name: Upload Artifact Windows
+        if: matrix.platform == 'windows-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-x86_x64
+          path: |
+            src-tauri/target/i686-pc-windows-msvc/release/bundle/msi/
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/
+          if-no-files-found: warn
+
+      - name: Build the app macOS
+        if: matrix.platform == 'macos-latest'
+        run: |
+          rustup target add aarch64-apple-darwin
+          rustup target add x86_64-apple-darwin
+          npm run tauri build -- --target aarch64-apple-darwin
+          npm run tauri build -- --target x86_64-apple-darwin
+        env: 
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+
+      - name: Compress dir to .zip macOS (aarch64)
+        if: matrix.platform == 'macos-latest'
+        uses: vimtor/action-zip@v1
+        with:
+          files: src-tauri/target/aarch64-apple-darwin/release/bundle/macos/
+          dest: CrzInstaller_aarch64_app.zip
+
+      - name: Compress dir to .zip macOS (x64)
+        if: matrix.platform == 'macos-latest'
+        uses: vimtor/action-zip@v1
+        with:
+          files: src-tauri/target/x86_64-apple-darwin/release/bundle/macos/
+          dest: CrzInstaller_x64_app.zip
+
+      - name: Upload Artifact macOS
+        if: matrix.platform == 'macos-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-silicium_intel
+          path: |
+            ${{ github.workspace }}/CrzInstaller_aarch64_app.zip
+            ${{ github.workspace }}/CrzInstaller_x64_app.zip
+            src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/
+            src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/
+          if-no-files-found: warn
+
+      - name: Build the app Linux
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          rustup target add aarch64-unknown-linux-gnu
+          rustup target add i686-unknown-linux-gnu
+          rustup target add x86_64-unknown-linux-gnu
+          npm run tauri build -- --target x86_64-unknown-linux-gnu
+        env: 
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+
+      - name: Upload Artifact Linux
+        if: matrix.platform == 'ubuntu-20.04'
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-ARM64_32-64bit
+          path: |
+            src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/appimage/
+            src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/deb/
+          if-no-files-found: warn
+
+  deploy:
+    needs: [build_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v3
+        # si aucun name, il récupére tout les artifacts uploader précédemment par défault.
+
+      - name: Chmod to AppImage (Linux)
+        run: |
+          cd linux-ARM64_32-64bit/appimage/
+          chmod a+x *.AppImage
+
+      - name: Add assets and publish Release to Github
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
+          name: 'v*'
+          body: 'Reddit Application - Distribution for Windows / MacOS / Linux'
+          draft: false
+          prerelease: false
+          files: |
+            windows-x86_x64/i686-pc-windows-msvc/release/bundle/msi/*
+            windows-x86_x64/x86_64-pc-windows-msvc/release/bundle/msi/*
+            macos-silicium_intel/CrzInstaller_aarch64_app.zip
+            macos-silicium_intel/CrzInstaller_x64_app.zip
+            macos-silicium_intel/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg
+            macos-silicium_intel/src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/*.dmg
+            linux-ARM64_32-64bit/appimage/*.AppImage
+            linux-ARM64_32-64bit/deb/*.deb

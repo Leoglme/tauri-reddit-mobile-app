@@ -1,4 +1,4 @@
-# Crzgames - Launcher
+# Reddit - Application Mobile/Desktop
 
 ## <span style="color: green;">Tech Stack 🛠</span>
 
@@ -6,7 +6,6 @@
 - Vue.js (framework front-end in Tauri)
 - Rust (back-end in Tauri)
 - NodeJS (environnement)
-- Mercure-SSE 
 
 <br />
 
@@ -19,12 +18,33 @@ It shows a concise list of information about the environment, Rust, Node.js and 
 npm run tauri info
 ```
 
+<br />
+
+
+## Icons - Generate icons for application
+1. Informations - Type files :
+```bash
+icon.icns=macOS
+icon.ico=Windows
+*.png=Linux
+Square*Logo.png& StoreLogo.png=Actuellement inutilisé mais destiné aux cibles AppX/MS Store.
+```
+2. Informations - Icon de base :
+```bash
+default format: .png
+default size : 1024x1024px with transparency 
+default name file : ./app-icon.png
+```
+3. Generate icons plateforms all :
+```bash
+npm run tauri icon
+```
 <br /><br />
 
 
 ## Setup Tauri for Windows
 1. Install Microsoft Visual Studio 2022 (MSVC v143 + Windows 10 SDK): https://visualstudio.microsoft.com/fr/vs/
-2. Install WebView2 : https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
+2. Install WebView2 (if windows <= 10) : https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 3. Install Rust : https://www.rust-lang.org/tools/install
 
 
@@ -63,6 +83,55 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 <br /><br />
 
 
+## Setup Tauri Mobile to Android for Windows
+1. Set MSVC Toolchain as default :
+```bash
+rustup default stable-msvc
+```
+2. Android - First make sure to install the required rust android targets :
+```bash
+rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+```
+3. Installing Java-JDK (PowerShell) :
+```bash
+Invoke-WebRequest https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip -o openjdk-11.zip
+Expand-Archive openjdk-11.zip -d .
+mkdir $env:LocalAppData\Java
+mv jdk-11.0.2 $env:LocalAppData\Java
+``` 
+4. Set the JAVA_HOME environment variable (PowerShell) :
+```bash
+[System.Environment]::SetEnvironmentVariable("JAVA_HOME", "$env:LocalAppData\Java\jdk-11.0.2", "User")
+```
+5. Install the Android SDK and NDK (PowerShell) :
+```bash
+Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip -o cmdline-tools.zip
+Expand-Archive cmdline-tools.zip -d .
+mkdir $HOME\.android\cmdline-tools\latest
+mv cmdline-tools\* $HOME\.android\cmdline-tools\latest
+rm cmdline-tools
+```
+6. Set the ANDROID_HOME and NDK_HOME environment variables (PowerShell) :
+```bash
+[System.Environment]::SetEnvironmentVariable("ANDROID_HOME", "$HOME\.android", "User")
+[System.Environment]::SetEnvironmentVariable("NDK_HOME", "$HOME\.android\ndk\25.0.8775105", "User")
+```
+7. Vous devez maintenant redémarrer votre machine Windows pour que les variables d'environnement soient chargées correctement.
+8. Install required SDK and NDK components (PowerShell) :
+```bash
+& "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" "platforms;android-33" "platform-tools" "ndk;25.0.8775105" "build-tools;33.0.0"
+```
+<br />
+
+## Setup Tauri Mobile to iOS for macOS
+1. Install xCode.
+2. Then install the required rust iOS targets :
+```bash
+rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+```
+<br /><br />
+
+
 ## Setup for Vue.js 
 
 ```bash
@@ -78,6 +147,7 @@ npm install
 ```
 
 <br /><br />
+
 
 
 ## Updating Dependencies
@@ -114,13 +184,42 @@ cargo update
 
 <br /><br />
 
-## Development Server
+## Development Server - Mobile
 Cette commande vérifie rapidement votre code pour s'assurer qu'il se compile mais ne produit pas d'exécutable et ne lance pas l'application (seulement pour s'assurer que le projet Rust compile). <br /> A faire dans le dossier 'src-tauri' :
 ```bash
 #cargo
 cargo check
 ```
+
+Application Type : Android / iOS <br />
+1. Exécuter l'application dans un émulateur existant ou un appareil connecté au PC :
+```bash
+# npm
+# Android
+npm run tauri android dev
+
+# npm
+# iOS
+npm run tauri ios dev
+```
+1. Exécuter l'application dans AndroidStudio ou xCode :
+```bash
+# npm
+# Android
+npm run tauri android dev [-- --open]
+
+# npm
+# iOS
+npm run tauri ios dev [-- --open]
+```
 <br />
+
+## Development Server - Desktop
+Cette commande vérifie rapidement votre code pour s'assurer qu'il se compile mais ne produit pas d'exécutable et ne lance pas l'application (seulement pour s'assurer que le projet Rust compile). <br /> A faire dans le dossier 'src-tauri' :
+```bash
+#cargo
+cargo check
+```
 
 Application type : Desktop (.exe)
 ```bash
@@ -137,7 +236,19 @@ npm run dev
 
 <br /><br />
 
-## Production
+## Production - Mobile :
+```bash
+# npm
+# Android
+npm run tauri android build
+
+# npm
+# iOS
+npm run tauri ios build
+```
+<br />
+
+## Production - Desktop
 
 ### Install for production - Windows / macOS / Linux :
 Par défaut, Rust installe uniquement les chaînes d'outils pour la cible de votre machine. <br />

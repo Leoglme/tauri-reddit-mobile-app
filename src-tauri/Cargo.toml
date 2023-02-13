@@ -1,21 +1,25 @@
 [package]
-name = "my-app"
+name = "reddit_app"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Reddit application"
+authors = ["corentin recanzone"]
 license = ""
 repository = ""
 edition = "2021"
+rust-version = "1.67.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+name = "reddit"
 
 [build-dependencies]
-tauri-build = { version = "1.2", features = [] }
+tauri-build = { version = "2.0.0-alpha.0", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2", features = ["shell-open"] }
+tauri = { version = "2.0.0-alpha.3", features = ["api-all", "updater", "windows7-compat"] }
 
 [features]
 # by default Tauri runs in production mode
@@ -24,3 +28,10 @@ default = ["custom-protocol"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+panic = "abort" # Éliminer la logique de nettoyage de panique coûteuse
+codegen-units = 1 # Compiler les crates l'une après l'autre pour que le compilateur puisse optimiser mieux
+lto = true # Active les optimisations de link
+opt-level = "s" # Optimiser la taille du binaire
+strip = true # Supprimer automatiquement les symboles du binaire.
