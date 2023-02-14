@@ -92,7 +92,7 @@ rustup default stable-msvc
 ```bash
 rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 ```
-3. Installing Java-JDK (PowerShell) :
+3. Open PowerShell (Administrator) - Installing Java-JDK :
 ```bash
 Invoke-WebRequest https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip -o openjdk-11.zip
 Expand-Archive openjdk-11.zip -d .
@@ -116,7 +116,7 @@ rm cmdline-tools
 [System.Environment]::SetEnvironmentVariable("ANDROID_HOME", "$HOME\.android", "User")
 [System.Environment]::SetEnvironmentVariable("NDK_HOME", "$HOME\.android\ndk\25.0.8775105", "User")
 ```
-7. Vous devez maintenant redémarrer votre machine Windows pour que les variables d'environnement soient chargées correctement.
+7. Fermer le PowerShell et le reouvrir.
 8. Install required SDK and NDK components (PowerShell) :
 ```bash
 & "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" "platforms;android-33" "platform-tools" "ndk;25.0.8775105" "build-tools;33.0.0"

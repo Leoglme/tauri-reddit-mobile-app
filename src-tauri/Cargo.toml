@@ -11,7 +11,6 @@ rust-version = "1.67.1"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 crate-type = ["staticlib", "cdylib", "rlib"]
-name = "reddit"
 
 [build-dependencies]
 tauri-build = { version = "2.0.0-alpha.0", features = [] }
@@ -19,7 +18,7 @@ tauri-build = { version = "2.0.0-alpha.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "2.0.0-alpha.3", features = ["api-all", "updater", "windows7-compat"] }
+tauri = { version = "2.0.0-alpha.0", features = ["api-all", "updater", "windows7-compat"] }
 
 [features]
 # by default Tauri runs in production mode
