@@ -84,26 +84,29 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
 
 ## Setup Tauri Mobile to Android for Windows
-1. Set MSVC Toolchain as default :
+1. Install AndroidStudio : https://developer.android.com/studio
+2. Supprimez simplement le dossier jre dans : C:\Program Files\Android\Android Studio
+3. Create device emulator in AndroidStudio : Pixel 3a 
+4. Set MSVC Toolchain as default :
 ```bash
 rustup default stable-msvc
 ```
-2. Android - First make sure to install the required rust android targets :
+5. Android - First make sure to install the required rust android targets :
 ```bash
 rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
 ```
-3. Open PowerShell (Administrator) - Installing Java-JDK :
+6. Open PowerShell (Administrator) - Installing Java-JDK :
 ```bash
 Invoke-WebRequest https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip -o openjdk-11.zip
 Expand-Archive openjdk-11.zip -d .
 mkdir $env:LocalAppData\Java
 mv jdk-11.0.2 $env:LocalAppData\Java
 ``` 
-4. Set the JAVA_HOME environment variable (PowerShell) :
+7. Set the JAVA_HOME environment variable (PowerShell) :
 ```bash
 [System.Environment]::SetEnvironmentVariable("JAVA_HOME", "$env:LocalAppData\Java\jdk-11.0.2", "User")
 ```
-5. Install the Android SDK and NDK (PowerShell) :
+8. Install the Android SDK and NDK (PowerShell) :
 ```bash
 Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip -o cmdline-tools.zip
 Expand-Archive cmdline-tools.zip -d .
@@ -111,13 +114,13 @@ mkdir $HOME\.android\cmdline-tools\latest
 mv cmdline-tools\* $HOME\.android\cmdline-tools\latest
 rm cmdline-tools
 ```
-6. Set the ANDROID_HOME and NDK_HOME environment variables (PowerShell) :
+9. Set the ANDROID_HOME and NDK_HOME environment variables (PowerShell) :
 ```bash
 [System.Environment]::SetEnvironmentVariable("ANDROID_HOME", "$HOME\.android", "User")
 [System.Environment]::SetEnvironmentVariable("NDK_HOME", "$HOME\.android\ndk\25.0.8775105", "User")
 ```
-7. Fermer le PowerShell et le reouvrir.
-8. Install required SDK and NDK components (PowerShell) :
+10. Fermer le PowerShell et le reouvrir.
+11. Install required SDK and NDK components (PowerShell) :
 ```bash
 & "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" "platforms;android-33" "platform-tools" "ndk;25.0.8775105" "build-tools;33.0.0"
 ```
@@ -206,11 +209,11 @@ npm run tauri ios dev
 ```bash
 # npm
 # Android
-npm run tauri android dev [-- --open]
+npm run tauri android dev --open
 
 # npm
 # iOS
-npm run tauri ios dev [-- --open]
+npm run tauri ios dev --open
 ```
 <br />
 
