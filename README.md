@@ -195,7 +195,7 @@ cargo check
 ```
 
 Application Type : Android / iOS <br />
-1. Exécuter l'application dans un émulateur existant ou un appareil connecté au PC :
+1. Exécuter l'application à un appareil connecté au PC :
 ```bash
 # npm
 # Android
