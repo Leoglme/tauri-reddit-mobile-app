@@ -1,0 +1,69 @@
+// Generic
+@import "variables";
+body {
+  font-family: $font;
+  font-size: 14px;
+  color: var(--white);
+  line-height: 1.6;
+  background: var(--black);
+  scroll-margin: 100px 0 0 0;
+  word-break: break-word;
+}
+
+.relative {
+  position: relative;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+.user-select-none {
+  user-select: none;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+.opacity-0 {
+  opacity: 0;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*Height && width */
+.vh-100 {
+  min-height: 100vh;
+}
+.h-full {
+  height: 100%;
+}
+.w-full {
+  width: 100%;
+}
+
+/* Pseudo-classes */
+::selection {
+  background: var(--selection);
+  color: var(--grey-100);
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--grey-700);
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: var(--grey-700);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: var(--grey-700);
+}

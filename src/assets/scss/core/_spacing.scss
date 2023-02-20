@@ -1,0 +1,33 @@
+@import "functions";
+
+$max: 8;
+
+@for $i from 1 through $max {
+  .gap-#{$i} {
+    gap: space($i)
+  }
+  .p-#{$i} {
+    padding: space($i);
+  }
+  .px-#{$i} {
+    padding-right: space($i);
+    padding-left: space($i);
+  }
+  .py-#{$i} {
+    padding-top: space($i);
+    padding-bottom: space($i);
+  }
+  .ml-#{$i} {
+    margin-left: space($i)
+  }
+  .mx-#{$i} {
+    margin-left: space($i);
+    margin-right: space($i)
+  }
+  .mb-#{$i} {
+    margin-bottom: space($i)
+  }
+  .mt-#{$i} {
+    margin-top: space($i);
+  }
+}
