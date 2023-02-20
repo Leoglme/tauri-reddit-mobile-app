@@ -1,0 +1,42 @@
+@import "variables";
+
+.text-2xl {
+  font-size: 54px;
+}
+
+.text-xl {
+  font-size: 32px;
+}
+
+.text-lg {
+  font-size: 30px;
+}
+
+.text-md {
+  font-size: 24px;
+}
+
+.text-sm {
+  font-size: 22px;
+}
+
+/*Thickness*/
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* Color */
+@each $key, $value in $variants {
+  .text-#{ "" + $key} {
+    color: $value;
+  }
+}
+
+/*Text alignement*/
+.text-center {
+  text-align: center;
+}
