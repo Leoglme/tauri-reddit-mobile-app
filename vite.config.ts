@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { fileURLToPath, URL } from 'node:url'
 import vue from "@vitejs/plugin-vue";
 import { internalIpV4 } from 'internal-ip'
 
@@ -20,10 +21,6 @@ export default defineConfig(async () => {
         protocol: 'ws',
         host,
         port: 1420,
-        clientPort: 1420
-      },
-      watch: {
-        usePolling: true,
       },
     },
     // to make use of `TAURI_DEBUG` and other env variables
@@ -37,5 +34,10 @@ export default defineConfig(async () => {
       // produce sourcemaps for debug builds
       sourcemap: !!process.env.TAURI_DEBUG,
     },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    }
   }
 })
