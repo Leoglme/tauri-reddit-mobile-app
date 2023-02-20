@@ -1,13 +1,19 @@
 import { defineStore } from 'pinia'
 
+const accessTokenInLocalStorage = localStorage.getItem("access_token");
+
+
 export const useAuthStore = defineStore('auth', {
-    state: () => ({ token: ''}),
+    state: () => ({
+        access_token: accessTokenInLocalStorage
+    }),
     getters: {
 
     },
     actions: {
-        setToken(token: string){
-            this.token = token;
+        setAccessToken(access_token: string){
+            this.access_token = access_token;
+            localStorage.setItem("access_token", access_token)
         }
     },
 })
