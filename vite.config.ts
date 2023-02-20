@@ -20,6 +20,10 @@ export default defineConfig(async () => {
         protocol: 'ws',
         host,
         port: 1420,
+        clientPort: 1420
+      },
+      watch: {
+        usePolling: true,
       },
     },
     // to make use of `TAURI_DEBUG` and other env variables

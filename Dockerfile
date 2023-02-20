@@ -1,8 +1,9 @@
-FROM node:lts as vue
+FROM node:lts
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY . /app
+COPY package*.json package.json ./
 
 RUN npm install
 
+COPY . .
