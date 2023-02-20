@@ -1,14 +1,18 @@
 <template>
   <main>
-    INDEX TOKEN: {{authStore.access_token}}
+    INDEX
   </main>
 </template>
 
 <script lang="ts" setup>
-  import {useAuthStore} from "../stores/auth.store";
+ import {Auth} from "../api/auth/auth";
 
-  const authStore = useAuthStore()
 
+ Auth.getUserConnected().then(res => {
+   localStorage.setItem("Username",res.data.name)
+ }).catch(err => {
+   console.log(err)
+ })
 </script>
 
 <style lang="scss" scoped>
