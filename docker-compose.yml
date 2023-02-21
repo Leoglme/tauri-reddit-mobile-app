@@ -1,28 +1,33 @@
 version: '3.8'
 
 services:
-  tauri:
-    container_name: tauri
+  tauri_frontend_vue:
+    container_name: tauri_frontend_vue
+    image: shortpoet/vite
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
-
-  mercure-sse:
-    container_name: mercure-sse
-    image: dunglas/mercure
-    restart: always
-    environment:
-      # Uncomment the following line to disable HTTPS
-      SERVER_NAME: ':1405'
-      MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
-      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
-      MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins "http://localhost:4200"
-        anonymous
-    # Uncomment the following line to enable the development mode
-    command: /usr/bin/caddy run --config /etc/caddy/Caddyfile.dev
+    tty: true
+    stdin_open: true
+    working_dir: /usr/src/app
     ports:
-      - "1405:1405"
+      - "1420:1420"
     volumes:
-      - caddy_data:/data
-      - caddy_config:/config
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
+    depends_on:
+      - tauri_backend_rust
+    networks:
+      - app-network
+
+  tauri_backend_rust:
+    container_name: tauri_backend_rust
+    image: rust:1.67.1
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:

@@ -1,0 +1,20 @@
+$max: 6;
+.d-grid {
+  display: grid;
+}
+
+.d-grid.columns {
+  grid-template-columns: repeat(var(--columns, 1), 1fr);
+}
+.d-grid.col-auto {
+  grid-template-columns: repeat(var(--columns, 1), auto);
+}
+.d-grid.row-fit {
+  grid-auto-rows: minmax(min-content, max-content);
+}
+
+@for $i from 1 through $max {
+  .col-#{$i}{
+    --columns: #{$i};
+  }
+}

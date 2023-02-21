@@ -1,0 +1,13 @@
+$max: 2;
+
+@for $i from 1 through $max {
+  .b-#{$i} {
+    border: $i * 1px solid var(--contrast-30);;
+  }
+  .bb-#{$i} {
+    border-bottom: $i * 1px solid var(--contrast-30);;
+  }
+  .bt-#{$i} {
+    border-top: $i * 1px solid var(--contrast-30);;
+  }
+}

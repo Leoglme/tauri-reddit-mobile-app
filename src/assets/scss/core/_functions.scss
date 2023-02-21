@@ -1,0 +1,13 @@
+// Espacements
+@function space($i) {
+  @return calc(#{$i} * 0.5rem)
+}
+
+// Chaines
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}

@@ -1,0 +1,7 @@
+@import "../core/variables";
+
+@each $key, $value in $variants {
+  .bg-#{ "" + $key} {
+    background-color: $value;
+  }
+}
