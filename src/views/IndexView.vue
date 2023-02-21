@@ -1,6 +1,6 @@
 <template>
   <main>
-    INDEX
+    INDEX {{ authStore.access_token}}
   </main>
 </template>
 
@@ -8,6 +8,10 @@
  import {Auth} from "../api/auth/auth";
  import {User} from "../api/user/user";
  import {Community} from "../api/community/community";
+ import {Post} from "../api/post/post";
+ import {useAuthStore} from "../stores/auth.store";
+
+ const authStore = useAuthStore()
 
 
 
@@ -56,6 +60,60 @@
    console.log(err)
  })*/
 
+ /*Community.userCommunityList().then(res => {
+   console.log(res.data)
+ }).catch(err => {
+   console.log(err.message)
+ })*/
+
+ /*Community.hotPostCommunity().then(res => {
+   console.log(res)
+ }).catch(err => {
+   console.log(err)
+ })*/
+
+ /*Community.subscribeCommunity("FortNiteBR").then(res =>{
+  console.log("join")
+}).catch(err => {
+  console.log(err)
+})*/
+
+/*Community.unsubscribeCommunity("FortNiteBR").then(res =>{
+  console.log("leave")
+}).catch(err => {
+  console.log(err)
+})*/
+
+///POST
+
+ /*Post.homePage().then(res => {
+   console.log(res)
+ }).catch(err => {
+   console.log(err)
+ })*/
+
+/*Post.getPostUser("sir_posts_alot").then(res => {
+  console.log(res)
+}).catch(err => {
+  console.log(err)
+})*/
+
+ /*Post.createPost({
+   title: "test",
+   text: "test",
+   spoiler: false,
+   nsfw: false,
+ }).then(res => {
+   console.log("Post created")
+ }).catch(err => {
+   console.log(err)
+ })*/
+
+Post.deletePost("t3_1182kue").then(res => {
+  console.log("delete")
+}).catch(err => {
+  console.log(err)
+})
 
 </script>
 

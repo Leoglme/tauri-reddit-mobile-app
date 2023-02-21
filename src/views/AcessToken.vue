@@ -20,7 +20,7 @@ if(code){
     let accessToken = res.data.access_token
 
     if (accessToken) {
-      console.log(accessToken)
+      //console.log(accessToken)
       authStore.setAccessToken(accessToken)
       router.push({name: "index"})
     }
