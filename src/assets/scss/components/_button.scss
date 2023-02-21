@@ -1,0 +1,91 @@
+@use 'sass:color';
+@import "../core/functions";
+@import "../core/variables";
+%reset-button {
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  color: var(--white, #fff);
+}
+
+button {
+  @extend %reset-button;
+}
+
+%button {
+  font-size: 16px;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: filter 0.25s, background 0.25s, color 0.25s, transform .25s;
+  filter: brightness(1);
+  white-space: nowrap;
+  transform: translateZ(0);
+
+  &[disabled] {
+    pointer-events: none;
+    background: var(--grey-200);
+    color: var(--grey-600);
+  }
+
+  &:hover[disabled] {
+    filter: grayscale(1);
+  }
+
+  &:active:not([disabled]) {
+    transform: translateY(2px);
+  }
+  svg path {
+    stroke: var(--light);
+  }
+}
+
+.btn {
+  @extend %button;
+
+  @each $key, $value in $variants {
+    &[data-variant='#{"" + $key}'] {
+      background: $value;
+      color: text-contrast($value);
+
+      &:hover:not([disabled]) {
+        $color: color.adjust($value, $saturation: -22%, $lightness: -10%);
+        background: $color;
+        color: text-contrast($color);
+      }
+
+      &:active:hover {
+        background: $value;
+      }
+    }
+  }
+}
+
+.btn.square  {
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  padding: 0;
+}
+
+.btn-outlined {
+  @extend %button;
+  border: 1px solid var(--contrast);
+  color: var(--contrast);
+  box-shadow: none;
+
+  &:hover {
+    filter: none;
+    background: var(--contrast);
+    color: #fff;
+  }
+}
+
+.btn-small {
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8em;
+}

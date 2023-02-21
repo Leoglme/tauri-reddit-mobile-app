@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // Espacements
 @function space($i) {
   @return calc(#{$i} * 0.5rem)
@@ -10,4 +12,14 @@
   }
 
   @return $number;
+}
+// Accessibility
+@function text-contrast($n) {
+  $color-brightness: round((red($n) * 299) + (green($n) * 587) + calc((blue($n) * 114) / 1000));
+  $light-color: round((red(#ffffff) * 299) + (green(#ffffff) * 587) + calc((blue(#ffffff) * 114) / 1000));
+  @if abs($color-brightness) < math.div($light-color, 1.8) {
+    @return var(--white);
+  } @else {
+    @return var(--black);
+  }
 }

@@ -5,14 +5,19 @@
 .items-center {
   align-items: center;
 }
-.justify-center {
-  justify-content: center;
-}
 .items-end {
   align-items: end;
 }
+
+.justify-center {
+  justify-content: center;
+}
 .justify-end {
   justify-content: end;
+}
+
+.justify-start {
+  justify-content: start;
 }
 
 .justify-between {

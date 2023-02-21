@@ -13,6 +13,12 @@ $max: 8;
     padding-right: space($i);
     padding-left: space($i);
   }
+  .pt-#{$i} {
+    padding-top: space($i);
+  }
+  .pb-#{$i} {
+    padding-bottom: space($i);
+  }
   .py-#{$i} {
     padding-top: space($i);
     padding-bottom: space($i);

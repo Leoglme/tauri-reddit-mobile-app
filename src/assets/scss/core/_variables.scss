@@ -1,8 +1,8 @@
 /*FONTS*/
 $font: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 /*COLORS*/
-$primary: #ff7f4f;
-$primary-light: #E95428;
+$primary: #E95428;
+$primary-light: #ff7f4f;
 $primary-dark: #D13900;
 $blue: #2E6BBF;
 $blue-dark: #235599;
@@ -21,7 +21,7 @@ $grey-800: #D4D6D8;
 $white: #FEFEFE;
 
 :root {
-  --radius: 8px;
+  --radius: 6px;
   --primary: #{$primary};
   --primary-light: #{$primary-light};
   --primary-dark: #{$primary-dark};
@@ -48,7 +48,9 @@ $variants: (
         blue: $blue,
         red: $red,
         black: $black,
-        grey-100: $grey-400,
+        grey-100: $grey-100,
+        grey-200: $grey-200,
         grey-400: $grey-400,
-        grey-500: $grey-400
+        grey-500: $grey-500,
+        grey-800: $grey-800
 );

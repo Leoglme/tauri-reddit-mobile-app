@@ -1,0 +1,20 @@
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+
+$max: 1;
+
+/*top, left, right, bottom*/
+@for $i from 0 through $max {
+  .bottom-#{$i} {
+    bottom: $i * 1px;
+  }
+  .top-#{$i} {
+    top: $i * 1px;
+  }
+}

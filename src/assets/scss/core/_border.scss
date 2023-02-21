@@ -1,13 +1,31 @@
-$max: 2;
+@import "variables";
+$max: 4;
 
+/*Border width*/
 @for $i from 1 through $max {
   .b-#{$i} {
-    border: $i * 1px solid var(--contrast-30);;
+    border-style: solid;
+    border-width: $i * 1px;
   }
   .bb-#{$i} {
-    border-bottom: $i * 1px solid var(--contrast-30);;
+    border-style: solid;
+    border-bottom-width: $i * 1px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
   }
   .bt-#{$i} {
-    border-top: $i * 1px solid var(--contrast-30);;
+    border-style: solid;
+    border-top-width: $i * 1px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+  }
+}
+
+/*Border color*/
+@each $key, $value in $variants {
+  .border-#{ "" + $key} {
+    border-color: $value;
   }
 }

@@ -9,6 +9,7 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "types": ["vee-validate"],
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true

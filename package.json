@@ -15,7 +15,9 @@
     "@octokit/rest": "^19.0.7",
     "@tauri-apps/api": "^2.0.0-alpha.0",
     "pinia": "^2.0.31",
+    "vee-validate": "^4.7.4",
     "vue": "^3.2.47",
+    "vue-material-design-icons": "^5.2.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
