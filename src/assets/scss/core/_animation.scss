@@ -1,0 +1,25 @@
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  50% {
+    transform: rotateZ(180deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+.spin {
+  animation: spin linear infinite 2s;
+}
+
+.rotate-up {
+  transition: all .2s linear;
+  transform: rotateZ(180deg);
+}
+
+.rotate-reset {
+  transition: all .2s linear;
+  transform: rotateZ(0);
+}

@@ -1,0 +1,8 @@
+$max: 10;
+
+/*Border width*/
+@for $i from 1 through $max {
+  .z-index-#{$i} {
+    z-index: $i;
+  }
+}

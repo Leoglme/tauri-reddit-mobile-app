@@ -1,0 +1,122 @@
+@use 'sass:color';
+@import "../core/functions";
+@import "../core/variables";
+%reset-button {
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  color: var(--white, #fff);
+}
+
+button {
+  @extend %reset-button;
+}
+
+%button-props {
+  font-size: 14px;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: filter 0.25s, color 0.25s, transform .25s;
+  filter: brightness(1);
+  white-space: nowrap;
+  transform: translateZ(0);
+
+&[disabled] {
+  pointer-events: none;
+  color: var(--grey-600);
+}
+
+&:active:not([disabled]) {
+  transform: translateY(2px);
+}
+};
+
+%button {
+  @extend %reset-button;
+  @extend %button-props;
+
+  &[disabled] {
+    background: var(--grey-200);
+  }
+
+  &:hover[disabled] {
+    filter: grayscale(1);
+  }
+}
+
+%button-outlined {
+  @extend %button;
+
+  border: 2px solid var(--primary, #007bff);
+  transition: filter 0.25s, border-color 0.25s, color 0.25s, transform .25s;
+
+  &[disabled] {
+    border-color: var(--grey-200);
+  }
+
+  &:hover:not([disabled]) {
+    filter: brightness(0.9);
+    border-color: var(--primary-dark, #0062cc);
+  }
+}
+
+.btn {
+  @extend %button;
+
+  @each $key, $value in $variants {
+    &[data-variant='#{"" + $key}'] {
+      background: $value;
+      color: text-contrast($value);
+
+      &:hover:not([disabled]) {
+        $color: color.adjust($value, $saturation: -20%, $lightness: -5%);
+        background: $color;
+        color: text-contrast($color);
+      }
+
+      &:active:hover {
+        background: $value;
+      }
+    }
+  }
+}
+
+.btn-outlined {
+  @extend %button-outlined;
+
+  @each $key, $value in $variants {
+    &[data-variant='#{"" + $key}'] {
+      background: none;
+      color: $value;
+      border-color: $value;
+
+      &:hover:not([disabled]) {
+        $color: color.adjust($value, $saturation: -22%, $lightness: -15%);
+        color: $color;
+        border-color: $color;
+      }
+
+      &:active:hover {
+        color: $value;
+      }
+    }
+  }
+}
+
+
+.btn.square  {
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  padding: 0;
+}
+
+.btn-small {
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8em;
+}

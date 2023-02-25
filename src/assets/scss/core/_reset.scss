@@ -8,6 +8,7 @@
 
 html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 textarea, input {
@@ -30,7 +31,6 @@ input, button, textarea, select {
 
 a {
   text-decoration: inherit;
-  color: inherit;
 }
 
 ul {

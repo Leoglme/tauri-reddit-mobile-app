@@ -1,4 +1,5 @@
 /* Core */
+@import 'core/animation';
 @import 'core/variables';
 @import 'core/background';
 @import 'core/border';
@@ -11,3 +12,10 @@
 @import 'core/reset';
 @import 'core/spacing';
 @import 'core/typography';
+@import 'core/postion';
+@import 'core/radius';
+@import 'core/z-index';
+@import 'core/icon';
+
+/*Components*/
+@import "components/button";

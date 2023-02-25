@@ -10,13 +10,10 @@ body {
   word-break: break-word;
 }
 
-.relative {
-  position: relative;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
+
 .user-select-none {
   user-select: none;
 }
@@ -30,6 +27,18 @@ body {
 }
 .opacity-0 {
   opacity: 0;
+}
+
+a {
+  color: var(--primary);
+  font-weight: 600;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.round {
+  border-radius: 100%;
 }
 
 .ellipsis {

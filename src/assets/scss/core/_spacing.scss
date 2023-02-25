@@ -1,6 +1,6 @@
 @import "functions";
 
-$max: 8;
+$max: 20;
 
 @for $i from 1 through $max {
   .gap-#{$i} {
@@ -12,6 +12,18 @@ $max: 8;
   .px-#{$i} {
     padding-right: space($i);
     padding-left: space($i);
+  }
+  .pl-#{$i} {
+    padding-left: space($i);
+  }
+  .pr-#{$i} {
+    padding-right: space($i);
+  }
+  .pt-#{$i} {
+    padding-top: space($i);
+  }
+  .pb-#{$i} {
+    padding-bottom: space($i);
   }
   .py-#{$i} {
     padding-top: space($i);
