@@ -1,18 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Index from '../views/IndexView.vue';
-import DesignSystemPage from "../pages/DesignSystemPage.vue"
-import LoadingPage from "../pages/LoadingPage.vue"
-import ProfilePage from "../pages/ProfilePage.vue"
-import Login from '../views/LoginView.vue';
-import AccessToken from '../views/AcessToken.vue';
+import HomePage from '@/pages/HomePage.vue';
+import DesignSystemPage from "@/pages/DesignSystemPage.vue"
+import LoadingPage from "@/pages/LoadingPage.vue"
+import UserPage from "@/pages/UserPage.vue"
+import LoginPage from '@/pages/LoginPage.vue';
+import AccessTokenPage from '@/pages/AccessTokenPage.vue';
+import CreateCommunityPage from '@/pages/CreateCommunityPage.vue';
+import CommunityPage from '@/pages/CommunityPage.vue';
+import BottomNavigation from "@/components/navigation/BottomNavigation.vue";
+import Navbar from "@/components/navigation/Navbar.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            name: 'index',
-            component: Index
+            name: 'home',
+            components: {
+                default: HomePage,
+                Navbar: Navbar,
+                BottomNavigation: BottomNavigation
+            }
+        },
+        {
+            path: '/u/:username',
+            name: 'user',
+            components: {
+                default: UserPage,
+                BottomNavigation: BottomNavigation
+            }
+        },
+        {
+            path: '/r/:community',
+            name: 'community',
+            components: {
+                default: CommunityPage,
+                BottomNavigation: BottomNavigation
+            }
+        },
+        {
+            path: '/create-community',
+            name: 'create-community',
+            components: {
+                default: CreateCommunityPage,
+                BottomNavigation: BottomNavigation
+            }
         },
         {
             path: '/design-system',
@@ -22,23 +54,18 @@ const router = createRouter({
         {
             path: '/login',
             name: 'login',
-            component: Login
+            component: LoginPage
         },
         {
             path: '/access-token',
-            name: 'Access Token',
-            component: AccessToken
+            name: 'access-token',
+            component: AccessTokenPage
         },
         {
             path: '/loading',
             name: 'loading',
             component: LoadingPage
         },
-        {
-            path: '/profile',
-            name: 'profile',
-            component: ProfilePage
-        }
     ]
 })
 

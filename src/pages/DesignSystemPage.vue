@@ -63,21 +63,21 @@
 </template>
 
 <script lang="ts" setup>
-import RedditButton from "../components/actions/RedditButton.vue"
-import FollowButton from "../components/actions/FollowButton.vue"
-import Avatar from "../components/data-display/Avatar.vue"
-import PostCard from "../components/data-display/PostCard.vue"
-import SearchResultList from "../components/data-display/SearchResultList.vue"
-import SelectFilter from "../components/data-input/SelectFilter.vue"
-import TextInput from "../components/data-input/TextInput.vue"
-import Switch from "../components/data-input/Switch.vue"
-import SelectVisibility from "../components/data-input/SelectVisibility.vue"
-import Loader from "../components/ui/Loader.vue"
+import RedditButton from "@/components/actions/RedditButton.vue"
+import FollowButton from "@/components/actions/FollowButton.vue"
+import Avatar from "@/components/data-display/Avatar.vue"
+import PostCard from "@/components/data-display/PostCard.vue"
+import SearchResultList from "@/components/data-display/SearchResultList.vue"
+import SelectFilter from "@/components/data-input/SelectFilter.vue"
+import TextInput from "@/components/data-input/TextInput.vue"
+import Switch from "@/components/data-input/Switch.vue"
+import SelectVisibility from "@/components/data-input/SelectVisibility.vue"
+import Loader from "@/components/ui/Loader.vue"
 import MenuIcon from 'vue-material-design-icons/Menu.vue';
 import HomeIcon from 'vue-material-design-icons/Home.vue';
-import Tabs from "../components/navigation/Tabs.vue"
-import BottomNavigation from "../components/navigation/BottomNavigation.vue"
-import Navbar from "../components/navigation/Navbar.vue"
+import Tabs from "@/components/navigation/Tabs.vue"
+import BottomNavigation from "@/components/navigation/BottomNavigation.vue"
+import Navbar from "@/components/navigation/Navbar.vue"
 import { Form } from 'vee-validate';
 import { ref } from "vue";
 

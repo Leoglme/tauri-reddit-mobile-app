@@ -2,14 +2,14 @@
   <main>
     INDEX {{ authStore.access_token}}
   </main>
+  <BottomNavigation/>
 </template>
 
 <script lang="ts" setup>
- import {Auth} from "../api/auth/auth";
- import {User} from "../api/user/user";
- import {Community} from "../api/community/community";
- import {Post} from "../api/post/post";
- import {useAuthStore} from "../stores/auth.store";
+ import {Post} from "@/api/post/post";
+ import {useAuthStore} from "@/stores/auth.store";
+ import { Auth } from "@/api/auth/auth";
+ import BottomNavigation from "@/components/navigation/BottomNavigation.vue";
 
  const authStore = useAuthStore()
 
