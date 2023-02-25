@@ -1,5 +1,7 @@
 <template>
+  <RouterView name="Navbar" />
   <RouterView />
+  <RouterView name="BottomNavigation" />
 </template>
 
 <script lang="ts" setup>

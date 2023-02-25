@@ -8,7 +8,7 @@
           {'justify-start': index === tabs.length - 1}
           ]"
          class="bottom__tab--item h-full flex-1 flex justify-center items-center cursor-pointer">
-      <router-link to="to">
+      <router-link :to="tab.to">
         <component
             :fillColor="route.path === tab.to ? 'var(--white)': 'var(--grey-700)'"
             :size="28"
@@ -30,17 +30,17 @@ const tabs = [
   {
     name: "home",
     icon: HomeIcon,
-    to: "/design-system"
+    to: "/"
   },
   {
     name: "create",
     icon: PlusIcon,
-    to: "/loading"
+    to: "/create-community"
   },
   {
-    name: "profile",
+    name: "user",
     icon: PersonIcon,
-    to: "/profile"
+    to: "/u/toto"
   },
 ]
 </script>

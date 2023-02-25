@@ -24,6 +24,10 @@
 </template>
 
 <style lang="scss" scoped>
+$size: 60px;
+$outer-moon-left: 24px;
+$inner-moon-left: 16px;
+
 .loader {
   position: relative;
   --center: translate(-50%, -50%);
@@ -32,8 +36,8 @@
 
 .center-spin {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: calc($size / 3.33);
+  height: calc($size / 3.33);
   background: var(--spinner);
   border-radius: 50%;
   transform: var(--center);
@@ -42,7 +46,7 @@
   position: absolute;
 }
 .outer-spin {
-  animation: spin 4s linear infinite;
+  animation: spin 3.5s linear infinite;
 }
 .outer-arc, .inner-arc {
   position: absolute;
@@ -50,8 +54,8 @@
   border: 4px solid;
 }
 .outer-arc {
-  width: 100px;
-  height: 100px;
+  width: $size;
+  height: $size;
 }
 .outer-arc_start-a {
   border-color: transparent transparent transparent var(--spinner);
@@ -72,28 +76,28 @@
 
 .outer-moon-a {
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: calc($size / 6.67);
+  height: calc($size / 6.67);
   background: var(--spinner);
   border-radius: 50%;
-  left: -4px;
+  left: -$outer-moon-left;
   transform: var(--center) translate(52px, 0);
 }
 .outer-moon-b {
   position: absolute;
-  width: 15px;
-  left: 4px;
-  height: 15px;
+  width: calc($size / 6.67);
+  left: $outer-moon-left;
+  height: calc($size / 6.67);
   background: var(--spinner);
   border-radius: 50%;
   transform: var(--center) translate(-52px, 0);
 }
 .inner-spin {
-  animation: spin 3s linear infinite;
+  animation: spin 2.5s linear infinite;
 }
 .inner-arc {
-  width: 62px;
-  height: 62px;
+  width: calc($size / 1.62);
+  height: calc($size / 1.62);
 }
 .inner-arc_start-a {
   border-color: transparent transparent transparent var(--spinner);
@@ -114,20 +118,20 @@
 }
 .inner-moon-a {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: calc($size / 8.3);
+  height: calc($size / 8.3);
   background: var(--spinner);
   border-radius: 50%;
-  left: -4px;
+  left: -$inner-moon-left;
   transform: var(--center) translate(33px, 0);
 }
 .inner-moon-b {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: calc($size / 8.3);
+  height: calc($size / 8.3);
   background: var(--spinner);
   border-radius: 50%;
-  left: 4px;
+  left: $inner-moon-left;
   transform: var(--center) translate(-33px, 0);
 }
 
