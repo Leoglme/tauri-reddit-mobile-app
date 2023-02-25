@@ -1,0 +1,6 @@
+.clickable-icon {
+  cursor: pointer;
+  &:active svg {
+    fill: var(--white);
+  }
+}

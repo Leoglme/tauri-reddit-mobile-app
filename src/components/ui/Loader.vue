@@ -1,12 +1,134 @@
 <template>
-  <svg class="spin" width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="22" width="4" height="12" rx="2" fill="#414141"/>
-    <rect y="26" width="4" height="12" rx="2" transform="rotate(-90 0 26)" fill="#6D6D6D"/>
-    <rect x="26" y="48" width="4" height="12" rx="2" transform="rotate(180 26 48)" fill="#989898"/>
-    <rect x="48" y="22" width="4" height="12" rx="2" transform="rotate(90 48 22)" fill="#C4C4C4"/>
-    <rect x="5.61523" y="8.4436" width="4" height="12" rx="2" transform="rotate(-45 5.61523 8.4436)" fill="#414141"/>
-    <rect x="8.44336" y="42.3848" width="4" height="12" rx="2" transform="rotate(-135 8.44336 42.3848)" fill="#828282"/>
-    <rect x="42.3848" y="39.5564" width="4" height="12" rx="2" transform="rotate(135 42.3848 39.5564)" fill="#AEAEAE"/>
-    <rect x="39.5562" y="5.61523" width="4" height="12" rx="2" transform="rotate(45 39.5562 5.61523)" fill="#D9D9D9"/>
-  </svg>
+  <div class="loader">
+    <div class="center-spin"></div>
+    <div class="inner-spin">
+      <div class="inner-arc inner-arc_start-a"></div>
+      <div class="inner-arc inner-arc_end-a"></div>
+
+      <div class="inner-arc inner-arc_start-b"></div>
+      <div class="inner-arc inner-arc_end-b"></div>
+      <div class="inner-moon-a"></div>
+      <div class="inner-moon-b"></div>
+
+    </div>
+    <div class="outer-spin">
+      <div class="outer-arc outer-arc_start-a"></div>
+      <div class="outer-arc outer-arc_end-a"></div>
+
+      <div class="outer-arc outer-arc_start-b"></div>
+      <div class="outer-arc outer-arc_end-b"></div>
+      <div class="outer-moon-a"></div>
+      <div class="outer-moon-b"></div>
+    </div>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.loader {
+  position: relative;
+  --center: translate(-50%, -50%);
+  --spinner: var(--primary);
+}
+
+.center-spin {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: var(--spinner);
+  border-radius: 50%;
+  transform: var(--center);
+}
+.outer-spin, .inner-spin {
+  position: absolute;
+}
+.outer-spin {
+  animation: spin 4s linear infinite;
+}
+.outer-arc, .inner-arc {
+  position: absolute;
+  border-radius: 50%;
+  border: 4px solid;
+}
+.outer-arc {
+  width: 100px;
+  height: 100px;
+}
+.outer-arc_start-a {
+  border-color: transparent transparent transparent var(--spinner);
+  transform: var(--center) rotate(65deg);
+}
+.outer-arc_end-a {
+  border-color: var(--spinner) transparent transparent transparent;
+  transform: var(--center) rotate(45deg);
+}
+.outer-arc_start-b {
+  border-color: transparent transparent transparent var(--spinner);
+  transform: var(--center) rotate(65deg) scale(-1, -1);
+}
+.outer-arc_end-b {
+  border-color: var(--spinner) transparent transparent transparent;
+  transform: var(--center) rotate(45deg) scale(-1, -1);
+}
+
+.outer-moon-a {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: var(--spinner);
+  border-radius: 50%;
+  left: -4px;
+  transform: var(--center) translate(52px, 0);
+}
+.outer-moon-b {
+  position: absolute;
+  width: 15px;
+  left: 4px;
+  height: 15px;
+  background: var(--spinner);
+  border-radius: 50%;
+  transform: var(--center) translate(-52px, 0);
+}
+.inner-spin {
+  animation: spin 3s linear infinite;
+}
+.inner-arc {
+  width: 62px;
+  height: 62px;
+}
+.inner-arc_start-a {
+  border-color: transparent transparent transparent var(--spinner);
+  /*NOTE: the order here very much matters!  */
+  transform: var(--center) rotate(65deg);
+}
+.inner-arc_end-a {
+  border-color: var(--spinner) transparent transparent transparent;
+  transform: var(--center) rotate(45deg);
+}
+.inner-arc_start-b {
+  border-color: transparent transparent transparent var(--spinner);
+  transform: var(--center) rotate(65deg) scale(-1, -1);
+}
+.inner-arc_end-b {
+  border-color: var(--spinner) transparent transparent transparent;
+  transform: var(--center) rotate(45deg) scale(-1, -1);
+}
+.inner-moon-a {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--spinner);
+  border-radius: 50%;
+  left: -4px;
+  transform: var(--center) translate(33px, 0);
+}
+.inner-moon-b {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--spinner);
+  border-radius: 50%;
+  left: 4px;
+  transform: var(--center) translate(-33px, 0);
+}
+
+</style>

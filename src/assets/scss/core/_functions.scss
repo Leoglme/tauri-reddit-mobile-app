@@ -2,7 +2,7 @@
 
 // Espacements
 @function space($i) {
-  @return calc(#{$i} * 0.5rem)
+  @return calc(#{$i} * 0.25rem)
 }
 
 // Chaines

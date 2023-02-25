@@ -1,7 +1,7 @@
 <template>
   <div>
     <button @click="handleClick"
-            class="text-grey-800 flex items-center justify-center gap-1 bg-grey-400 font-semibold px-1 py-1 radius">
+            class="text-grey-800 flex items-center justify-center gap-2 bg-grey-400 font-semibold px-2 py-1 radius">
       Accueil <ChevronDownIcon :class="open ? 'rotate-up' : 'rotate-reset'" :size="22"/>
     </button>
   </div>

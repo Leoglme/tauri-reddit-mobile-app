@@ -1,5 +1,5 @@
 <template>
-  <div class="bt-2 border-grey-500 gap-2 bg-grey-200 flex w-full justify-center items-center fixed bottom-0"
+  <div class="z-index-10 bt-2 border-grey-500 gap-4 bg-grey-200 flex w-full justify-center items-center fixed bottom-0"
        style="height: 48px;">
     <div v-for="(tab, index) in tabs"
          :key="tab.name"

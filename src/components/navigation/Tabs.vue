@@ -32,33 +32,13 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .tabs {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-}
-
-ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  margin: 0 10px;
-}
-
-li a {
-  display: block;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  color: #333;
 }
 
 .active-border {
