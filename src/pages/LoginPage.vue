@@ -1,15 +1,14 @@
 <template>
-  <main>
-    <h1>Se Connecter</h1>
-    <a href="https://www.reddit.com/api/v1/authorize?client_id=092USZcSP0ni2yftuo1q6w&response_type=code&state=redditech&redirect_uri=http://localhost:1420/access-token&duration=permanent&scope=*">
-      <button>Continuer avec Reddit</button>
-    </a>
-
-  </main>
+  <div class="flex flex-col items-center gap-8 px-4 pt-8">
+    <Logo/>
+    <h1 class="text-xl text-grey-800 font-medium">Se Connecter</h1>
+    <RedditButton class="mt-2"/>
+  </div>
 </template>
 
 <script lang="ts" setup>
-
+import RedditButton from "@/components/actions/RedditButton.vue"
+import Logo from "@/components/ui/Logo.vue"
 </script>
 
 <style lang="scss" scoped>

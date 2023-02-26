@@ -18,7 +18,10 @@
     <Avatar :size="80"/>
     <Avatar :size="80" image="https://www.redditstatic.com/avatars/defaults/v2/avatar_default_1.png"/>
     <h3 class="text-grey-800">Post card</h3>
-    <PostCard :post="post"/>
+
+    <section class="d-grid gap-2" id="posts">
+      <PostCard v-for="(post, i) in posts" :key="`post-${i}`" :post="post"/>
+    </section>
 
     <h3 class="text-grey-800">SearchResultList</h3>
     <SearchResultList />
@@ -39,7 +42,11 @@
     <hr class="w-full">
     <h2>Navigation</h2>
     <h3 class="text-grey-800">Tabs</h3>
-    <Tabs :tabs="[{title: 'home', to: '/'}, {title: 'design', to: '/design-system'}]"/>
+    <Tabs :tabs="tabs">
+      <section>This is first tab</section>
+      <section>This is second tab</section>
+      <section>This is third tab</section>
+    </Tabs>
     <BottomNavigation/>
     <Navbar/>
     <hr class="w-full">
@@ -84,10 +91,27 @@ import { ref } from "vue";
 const checked = ref(true)
 const follow = ref(false)
 
-const post = {
-  community: "Adblock",
-  title: "How to block redirect or pop  unders on Firefox ?",
-  time: "22h",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec diam id dolor placerat ullamcorper vitae pretium libero. Ut euismod dolor in risus luctus, sit amet rhoncus eros imperdiet. Vivamus tempor vel lacus sit amet lacus"
-}
+const posts = [
+  {
+    community: "Adblock",
+    title: "How to block redirect or pop  unders on Firefox ?",
+    time: "22h",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec diam id dolor placerat ullamcorper vitae pretium libero. Ut euismod dolor in risus luctus, sit amet rhoncus eros imperdiet. Vivamus tempor vel lacus sit amet lacus"
+  },
+  {
+    community: "Adblock",
+    title: "How to block redirect or pop  unders on Firefox ?",
+    time: "22h",
+    image: "/post-picture.jpg"
+  }
+]
+
+const tabs = [
+  {
+    label: "Publications"
+  },
+  {
+    label: "À Propos"
+  }
+]
 </script>

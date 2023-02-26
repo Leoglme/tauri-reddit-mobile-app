@@ -1,5 +1,5 @@
 <template>
-  <div class="round bg-primary border-grey-200 flex"
+  <div class="round bg-primary border-grey-200 flex b-1 border-grey-200"
        :style="`width: ${size}px; height: ${size}px; ${isDefaultImage ? 'padding: 4px' : null}`">
     <img class="round" :src="image" :alt="title">
   </div>

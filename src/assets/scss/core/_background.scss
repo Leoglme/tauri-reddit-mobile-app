@@ -1,4 +1,4 @@
-@import "../core/variables";
+@import "src/assets/scss/core/variables";
 
 @each $key, $value in $variants {
   .bg-#{ "" + $key} {

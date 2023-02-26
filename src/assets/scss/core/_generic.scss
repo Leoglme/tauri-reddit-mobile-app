@@ -51,6 +51,9 @@ a {
 .vh-100 {
   min-height: 100vh;
 }
+.vh-fit {
+  min-height: calc(100vh - calc(var(--navbar-height) + var(--bottom-nav-height)));
+}
 .h-full {
   height: 100%;
 }
