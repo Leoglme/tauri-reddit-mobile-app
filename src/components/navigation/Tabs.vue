@@ -7,7 +7,8 @@
           v-for="(item, index) in tabs"
           :class="{ 'active': index === tabIndex }"
           :key="item.label"
-      >{{item.label}}</div>
+      >{{ item.label }}
+      </div>
       <div
           class="scroll-bar border-blue bb-2"
           ref="scrollBar"
@@ -37,107 +38,101 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+/*PROPS*/
+import { onMounted, ref, watch } from "vue";
+import type { PropType } from "vue";
 
-export default {
-  name: "vue-slide-tabs",
-  props: {
-    tabs: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      tabIndex: 0,
-      tabWidth: 0,
-      touching: false,
-      dx: 0,
-      translateX: 0,
-      width: 0
-    }
-  },
-  methods: {
-    getAngle(dx: number, dy: number) {
-      return 360 * Math.atan(dy / dx) / (2 * Math.PI);
-    },
-    select(index: any) {
-      //@ts-ignore
-      this.tabIndex = index;
-    },
-    handleTouchstart(e: { touches: { pageY: any; }[]; }) {
-      //@ts-ignore
-      this.touching = true;
-      //@ts-ignore
-      this.dx = 0;
-      //@ts-ignore
-      this.startX = e.touches[0].pageX;
-        //@ts-ignore
-      this.startY = e.touches[0].pageY;
-        //@ts-ignore
-      this.endX = e.touches[0].pageX;
-        //@ts-ignore
-      this.endY = e.touches[0].pageY;
-    },
-    handleTouchmove(e: { touches: { pageY: any; }[]; }) {
-      //@ts-ignore
-      const endX = e.touches[0].pageX;
-      const endY = e.touches[0].pageY;
-      //@ts-ignore
-      const dx = this.dx = endX - this.startX;
-      if (this.canSlider()) {
-        return;
-      }
-      //@ts-ignore
-      if (Math.abs(dx) > 6 && Math.abs(this.getAngle(dx, endY - this.startY)) < 30) {
-        //@ts-ignore
-        this.translateX = dx;
-      }
-    },
-    handleTouchend() {
-        //@ts-ignore
-      this.touching = false;
-        //@ts-ignore
-      this.translateX = 0;
-        //@ts-ignore
-      const percent = this.dx / this.width;
-      if (this.canSlider()) {
-        return;
-      }
-      if (percent < -0.3) {
-          //@ts-ignore
-        this.tabIndex++;
-      }
-      if (percent > 0.3) {
-          //@ts-ignore
-        this.tabIndex--;
-      }
-    },
-    //@ts-ignore
-    canSlider() {
-      //@ts-ignore
-      return (this.dx < 0 && this.tabIndex >= this.tabs.length - 1) || (this.dx > 0 && this.tabIndex === 0);
-    },
-    resizeWidth() {
-      //@ts-ignore
-      this.width = this.$el.clientWidth;
-      //@ts-ignore
-      this.tabWidth = Math.round(this.width / this.tabs.length);
-    }
-  },
-  watch: {
-    tabIndex(newVal: any) {
-      //@ts-ignore
-      this.$emit('change', newVal);
-    }
-  },
-  mounted() {
-    //@ts-ignore
-    this.resizeWidth();
-    //@ts-ignore
-    window.addEventListener('resize', this.resizeWidth);
+type Tab = {
+  label: string
+}
+
+const props = defineProps({
+  tabs: { type: Array as PropType<Tab[]>, default: () => [] }
+})
+
+/*REFS*/
+const tabIndex = ref(0)
+const tabWidth = ref(0)
+const touching = ref(false)
+const dx = ref(0)
+const translateX = ref(0)
+const width = ref(0)
+const startX = ref(0)
+const startY = ref(0)
+const endX = ref(0)
+const endY = ref(0)
+
+/*METHODS*/
+const getAngle = (dx: number, dy: number) => {
+  return 360 * Math.atan(dy / dx) / (2 * Math.PI);
+}
+
+const select = (index: number) => {
+  tabIndex.value = index;
+}
+
+const handleTouchstart = (e: TouchEvent) => {
+  touching.value = true;
+  dx.value = 0;
+  startX.value = e.touches[0].pageX;
+  startY.value = e.touches[0].pageY;
+  endX.value = e.touches[0].pageX;
+  endY.value = e.touches[0].pageY;
+}
+
+const handleTouchmove = (e: TouchEvent) => {
+  const endX = e.touches[0].pageX;
+  const endY = e.touches[0].pageY;
+  dx.value = endX - startX.value;
+
+  if (canSlider()) {
+    return;
+  }
+
+  if (Math.abs(dx.value) > 6 && Math.abs(getAngle(dx.value, endY - startY.value)) < 30) {
+    translateX.value = dx.value;
   }
 }
+
+const handleTouchend = () => {
+  touching.value = false;
+  translateX.value = 0;
+  const percent = dx.value / width.value;
+
+  if (canSlider()) {
+    return;
+  }
+  if (percent < -0.3) {
+    tabIndex.value++;
+  }
+  if (percent > 0.3) {
+    tabIndex.value--;
+  }
+}
+
+const canSlider = () => {
+  return (dx.value < 0 && tabIndex.value >= props.tabs.length - 1) || (dx.value > 0 && tabIndex.value === 0);
+}
+
+const resizeWidth = () => {
+  width.value = window.screen.width;
+  tabWidth.value = Math.round(width.value / props.tabs.length);
+}
+
+/*EMITS*/
+const emit = defineEmits(['change'])
+
+/*WATCHERS*/
+watch(() => tabIndex.value, (newVal) => {
+  emit('change', newVal)
+});
+
+/*LIFECYCLE*/
+onMounted(() => {
+  resizeWidth()
+  window.addEventListener('resize', resizeWidth);
+})
 </script>
 
 <style lang="scss">
@@ -152,26 +147,31 @@ $color-theme: var(--white);
       border-radius: 5px;
       transition: transform 0.3s;
     }
+
     .title-item {
       flex: 1;
       color: var(--grey-700);
+
       &.active {
         color: $color-theme;
       }
     }
   }
+
   &-content {
     height: calc(100% - 44px);
     overflow: hidden;
+
     .wrapper {
       white-space: nowrap;
       font-size: 0;
-       & > div, & > section {
-         display: inline-grid;
-         width: 100%;
-         height: 100%;
-         font-size: 14px;
-       }
+
+      & > div, & > section {
+        display: inline-grid;
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+      }
     }
   }
 }
