@@ -103,12 +103,12 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 611,
-        "width": 365,
-        "resizable": false,
+        "height": 600,
+        "width": 800,
+        "resizable": true,
         "title": "Reddit",
-        "transparent": true,
-        "decorations": false
+        "transparent": false,
+        "decorations": true
       }
     ]
   }
