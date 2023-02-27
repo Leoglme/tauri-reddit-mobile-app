@@ -9,6 +9,7 @@ import CreateCommunityPage from '@/pages/CreateCommunityPage.vue';
 import CommunityPage from '@/pages/CommunityPage.vue';
 import BottomNavigation from "@/components/navigation/BottomNavigation.vue";
 import Navbar from "@/components/navigation/Navbar.vue";
+import {useAuthStore} from "@/stores/auth.store";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,15 @@ const router = createRouter({
             component: LoadingPage
         },
     ]
+})
+
+router.beforeEach(async (to) => {
+    const pageWithoutConnection = ['/login', '/design-system', '/access-token'];
+    const auth = useAuthStore();
+
+    if(!auth.access_token && !pageWithoutConnection.includes(to.path)){
+        await router.push('/login');
+    }
 })
 
 export default router;
