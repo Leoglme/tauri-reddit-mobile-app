@@ -2,7 +2,6 @@ import axios from "axios"
 import { BaseApi } from "@/api/BaseApi";
 
 export class Auth extends BaseApi {
-    static token = localStorage.getItem("access_token")
     static oauthRedditLoginUrl = `${this.redditApiUrl}/authorize?client_id=${this.redditClientId}&response_type=code&state=redditech&redirect_uri=${this.redirectUri}&duration=permanent&scope=*`
 
     static option = {
@@ -28,9 +27,9 @@ export class Auth extends BaseApi {
         return await axios.post(url, null, option)
     }
 
-    static async getUserConnected() {
+    static async getUserConnected(token: string) {
         const url = `${this.oauthRedditApiUrl}/me`
-        return await axios.get(url, {...this.option, headers: {"Authorization": "Bearer " + this.token }})
+        return await axios.get(url, {...this.option, headers: {"Authorization": "Bearer " + token }})
     }
 
 }

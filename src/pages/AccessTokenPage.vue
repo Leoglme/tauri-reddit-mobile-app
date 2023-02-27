@@ -23,9 +23,14 @@ if(code){
   Auth.getToken(code).then(res => {
     let accessToken = res.data.access_token
 
+
     if (accessToken) {
       authStore.setAccessToken(accessToken)
-      router.push({name: "home"})
+      Auth.getUserConnected(accessToken).then(res => {
+        authStore.setUsername(res.data.name)
+        authStore.setSr(res.data.subreddit.name)
+        router.push({name: "home"})
+      })
     }
   }).catch(err => {
     console.log("ERR", err)

@@ -12,13 +12,12 @@ const authStore = useAuthStore()
 
 /*API*/
 //get user infos and set username, sr
-Auth.getUserConnected().then(res => {
-  console.log(res.data)
-  localStorage.setItem("Username", res.data.name)
-  localStorage.setItem("sr", res.data.subreddit.name)
-}).catch(err => {
-  console.log(err)
-})
+// Auth.getUserConnected().then(res => {
+//   console.log(res.data)
+//
+// }).catch(err => {
+//   console.log(err)
+// })
 
 //User.updateUserInfo("2eme test", "titi") //remplacer les 2 valeurs par des variables
 
