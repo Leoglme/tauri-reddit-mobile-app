@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 z-index-10 fixed top-0 bb-2 border-grey-500 bg-grey-100 flex justify-between w-full items-center" style="height: 54px;">
+  <div class="px-2 z-index-10 inherit top-0 bb-2 border-grey-500 bg-grey-100 flex justify-between w-full items-center" style="height: var(--navbar-height)">
     <SelectFilter/>
 
     <div class="flex items-center gap-4">

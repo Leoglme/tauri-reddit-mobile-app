@@ -1,6 +1,10 @@
 <template>
   <RouterView name="Navbar" />
-  <RouterView />
+
+  <main class="vh-fit">
+    <RouterView />
+  </main>
+
   <RouterView name="BottomNavigation" />
 </template>
 

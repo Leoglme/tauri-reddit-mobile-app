@@ -22,6 +22,9 @@ $white: #FEFEFE;
 
 :root {
   --radius: 6px;
+  --linear: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(33, 39, 48, 0.8) 100%);
+  --navbar-height: 54px;
+  --bottom-nav-height: 48px;
   --primary: #{$primary};
   --primary-light: #{$primary-light};
   --primary-dark: #{$primary-dark};

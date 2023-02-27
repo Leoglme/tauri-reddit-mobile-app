@@ -6,7 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+android
+.android
 node_modules
 dist
 dist-ssr
@@ -25,3 +26,4 @@ dist-ssr
 
 #
 package-lock.json
+.env

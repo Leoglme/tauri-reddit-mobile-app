@@ -1,6 +1,6 @@
 <template>
-  <div class="z-index-10 bt-2 border-grey-500 gap-4 bg-grey-200 flex w-full justify-center items-center fixed bottom-0"
-       style="height: 48px;">
+  <div class="z-index-10 bt-2 border-grey-500 gap-4 bg-grey-200 flex w-full justify-center items-center sticky bottom-0"
+       style="height: var(--bottom-nav-height)">
     <div v-for="(tab, index) in tabs"
          :key="tab.name"
          :class="[

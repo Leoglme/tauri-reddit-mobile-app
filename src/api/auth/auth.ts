@@ -1,7 +1,9 @@
 import axios from "axios"
+import { BaseApi } from "@/api/BaseApi";
 
-export class Auth {
+export class Auth extends BaseApi {
     static token = localStorage.getItem("access_token")
+    static oauthRedditLoginUrl = `${this.redditApiUrl}/authorize?client_id=${this.redditClientId}&response_type=code&state=redditech&redirect_uri=${this.redirectUri}&duration=permanent&scope=*`
 
     static option = {
         headers: {
@@ -10,18 +12,24 @@ export class Auth {
     }
 
     static async getToken(code: string) {
+
+        if (this.redditClientId === undefined || this.redditSecret === undefined) {
+            throw new Error("Missing REDDIT_CLIENT_ID or REDDIT_SECRET in .env file");
+        }
+
         const option = {
             ...this.option, auth: {
-                username: '092USZcSP0ni2yftuo1q6w',
-                password: 'aosKrwSibpOH-mC5kcDR6syjX9xWnw'
+                username: this.redditClientId,
+                password: this.redditSecret
             }
         }
-        let url = "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=" + code + "&redirect_uri=http://localhost:1420/access-token"
+
+        const url = `${this.redditApiUrl}/access_token?grant_type=authorization_code&code=${code}&redirect_uri=${this.redirectUri}`
         return await axios.post(url, null, option)
     }
 
     static async getUserConnected() {
-        let url = "https://oauth.reddit.com/api/v1/me"
+        const url = `${this.oauthRedditApiUrl}/me`
         return await axios.get(url, {...this.option, headers: {"Authorization": "Bearer " + this.token }})
     }
 

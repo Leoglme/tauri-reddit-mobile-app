@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import MenuDownIcon from 'vue-material-design-icons/MenuDown.vue';
-import { visibilities } from "../../env";
+import { visibilities } from "@/env";
 
 /*PROPS*/
 const props = defineProps({
@@ -20,7 +20,7 @@ const props = defineProps({
 })
 
 /*REFS*/
-const activeVisibility = ref(visibilities.find(v => v.value === props.visibility))
+const activeVisibility = ref(visibilities.find(v => v.value === props.visibility) || visibilities[0])
 </script>
 
 

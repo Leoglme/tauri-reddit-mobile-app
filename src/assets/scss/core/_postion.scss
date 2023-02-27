@@ -1,3 +1,7 @@
+.absolute {
+  position: absolute;
+}
+
 .relative {
   position: relative;
 }
@@ -6,8 +10,16 @@
   position: fixed;
 }
 
+.sticky {
+  position: sticky;
+}
 
-$max: 1;
+.inherit {
+  position: inherit;
+}
+
+
+$max: 10;
 
 /*top, left, right, bottom*/
 @for $i from 0 through $max {
@@ -16,5 +28,11 @@ $max: 1;
   }
   .top-#{$i} {
     top: $i * 1px;
+  }
+  .right-#{$i} {
+    right: $i * 1px;
+   }
+  .left-#{$i} {
+    left: $i * 1px;
   }
 }

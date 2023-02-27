@@ -1,11 +1,15 @@
 @use 'sass:color';
-@import "../core/functions";
-@import "../core/variables";
+@import "src/assets/scss/core/functions";
+@import "src/assets/scss/core/variables";
 %reset-button {
   cursor: pointer;
   text-decoration: none;
   border: none;
   color: var(--white, #fff);
+}
+
+a[role=button]:hover {
+  text-decoration: none;
 }
 
 button {
