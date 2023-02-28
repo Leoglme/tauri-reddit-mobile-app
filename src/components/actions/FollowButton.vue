@@ -1,5 +1,5 @@
 <template>
-  <button @click="emit('follow')" class="btn-outlined gap-1" data-variant="white">
+  <button @click="emit('follow', !follow)" class="btn-outlined gap-1" data-variant="white">
     <CheckIcon fill-color="var(--white)" :size="20" v-if="props.follow"/> {{props.follow ? 'Abonné' : 'Suivre'}}
   </button>
 </template>
