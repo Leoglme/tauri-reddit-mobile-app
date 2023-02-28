@@ -9,6 +9,7 @@ import CreateCommunityPage from '@/pages/CreateCommunityPage.vue';
 import CommunityPage from '@/pages/CommunityPage.vue';
 import BottomNavigation from "@/components/navigation/BottomNavigation.vue";
 import Navbar from "@/components/navigation/Navbar.vue";
+import Search from '@/pages/SearchPage.vue';
 import {useAuthStore} from "@/stores/auth.store";
 
 const router = createRouter({
@@ -66,6 +67,14 @@ const router = createRouter({
             path: '/loading',
             name: 'loading',
             component: LoadingPage
+        },
+        {
+            path: '/search',
+            name: 'search',
+            components: {
+                default: Search,
+                BottomNavigation: BottomNavigation
+            }
         },
     ]
 })

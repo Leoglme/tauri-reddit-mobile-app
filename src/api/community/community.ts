@@ -8,13 +8,13 @@ export class Community{
         }
     }
 
-    static async searchCommunity() {
-        let url = "https://www.reddit.com/subreddits/search.json?q=Fortnite&limit=25"
+    static async searchCommunity(communityName: string) {
+        let url = "https://www.reddit.com/subreddits/search.json?q=" + communityName + "&limit=8"
         return await axios.get(url)
     }
 
-    static async getCommunityInfo() {
-        let url = "https://oauth.reddit.com/search?q=FortCollins"
+    static async getCommunityInfo(communityName: string) {
+        let url = "https://oauth.reddit.com/search?q="+ communityName
         return await axios.get(url, this.option)
     }
 

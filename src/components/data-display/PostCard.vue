@@ -12,7 +12,7 @@
     <!-- Body -->
     <div class="d-grid gap-1 text-grey-800">
       <h3 class="text-lg font-semibold">{{props.post.data.title}}</h3>
-      <p v-if="props.post.data.selftext_html" class="text-sm block-with-text" v-html="props.post.data.selftext"></p>
+      <p v-if="props.post.data.selftext_html" class="text-sm block-with-text" v-html="props.post.data.selftext_html"></p>
       <img class="post-image" v-if="props.post.image" :src="props.post.image" :alt="props.post.title">
     </div>
   </div>

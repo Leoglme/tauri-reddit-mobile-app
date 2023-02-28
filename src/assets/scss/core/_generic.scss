@@ -30,11 +30,10 @@ body {
 }
 
 a {
-  color: var(--primary);
-  font-weight: 600;
-  &:hover {
-    text-decoration: underline;
-  }
+  color: inherit;
+  //&:hover {
+  //  text-decoration: underline;
+  //}
 }
 
 .round {

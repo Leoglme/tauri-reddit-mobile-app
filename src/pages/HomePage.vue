@@ -18,18 +18,6 @@ const authStore = useAuthStore()
 const posts = ref<any[]>([])
 const showLoading = ref(true)
 
-/*API*/
-/* Community.searchCommunity().then(res => {
-   console.log(res.data.data)
- }).catch(err => {
-   console.log(err)
- })*/
-
-/*Community.userCommunityList().then(res => {
-  console.log(res.data)
-}).catch(err => {
-  console.log(err.message)
-})*/
 
 const getHomePosts = () => {
   Post.homePage().then(res => {

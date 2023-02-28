@@ -20,7 +20,7 @@
     <h3 class="text-grey-800">Post card</h3>
 
     <section class="d-grid gap-2" id="posts">
-      <PostCard v-for="(post, i) in posts" :key="`post-${i}`" :post="post"/>
+<!--      <PostCard v-for="(post, i) in posts" :key="`post-${i}`" :post="post"/>-->
     </section>
 
     <h3 class="text-grey-800">SearchResultList</h3>
@@ -91,20 +91,23 @@ import { ref } from "vue";
 const checked = ref(true)
 const follow = ref(false)
 
-const posts = [
-  {
-    community: "Adblock",
-    title: "How to block redirect or pop  unders on Firefox ?",
-    time: "22h",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec diam id dolor placerat ullamcorper vitae pretium libero. Ut euismod dolor in risus luctus, sit amet rhoncus eros imperdiet. Vivamus tempor vel lacus sit amet lacus"
-  },
-  {
-    community: "Adblock",
-    title: "How to block redirect or pop  unders on Firefox ?",
-    time: "22h",
-    image: "/post-picture.jpg"
-  }
-]
+// const posts = [
+//   {
+//     data: {
+//       subreddit_name_prefixed: 'Adblock'
+//     },
+//     community: "Adblock",
+//     title: "How to block redirect or pop  unders on Firefox ?",
+//     time: "22h",
+//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec diam id dolor placerat ullamcorper vitae pretium libero. Ut euismod dolor in risus luctus, sit amet rhoncus eros imperdiet. Vivamus tempor vel lacus sit amet lacus"
+//   },
+//   {
+//     community: "Adblock",
+//     title: "How to block redirect or pop  unders on Firefox ?",
+//     time: "22h",
+//     image: "/post-picture.jpg"
+//   }
+// ]
 
 const tabs = [
   {
