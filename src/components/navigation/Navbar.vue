@@ -4,7 +4,9 @@
     <SelectFilter/>
 
     <div class="flex items-center gap-4">
-      <MagnifyIcon class="cursor-pointer" fill-color="var(--grey-700)" :size="28"/>
+      <router-link to="/search">
+        <MagnifyIcon class="cursor-pointer" fill-color="var(--grey-700)" :size="28"/>
+      </router-link>
       <Avatar :image="authStore.userImage" :size="32"/>
     </div>
   </div>
