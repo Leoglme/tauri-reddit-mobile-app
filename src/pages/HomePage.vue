@@ -1,107 +1,36 @@
 <template>
-  INDEX {{ authStore.access_token }}
+  <div v-if="showLoading">
+      Chargement
+  </div>
+  <div class="bg-black d-grid gap-2" v-else>
+    <PostCard v-for="(post, i) in posts" :key="`post-${i}`" :post="post"  />
+  </div>
+
 </template>
 
 <script lang="ts" setup>
 import { useAuthStore } from "@/stores/auth.store";
-import { Auth } from "@/api/auth/auth";
-
+import {Post} from "@/api/post/post";
+import {ref} from "vue";
+import PostCard from "@/components/data-display/PostCard.vue"
 /*STORE*/
 const authStore = useAuthStore()
+const posts = ref<any[]>([])
+const showLoading = ref(true)
 
 
-/*API*/
-//get user infos and set username, sr
-// Auth.getUserConnected().then(res => {
-//   console.log(res.data)
-//
-// }).catch(err => {
-//   console.log(err)
-// })
+const getHomePosts = () => {
+  Post.homePage().then(res => {
+    posts.value = posts.value.concat(res.data.data.children)
+    showLoading.value = false
+    console.log(posts.value)
 
-//User.updateUserInfo("2eme test", "titi") //remplacer les 2 valeurs par des variables
+  }).catch(err => {
+    console.log(err)
+  })
+}
 
-
-///COMMUNITY
-/* Community.searchCommunity().then(res => {
-   console.log(res.data.data)
- }).catch(err => {
-   console.log(err)
- })*/
-
-/*Community.getCommunityInfo().then(res => {
-  console.log(res)
-}).catch(err => {
-  console.log(err)
-})*/
-
-/*Community.createCommunity({
-  communityDescription: "string",
-  communityName: "strincndjkgfkzcvjhdzlj",
-  type: "private",
-  over18: true,
-  restrictCommenting: true,
-  restrictPosting: true
-}).then(res => {
-  console.log("Community created")
-}).catch(err => {
-  console.log(err)
-})*/
-
-/*Community.userCommunityList().then(res => {
-  console.log(res.data)
-}).catch(err => {
-  console.log(err.message)
-})*/
-
-/*Community.hotPostCommunity().then(res => {
-  console.log(res)
-}).catch(err => {
-  console.log(err)
-})*/
-
-/*Community.subscribeCommunity("FortNiteBR").then(res =>{
- console.log("join")
-}).catch(err => {
- console.log(err)
-})*/
-
-/*Community.unsubscribeCommunity("FortNiteBR").then(res =>{
-  console.log("leave")
-}).catch(err => {
-  console.log(err)
-})*/
-
-///POST
-
-/*Post.homePage().then(res => {
-  console.log(res)
-}).catch(err => {
-  console.log(err)
-})*/
-
-/*Post.getPostUser("sir_posts_alot").then(res => {
-  console.log(res)
-}).catch(err => {
-  console.log(err)
-})*/
-
-/*Post.createPost({
-  title: "test",
-  text: "test",
-  spoiler: false,
-  nsfw: false,
-}).then(res => {
-  console.log("Post created")
-}).catch(err => {
-  console.log(err)
-})*/
-
-// Post.deletePost("t3_1182kue").then(res => {
-//   console.log("delete")
-// }).catch(err => {
-//   console.log(err)
-// })
+getHomePosts()
 
 </script>
 

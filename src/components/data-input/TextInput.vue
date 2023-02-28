@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex column gap-2 w-full mt-4 relative">
+  <div class="d-flex column gap-2 w-full relative">
     <label class="font-semibold text-grey-800" v-if="label" :for="props.id">{{ label }}</label>
 
     <Field
@@ -15,7 +15,7 @@
       <div class="relative">
         <MagnifyIcon fill-color="var(--grey-700)" class="search__input--icon" v-if="type === 'search'"/>
         <span v-if="prefix" class="prefix text-grey-700">{{prefix}}</span>
-        <input ref="input" class="input mt-4 pr-3 py-2 w-full bg-grey-200 text-grey-800"
+        <input ref="input" class="input pr-3 py-2 w-full bg-grey-200 text-grey-800"
                :style="[hasIcon ? 'padding-left: 40px' : null, round ? '--radius: 50px' : null]" v-bind="field" :type="typeRef"
                :id="props.id"
                :placeholder="props.placeholder"
