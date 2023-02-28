@@ -1,5 +1,5 @@
 <template>
-<!--  https://github.com/vaban-ru/vue-bottom-sheet-->
+<!--  https://github.com/vaban-ru/vue-bottom-sheet -->
   <div class="flex flex-col justify-center gap-2 cursor-pointer user-select-none select__visibility">
     <span class="text-sm font-medium text-grey-800">Type de communauté</span>
     <div class="flex flex-col justify-center gap-1">

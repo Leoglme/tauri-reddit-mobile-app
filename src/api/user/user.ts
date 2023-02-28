@@ -11,8 +11,12 @@ export class User {
     }
 
     static async getUserInfo(username: string) {
-        let url = "https://www.reddit.com/user/" + username + "/about.json"
-        return await axios.get(url)
+        let url = "https://oauth.reddit.com/user/" + username + "/about"
+        return await axios.get(url, {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("access_token")
+            }
+        })
     }
 
     static async updateUserInfo(newDescription: string, newTitle: string){
