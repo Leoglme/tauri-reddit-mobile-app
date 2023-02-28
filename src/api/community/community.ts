@@ -14,7 +14,7 @@ export class Community{
     }
 
     static async getCommunityInfo(communityName: string) {
-        let url = "https://oauth.reddit.com/search?q="+ communityName
+        let url = "https://oauth.reddit.com/r/" + communityName + "/about.json"
         return await axios.get(url, this.option)
     }
 
@@ -37,8 +37,8 @@ export class Community{
         return await axios.get(url, this.option)
     }
 
-    static async hotPostCommunity(){
-        let url = "https://www.reddit.com/r/FortNiteBR/hot.json"
+    static async hotPostCommunity(communityName: string){
+        let url = "https://www.reddit.com/r/" + communityName + "/hot.json"
         return await axios.get(url)
     }
 
