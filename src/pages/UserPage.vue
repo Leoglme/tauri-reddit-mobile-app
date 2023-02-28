@@ -1,27 +1,34 @@
 <template>
   <Loader v-if="appStore.loading"/>
   <section id="user-profile" v-else>
-    <div class="w-full user__header relative bg-blue">
-      <div class="p-3 d-grid gap-1 relative z-index-2">
-        <div class="w-full flex justify-end">
-          <DisconnectButton/>
-          <!--        <DotsHorizontalIcon fill-color="var(&#45;&#45;grey-800)" :size="28" class="clickable-icon"/>-->
-        </div>
+    <div class="w-full user__header relative bg-blue"
+         :style="user.banner_img ? `background-image: url('${user.banner_img}'); background-size: contain; background-repeat: no-repeat;` : null">
+      <div class="h-full d-grid relative z-index-2">
+<!--        <div class="w-full flex justify-end">-->
+<!--&lt;!&ndash;          <DisconnectButton/>&ndash;&gt;-->
+<!--          &lt;!&ndash;        <DotsHorizontalIcon fill-color="var(&#45;&#45;grey-800)" :size="28" class="clickable-icon"/>&ndash;&gt;-->
+<!--        </div>-->
 
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center px-3 py-2">
           <Avatar
-              image="https://styles.redditmedia.com/t5_2t0pyr/styles/profileIcon_9hgrabyaafja1.png?width=256&amp;height=256&amp;crop=256:256,smart&amp;v=enabled&amp;s=a1ecd758bb920873ca6dbedc1927408cc1311c68"
+              :image="user.icon_img"
               :size="90"/>
-          <FollowButton :follow="follow" @follow="follow = !follow"/>
         </div>
 
-        <h1 class="font-semibold text-xl">{{ username }}</h1>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-grey-800">u/{{ username }} • 5 juin 2021</span>
+        <div class="bg-grey-200 flex flex-col justify-center p-3">
+          <div>
+            <h1 class="font-semibold text-lg">{{ username }}</h1>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-grey-800">u/{{ username }} • {{ user.createdAt }}</span>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <FollowButton :follow="user.user_is_subscriber" @follow="follow = !follow"/>
+          </div>
+
         </div>
 
       </div>
-      <div class="linear__mask w-full absolute bottom-0"/>
     </div>
     <Tabs :tabs="tabs">
       <section class="gap-2" id="posts">
@@ -44,9 +51,11 @@ import { useRoute } from "vue-router";
 import { User } from "@/api/user/user";
 import { Post } from "@/api/post/post";
 import { useAppStore } from "@/stores/app.store";
+import { removeAmpUrl } from "@/utils/format";
+import type { UserModel } from "@/api/user/user.model";
 
 /*REFS*/
-const follow = ref(false)
+const isUserConnectedProfile = ref(false)
 
 /*DATA*/
 const tabs = [
@@ -62,15 +71,33 @@ const route = useRoute()
 const username = route.params.username
 const posts = ref([])
 const appStore = useAppStore()
+const user = ref({} as UserModel)
 appStore.setLoading(true)
 
 User.getUserInfo(username.toString()).then(res => {
-  const { icon_img, title, display_name_prefixed, public_description } = res.data.data.subreddit
-  console.log({ icon_img, title, display_name_prefixed, public_description })
+  const { icon_img, title, display_name_prefixed, public_description, banner_img, user_is_subscriber } = res.data.data.subreddit
+  user.value = { title, display_name_prefixed, public_description, createdAt: res.data.data.created_utc, user_is_subscriber }
+  user.value.icon_img = removeAmpUrl(icon_img)
+  user.value.banner_img = removeAmpUrl(banner_img)
+  console.log(res.data.data)
+
   Post.getPostUser(username.toString()).then((res) => {
-    console.log(res.data.data.children)
     posts.value = res.data.data.children
     appStore.setLoading(false)
+    // console.log(res.data.data)
+    // is_gallery
+    // title
+    // is_video
+    // subreddit_name_prefixed
+    // created_utc
+    // thumbnail
+    //
+    //
+    // is_gallery
+    // gallery_data db7qhlrs4wka1
+    // is_video
+    // media_metadata s.u
+    // preview
   }).catch(err => {
     console.log(err)
   })
@@ -82,13 +109,10 @@ User.getUserInfo(username.toString()).then(res => {
 
 
 <style lang="scss" scoped>
-$header_height: 250px;
-.user__header {
-  height: $header_height;
-}
+$header_height: 200px;
 
 .linear__mask {
-  height: calc(250px / 2.78);
+  height: 100px;
   background: var(--linear);
 }
 

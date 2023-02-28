@@ -24,6 +24,16 @@ import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
 import type { PropType } from "vue";
 import type {PostModel} from "@/api/post/post.model";
 
+type Post = {
+  data: {
+    subreddit_name_prefixed: string,
+    title: string,
+    time: string,
+    selftext?: string,
+    image?: string
+  }
+}
+
 const props = defineProps({
   post: { type: Object as PropType<PostModel>, required: true }
 })
