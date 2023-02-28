@@ -29,6 +29,7 @@ if(code){
       Auth.getUserConnected(accessToken).then(res => {
         authStore.setUsername(res.data.name)
         authStore.setSr(res.data.subreddit.name)
+        authStore.setUserImage(res.data.subreddit.icon_img)
         router.push({name: "home"})
       })
     }
