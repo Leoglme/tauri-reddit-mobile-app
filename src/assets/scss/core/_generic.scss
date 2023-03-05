@@ -1,5 +1,5 @@
 // Generic
-@import "variables";
+@import 'variables';
 body {
   font-family: $font;
   font-size: 14px;
@@ -31,9 +31,6 @@ body {
 
 a {
   color: inherit;
-  //&:hover {
-  //  text-decoration: underline;
-  //}
 }
 
 .round {
@@ -60,21 +57,28 @@ a {
   width: 100%;
 }
 
+.fit-content {
+  width: fit-content;
+}
+
 /* Pseudo-classes */
 ::selection {
   background: var(--selection);
   color: var(--grey-100);
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: var(--grey-700);
   opacity: 1; /* Firefox */
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
   color: var(--grey-700);
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
+::-ms-input-placeholder {
+  /* Microsoft Edge */
   color: var(--grey-700);
 }

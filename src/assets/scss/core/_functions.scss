@@ -1,14 +1,14 @@
-@use "sass:math";
+@use 'sass:math';
 
 // Espacements
 @function space($i) {
-  @return calc(#{$i} * 0.25rem)
+  @return calc(#{$i} * 0.25rem);
 }
 
 // Chaines
 @function strip-unit($number) {
   @if type-of($number) == 'number' and not unitless($number) {
-    @return $number / ($number * 0 + 1);
+    @return math.div($number, $number * 0 + 1);
   }
 
   @return $number;

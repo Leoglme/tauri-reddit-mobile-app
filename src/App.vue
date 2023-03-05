@@ -1,18 +1,20 @@
 <template>
-  <RouterView name="Navbar" />
+  <div>
+    <RouterView name="Navbar" />
 
-  <main :class="{'vh-100 centered': authStore.loading}">
-    <RouterView/>
-  </main>
+    <main :class="{ 'vh-100 centered': appStore.loading }">
+      <RouterView />
+    </main>
 
-  <RouterView name="BottomNavigation" />
+    <RouterView name="BottomNavigation" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { useAppStore } from "@/stores/app.store";
+import { useAppStore } from '@/stores/app.store'
 
 /*STORE*/
-const authStore = useAppStore()
+const appStore = useAppStore()
 </script>
 
 <style lang="scss" scoped>

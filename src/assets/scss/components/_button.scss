@@ -1,6 +1,6 @@
 @use 'sass:color';
-@import "src/assets/scss/core/functions";
-@import "src/assets/scss/core/variables";
+@import 'src/assets/scss/core/functions';
+@import 'src/assets/scss/core/variables';
 %reset-button {
   cursor: pointer;
   text-decoration: none;
@@ -8,7 +8,7 @@
   color: var(--white, #fff);
 }
 
-a[role=button]:hover {
+a[role='button']:hover {
   text-decoration: none;
 }
 
@@ -24,20 +24,20 @@ button {
   justify-content: center;
   font-weight: 600;
   border-radius: 100px;
-  transition: filter 0.25s, color 0.25s, transform .25s;
+  transition: filter 0.25s, color 0.25s, transform 0.25s;
   filter: brightness(1);
   white-space: nowrap;
   transform: translateZ(0);
 
-&[disabled] {
-  pointer-events: none;
-  color: var(--grey-600);
-}
+  &[disabled] {
+    pointer-events: none;
+    color: var(--grey-600);
+  }
 
-&:active:not([disabled]) {
-  transform: translateY(2px);
+  &:active:not([disabled]) {
+    transform: translateY(2px);
+  }
 }
-};
 
 %button {
   @extend %reset-button;
@@ -56,7 +56,7 @@ button {
   @extend %button;
 
   border: 2px solid var(--primary, #007bff);
-  transition: filter 0.25s, border-color 0.25s, color 0.25s, transform .25s;
+  transition: filter 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
 
   &[disabled] {
     border-color: var(--grey-200);
@@ -111,8 +111,7 @@ button {
   }
 }
 
-
-.btn.square  {
+.btn.square {
   height: 40px;
   width: 40px;
   border-radius: 4px;

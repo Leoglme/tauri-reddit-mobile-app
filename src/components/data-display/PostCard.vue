@@ -1,49 +1,161 @@
 <template>
   <div class="d-grid gap-2 px-3 py-2 bg-grey-100">
     <!-- Header -->
+
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
-        <Avatar :image="props.post.data.avatarUrl" :size="28"/>
-        <h4 class="text-md font-medium text-grey-800">{{ props.post.data.subreddit_name_prefixed }}</h4>
-        <span class="font-medium text-grey-700">{{ props.post.data.time }}</span>
+        <Avatar
+          :image="props.post.data.avatarUrl"
+          :size="28"
+        />
+        <div
+          class="d-grid"
+          style="gap: 1px"
+        >
+          <div class="flex items-center gap-2">
+            <h4 class="text-sm font-medium text-grey-800">
+              {{ props.post.data.subreddit_name_prefixed }}
+            </h4>
+            <span
+              v-if="!hasAuthor"
+              class="font-medium text-grey-700 flex items-center gap-2"
+              ><span>•</span>{{ formatElapsedTime(props.post.data.created_utc) }}</span
+            >
+          </div>
+          <div
+            v-if="hasAuthor"
+            class="flex items-center gap-2"
+          >
+            <h4 class="text-sm font-medium text-grey-800">u/{{ props.post.data.author }}</h4>
+            <span class="font-medium text-grey-700 flex items-center gap-2"
+              ><span>•</span>{{ formatElapsedTime(props.post.data.created_utc) }}</span
+            >
+          </div>
+        </div>
       </div>
-      <DotsHorizontalIcon class="clickable-icon" fill-color="var(--grey-800)"/>
+
+      <DotsHorizontalIcon
+        class="clickable-icon"
+        fill-color="var(--grey-800)"
+      />
     </div>
     <!-- Body -->
     <div class="d-grid gap-1 text-grey-800">
-      <h3 class="text-lg font-semibold">{{props.post.data.title}}</h3>
-      <p v-if="props.post.data.selftext" class="text-sm block-with-text">{{props.post.data.selftext}}</p>
-      <img class="post-image" v-if="props.post.image" :src="props.post.image" :alt="props.post.title">
+      <h3 class="text-lg font-semibold">{{ props.post.data.title }}</h3>
+      <Swiper
+        v-if="images"
+        :images="images"
+      />
+      <PostVideo
+        v-else-if="isVideo && video"
+        :video="video"
+      />
+      <a
+        v-else-if="props.post.data.url_overridden_by_dest"
+        class="link-blue"
+        :href="props.post.data.url_overridden_by_dest"
+      >
+        {{ extractDomain(props.post.data.url_overridden_by_dest) }}
+      </a>
+      <selfTextLink
+        v-if="isLink"
+        :self-text="selftext"
+      />
+      <p
+        v-else-if="selftext && !images"
+        class="text-sm block-with-text"
+      >
+        {{ selftext }}
+      </p>
+      <Poll
+        v-if="poll"
+        :poll="poll"
+      />
+      <MediaEmbed
+        v-if="iframeUrl"
+        :iframe-content="iframeUrl"
+      />
+      <img
+        v-else-if="image && !isVideo"
+        class="post-image mt-1 user-select-none"
+        :src="image"
+        :alt="props.post.data.title"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Avatar from "../../components/data-display/Avatar.vue"
-import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
-import type { PropType } from "vue";
-import type {PostModel} from "@/api/post/post.model";
+import Avatar from '@/components/data-display/Avatar.vue'
+import MediaEmbed from '@/components/data-display/MediaEmbed.vue'
+import Swiper from '@/components/data-display/Swiper.vue'
+import Poll from '@/components/data-display/Poll.vue'
+import PostVideo from '@/components/data-display/PostVideo.vue'
+import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
+import type { PropType } from 'vue'
+import type { PostModel, VideoModel } from '@/api/post/post.model'
+import { computed, onMounted, ref } from 'vue'
+import { getBestImages, getImageInPreview } from '@/utils/imageUtils'
+import { extractDomain, removeLinkInSelfText, selfTextIsLinkFormat } from '@/utils/urlUtils'
+import SelfTextLink from '@/components/data-display/SelfTextLink.vue'
+import { formatElapsedTime } from '@/utils/dateUtils'
 
-type Post = {
-  data: {
-    subreddit_name_prefixed: string,
-    title: string,
-    time: string,
-    selftext?: string,
-    image?: string
+/*PROPS*/
+const props = defineProps({
+  post: { type: Object as PropType<PostModel>, required: true },
+})
+
+/*REFS*/
+const image = ref<undefined | string>()
+const video = ref(props.post?.data.media?.reddit_video as VideoModel)
+const poll = ref(props.post?.data.poll_data)
+const isLink = ref(selfTextIsLinkFormat(props.post.data.selftext) && !poll.value)
+const isVideo = ref(props.post.data.is_video)
+const iframeUrl = ref(props.post?.data.secure_media_embed?.content)
+const hasAuthor = ref(
+  props.post.data.author && 'u/' + props.post.data.author !== props.post.data.subreddit_name_prefixed
+)
+
+/*COMPUTED*/
+const selftext = computed(() => {
+  const text = props.post?.data.selftext
+  if (text && poll.value) {
+    return removeLinkInSelfText(text)
+  }
+  return text
+})
+
+const images = computed(() => {
+  const imagesInJson = props.post?.data.media_metadata
+  if (!imagesInJson) return null
+  const bestImages = getBestImages(imagesInJson)
+  if (bestImages.length === 1) {
+    image.value = bestImages[0].src
+    return null
+  }
+  return bestImages
+})
+
+/*METHODS*/
+const getImage = () => {
+  if (props.post?.data.preview) {
+    image.value = getImageInPreview(props.post.data.preview)
   }
 }
+getImage()
 
-const props = defineProps({
-  post: { type: Object as PropType<PostModel>, required: true }
+/*LIFECYCLE*/
+onMounted(() => {
+  window.addEventListener('resize', getImage)
 })
 </script>
-
 
 <style scoped>
 .post-image {
   object-fit: contain;
   border-radius: 16px;
-  border: 1px solid var(--grey-500);
+  width: 100%;
+  border: 1px solid var(--grey-600);
+  background: var(--grey-800);
 }
 </style>

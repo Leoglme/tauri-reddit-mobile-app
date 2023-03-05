@@ -1,24 +1,24 @@
 /*FONTS*/
-$font: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 /*COLORS*/
-$primary: #E95428;
+$primary: #e95428;
 $primary-light: #ff7f4f;
-$primary-dark: #D13900;
-$blue: #2E6BBF;
+$primary-dark: #d13900;
+$blue: #2e6bbf;
 $blue-dark: #235599;
-$red: #FF4A4A;
-$black: #0A0A0A;
+$red: #ff4a4a;
+$black: #0a0a0a;
 $black-65: rgba(10, 10, 10, 65%);
 $grey-100: #121212;
-$grey-200: #1E1E1E;
+$grey-200: #1e1e1e;
 $grey-300: #252423;
 $grey-400: #242424;
-$grey-400-70: rgba(0,0,14,70%);
-$grey-500: #2E2E2F;
-$grey-600: #3A3A3B;
-$grey-700: #898D8F;
-$grey-800: #D4D6D8;
-$white: #FEFEFE;
+$grey-400-70: rgba(0, 0, 14, 70%);
+$grey-500: #2e2e2f;
+$grey-600: #3a3a3b;
+$grey-700: #898d8f;
+$grey-800: #d4d6d8;
+$white: #fefefe;
 
 :root {
   --radius: 6px;
@@ -43,19 +43,22 @@ $white: #FEFEFE;
   --grey-700: #{$grey-700};
   --grey-800: #{$grey-800};
   --white: #{$white};
-  --selection: #FF7F4FFF;
+  --radio-width: 14px;
+  --radio-color: #{$white};
+  --selection: #ff7f4fff;
 }
 
 $variants: (
-        primary: $primary,
-        white: $white,
-        blue: $blue,
-        red: $red,
-        black: $black,
-        grey-100: $grey-100,
-        grey-200: $grey-200,
-        grey-400: $grey-400,
-        grey-500: $grey-500,
-        grey-700: $grey-700,
-        grey-800: $grey-800
+  primary: $primary,
+  white: $white,
+  blue: $blue,
+  red: $red,
+  black: $black,
+  grey-100: $grey-100,
+  grey-200: $grey-200,
+  grey-400: $grey-400,
+  grey-500: $grey-500,
+  grey-600: $grey-600,
+  grey-700: $grey-700,
+  grey-800: $grey-800,
 );

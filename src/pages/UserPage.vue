@@ -1,114 +1,255 @@
 <template>
-  <Loader v-if="appStore.loading"/>
-  <section id="user-profile" v-else>
-    <div class="w-full user__header relative bg-blue"
-         :style="user.banner_img ? `background-image: url('${user.banner_img}'); background-size: contain; background-repeat: no-repeat;` : null">
+  <Loader v-if="appStore.loading" />
+  <section
+    v-else
+    id="user-profile"
+  >
+    <div
+      class="w-full user__header relative bg-blue"
+      :style="
+        user.banner_img
+          ? `background-image: url('${user.banner_img}'); background-size: contain; background-repeat: no-repeat;`
+          : null
+      "
+    >
       <div class="h-full d-grid relative z-index-2">
-<!--        <div class="w-full flex justify-end">-->
-<!--&lt;!&ndash;          <DisconnectButton/>&ndash;&gt;-->
-<!--          &lt;!&ndash;        <DotsHorizontalIcon fill-color="var(&#45;&#45;grey-800)" :size="28" class="clickable-icon"/>&ndash;&gt;-->
-<!--        </div>-->
-
         <div class="flex justify-between items-center px-3 py-2">
           <Avatar
-              :image="user.icon_img"
-              :size="90"/>
+            :image="user.icon_img"
+            :size="90"
+          />
         </div>
 
         <div class="bg-grey-200 flex flex-col justify-center p-3">
           <div>
-            <h1 class="font-semibold text-lg">{{ username }}</h1>
+            <h1 class="font-semibold text-lg">
+              {{ displayName }}
+            </h1>
             <div class="flex justify-between items-center">
-              <span class="text-sm text-grey-800">u/{{ username }} • {{ user.createdAt }}</span>
+              <span class="text-sm text-grey-800"
+                >{{ user.display_name_prefixed }} <span class="mx-1">•</span>
+                {{ timestampToDate(user.createdAt) }}</span
+              >
             </div>
           </div>
-          <div class="flex justify-end">
-            <FollowButton :follow="user.user_is_subscriber" @follow="follow = !follow"/>
+          <div
+            class="flex items-center mt-2"
+            :class="user.user_is_moderator ? 'justify-between' : 'justify-end'"
+          >
+            <span
+              v-if="user.user_is_moderator"
+              class="text-sm text-grey-800 font-medium"
+            >
+              {{ user.subscribers }} abonné<span v-if="user.subscribers > 1">s</span>
+            </span>
+            <DisconnectButton v-if="user.user_is_moderator" />
+            <FollowButton
+              v-else
+              :follow="user.user_is_subscriber"
+              @follow="followUser"
+            />
           </div>
-
         </div>
-
       </div>
     </div>
     <Tabs :tabs="tabs">
-      <section class="gap-2" id="posts">
-        <PostCard v-for="(post, i) in posts" :key="`${username}-post-${i}`" :post="post"/>
+      <section
+        id="posts"
+        class="gap-2"
+      >
+        <PostCard
+          v-for="(post, i) in posts"
+          :key="`${username}-post-${i}`"
+          :post="post"
+        />
       </section>
-      <section>A PROPS</section>
+      <section
+        id="about"
+        class="gap-4"
+      >
+        <div
+          id="karmas"
+          class="inline-grid gap-3 px-4 py-5 bb-1 border-grey-400 bg-grey-100 col-2 columns"
+        >
+          <div class="flex flex-col">
+            <span class="font-medium">{{ user.link_karma }}</span>
+            <span class="text-grey-800 text-sm">Karma pour publications</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium">{{ user.comment_karma }}</span>
+            <span class="text-grey-800 text-sm">Karma pour commentaires</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium">{{ user.awarder_karma }}</span>
+            <span class="text-grey-800 text-sm">Karma donné</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium">{{ user.awardee_karma }}</span>
+            <span class="text-grey-800 text-xs">Karma reçu</span>
+          </div>
+        </div>
+        <div
+          v-if="user.public_description"
+          id="description"
+          class="d-grid gap-4 px-4 py-4 by-1 border-grey-400 bg-grey-100 text-grey-800 font-medium text-sm"
+        >
+          {{ user.public_description }}
+        </div>
+        <div class="d-grid gap-2">
+          <h4 class="text-grey-800 font-medium text-sm pl-2">TROPHÉES</h4>
+          <div
+            v-if="trophies && trophies.length"
+            id="trophies"
+            class="d-grid gap-4 px-4 py-4 by-1 border-grey-400 bg-grey-100"
+          >
+            <div
+              v-for="trophy in trophies"
+              :key="trophy.data.id"
+              class="flex items-center gap-3"
+            >
+              <img
+                :src="trophy.data.icon_40"
+                :alt="trophy.data.name"
+              />
+              <span class="font-medium text-grey-800">{{ trophy.data.name }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </Tabs>
   </section>
 </template>
 
 <script lang="ts" setup>
-import Avatar from "@/components/data-display/Avatar.vue"
-import FollowButton from "@/components/actions/FollowButton.vue"
-import DisconnectButton from "@/components/actions/DisconnectButton.vue"
-import Loader from "@/components/ui/Loader.vue"
-import Tabs from '@/components/navigation/Tabs.vue';
-import { ref } from "vue";
-import PostCard from "@/components/data-display/PostCard.vue"
-import { useRoute } from "vue-router";
-import { User } from "@/api/user/user";
-import { Post } from "@/api/post/post";
-import { useAppStore } from "@/stores/app.store";
-import { removeAmpUrl } from "@/utils/format";
-import type { UserModel } from "@/api/user/user.model";
+import Avatar from '@/components/data-display/Avatar.vue'
+import FollowButton from '@/components/actions/FollowButton.vue'
+import DisconnectButton from '@/components/actions/DisconnectButton.vue'
+import Loader from '@/components/ui/Loader.vue'
+import Tabs from '@/components/navigation/Tabs.vue'
+import { ref, watch } from 'vue'
+import PostCard from '@/components/data-display/PostCard.vue'
+import { useRoute } from 'vue-router'
+import { User as UserApi } from '@/api/user/user'
+import { Post } from '@/api/post/post'
+import { useAppStore } from '@/stores/app.store'
+import { removeAmpUrl } from '@/utils/urlUtils'
+import type { UserModel } from '@/api/user/user.model'
+import { SITE_NAME } from '@/env'
+import { timestampToDate } from '@/utils/dateUtils'
+import { BaseApi } from '@/api/BaseApi'
+import { Trophy } from '@/api/user/user.model'
 
-/*REFS*/
-const isUserConnectedProfile = ref(false)
+/*Hooks*/
+const route = useRoute()
 
 /*DATA*/
+const username = ref(route.params.username)
 const tabs = [
   {
-    label: "Publications"
+    label: 'Publications',
   },
   {
-    label: "À Propos"
-  }
+    label: 'À Propos',
+  },
 ]
 
-const route = useRoute()
-const username = route.params.username
-const posts = ref([])
+/*STORE*/
 const appStore = useAppStore()
+
+/*REFS*/
+const posts = ref([])
 const user = ref({} as UserModel)
-appStore.setLoading(true)
+const trophies = ref([] as Trophy[])
+const displayName = ref()
 
-User.getUserInfo(username.toString()).then(res => {
-  const { icon_img, title, display_name_prefixed, public_description, banner_img, user_is_subscriber } = res.data.data.subreddit
-  user.value = { title, display_name_prefixed, public_description, createdAt: res.data.data.created_utc, user_is_subscriber }
-  user.value.icon_img = removeAmpUrl(icon_img)
-  user.value.banner_img = removeAmpUrl(banner_img)
-  console.log(res.data.data)
+/*WATCHERS*/
+watch(
+  () => route,
+  (newRoute) => {
+    username.value = newRoute.params.username
+    refreshDatas()
+  },
+  { deep: true }
+)
 
-  Post.getPostUser(username.toString()).then((res) => {
-    posts.value = res.data.data.children
-    appStore.setLoading(false)
-    // console.log(res.data.data)
-    // is_gallery
-    // title
-    // is_video
-    // subreddit_name_prefixed
-    // created_utc
-    // thumbnail
-    //
-    //
-    // is_gallery
-    // gallery_data db7qhlrs4wka1
-    // is_video
-    // media_metadata s.u
-    // preview
-  }).catch(err => {
-    console.log(err)
-  })
-}).catch(err => {
-  console.log(err)
-})
+/*API METHODS*/
+const followUser = (isFollow: boolean) => {
+  if (isFollow) {
+    BaseApi.subscribe(user.value.display_name)
+  } else {
+    BaseApi.unsubscribe(user.value.display_name)
+  }
+  user.value.user_is_subscriber = isFollow
+}
+const refreshDatas = async () => {
+  appStore.setLoading(true)
+  /*DOM*/
+  document.title = `Chargement... | ${SITE_NAME}`
 
+  await UserApi.getUserInfo(username.value.toString())
+    .then(async (res) => {
+      const { name, comment_karma, awardee_karma, awarder_karma, link_karma } = res.data.data
+      const {
+        icon_img,
+        title,
+        display_name_prefixed,
+        public_description,
+        banner_img,
+        user_is_subscriber,
+        display_name,
+        user_is_moderator,
+        subscribers,
+      } = res.data.data.subreddit
+
+      user.value = {
+        title,
+        display_name_prefixed,
+        display_name,
+        public_description,
+        subscribers,
+        createdAt: res.data.data.created_utc,
+        user_is_subscriber,
+        user_is_moderator,
+        name,
+        comment_karma,
+        awardee_karma,
+        awarder_karma,
+        link_karma,
+      }
+      user.value.icon_img = removeAmpUrl(icon_img)
+      user.value.banner_img = removeAmpUrl(banner_img)
+
+      displayName.value = title || name
+
+      document.title = `${title} (${display_name_prefixed}) -  ${SITE_NAME}`
+
+      await Post.getPostUser(username.value.toString())
+        .then((res) => {
+          posts.value = res.data.data.children
+          console.log(posts.value)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  await UserApi.getUserTrophies(username.value.toString())
+    .then((res) => {
+      trophies.value = res.data.data.trophies
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  appStore.setLoading(false)
+}
+
+refreshDatas()
 </script>
 
-
 <style lang="scss" scoped>
+@import '@/assets/scss/core/_mixins.scss';
 $header_height: 200px;
 
 .linear__mask {
@@ -118,5 +259,21 @@ $header_height: 200px;
 
 #posts {
   white-space: normal;
+}
+
+#about {
+  position: relative;
+  top: -6px;
+}
+
+#user-profile {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+#karmas {
+  @include down(330px) {
+    --columns: 1;
+  }
 }
 </style>

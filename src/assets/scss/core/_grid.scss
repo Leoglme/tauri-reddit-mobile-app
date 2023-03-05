@@ -3,7 +3,12 @@ $max: 6;
   display: grid;
 }
 
-.d-grid.columns {
+.inline-grid {
+  display: inline-grid;
+}
+
+.d-grid.columns,
+.inline-grid.columns {
   grid-template-columns: repeat(var(--columns, 1), 1fr);
 }
 .d-grid.col-auto {
@@ -14,7 +19,7 @@ $max: 6;
 }
 
 @for $i from 1 through $max {
-  .col-#{$i}{
+  .col-#{$i} {
     --columns: #{$i};
   }
 }

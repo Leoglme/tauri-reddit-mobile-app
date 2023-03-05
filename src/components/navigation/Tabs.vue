@@ -1,38 +1,42 @@
 <template>
   <div class="tabs w-full">
-    <div class="tabs-titles py-2 bg-grey-100 border-grey-400 by-1 flex relative text-center" ref="titles">
+    <div
+      ref="titles"
+      class="tabs-titles py-2 bg-grey-100 border-grey-400 by-1 flex relative text-center"
+    >
       <div
-          class="title-item cursor-pointer font-medium user-select-none"
-          @click="select(index)"
-          v-for="(item, index) in tabs"
-          :class="{ 'active': index === tabIndex }"
-          :key="item.label"
-      >{{ item.label }}
+        v-for="(item, index) in tabs"
+        :key="item.label"
+        class="title-item cursor-pointer font-medium user-select-none"
+        :class="{ active: index === tabIndex }"
+        @click="select(index)"
+      >
+        {{ item.label }}
       </div>
       <div
-          class="scroll-bar border-blue bb-2"
-          ref="scrollBar"
-          :style="{
-              width: `${tabWidth}px`,
-              transform: `translate3d(${tabIndex * tabWidth}px, 0, 0)`
-            }"
+        ref="scrollBar"
+        class="scroll-bar border-blue bb-2"
+        :style="{
+          width: `${tabWidth}px`,
+          transform: `translate3d(${tabIndex * tabWidth}px, 0, 0)`,
+        }"
       />
     </div>
 
     <div
-        class="tabs-content"
-        @touchstart="handleTouchstart"
-        @touchmove="handleTouchmove"
-        @touchend="handleTouchend"
+      class="tabs-content"
+      @touchstart="handleTouchstart"
+      @touchmove="handleTouchmove"
+      @touchend="handleTouchend"
     >
       <div
-          class="wrapper"
-          :style="{
-				transform: `translate3d(${translateX - tabIndex * width}px, 0, 0)`,
-				transition: touching ? '' : 'transform .3s'
-			}"
+        class="wrapper"
+        :style="{
+          transform: `translate3d(${translateX - tabIndex * width}px, 0, 0)`,
+          transition: touching ? '' : 'transform .3s',
+        }"
       >
-        <slot></slot>
+        <slot />
       </div>
     </div>
   </div>
@@ -40,15 +44,15 @@
 
 <script lang="ts" setup>
 /*PROPS*/
-import { onMounted, ref, watch } from "vue";
-import type { PropType } from "vue";
+import { onMounted, ref, watch } from 'vue'
+import type { PropType } from 'vue'
 
 type Tab = {
   label: string
 }
 
 const props = defineProps({
-  tabs: { type: Array as PropType<Tab[]>, default: () => [] }
+  tabs: { type: Array as PropType<Tab[]>, default: () => [] },
 })
 
 /*REFS*/
@@ -56,6 +60,7 @@ const tabIndex = ref(0)
 const tabWidth = ref(0)
 const touching = ref(false)
 const dx = ref(0)
+const titles = ref()
 const translateX = ref(0)
 const width = ref(0)
 const startX = ref(0)
@@ -65,73 +70,76 @@ const endY = ref(0)
 
 /*METHODS*/
 const getAngle = (dx: number, dy: number) => {
-  return 360 * Math.atan(dy / dx) / (2 * Math.PI);
+  return (360 * Math.atan(dy / dx)) / (2 * Math.PI)
 }
 
 const select = (index: number) => {
-  tabIndex.value = index;
+  tabIndex.value = index
 }
 
 const handleTouchstart = (e: TouchEvent) => {
-  touching.value = true;
-  dx.value = 0;
-  startX.value = e.touches[0].pageX;
-  startY.value = e.touches[0].pageY;
-  endX.value = e.touches[0].pageX;
-  endY.value = e.touches[0].pageY;
+  touching.value = true
+  dx.value = 0
+  startX.value = e.touches[0].pageX
+  startY.value = e.touches[0].pageY
+  endX.value = e.touches[0].pageX
+  endY.value = e.touches[0].pageY
 }
 
 const handleTouchmove = (e: TouchEvent) => {
-  const endX = e.touches[0].pageX;
-  const endY = e.touches[0].pageY;
-  dx.value = endX - startX.value;
+  const endX = e.touches[0].pageX
+  const endY = e.touches[0].pageY
+  dx.value = endX - startX.value
 
   if (canSlider()) {
-    return;
+    return
   }
 
   if (Math.abs(dx.value) > 6 && Math.abs(getAngle(dx.value, endY - startY.value)) < 30) {
-    translateX.value = dx.value;
+    translateX.value = dx.value
   }
 }
 
 const handleTouchend = () => {
-  touching.value = false;
-  translateX.value = 0;
-  const percent = dx.value / width.value;
+  touching.value = false
+  translateX.value = 0
+  const percent = dx.value / width.value
 
   if (canSlider()) {
-    return;
+    return
   }
   if (percent < -0.3) {
-    tabIndex.value++;
+    tabIndex.value++
   }
   if (percent > 0.3) {
-    tabIndex.value--;
+    tabIndex.value--
   }
 }
 
 const canSlider = () => {
-  return (dx.value < 0 && tabIndex.value >= props.tabs.length - 1) || (dx.value > 0 && tabIndex.value === 0);
+  return (dx.value < 0 && tabIndex.value >= props.tabs.length - 1) || (dx.value > 0 && tabIndex.value === 0)
 }
 
 const resizeWidth = () => {
-  width.value = window.screen.width;
-  tabWidth.value = Math.round(width.value / props.tabs.length);
+  width.value = titles.value.clientWidth
+  tabWidth.value = Math.round(width.value / props.tabs.length)
 }
 
 /*EMITS*/
 const emit = defineEmits(['change'])
 
 /*WATCHERS*/
-watch(() => tabIndex.value, (newVal) => {
-  emit('change', newVal)
-});
+watch(
+  () => tabIndex.value,
+  (newVal) => {
+    emit('change', newVal)
+  }
+)
 
 /*LIFECYCLE*/
 onMounted(() => {
   resizeWidth()
-  window.addEventListener('resize', resizeWidth);
+  window.addEventListener('resize', resizeWidth)
 })
 </script>
 
@@ -166,7 +174,8 @@ $color-theme: var(--white);
       white-space: nowrap;
       font-size: 0;
 
-      & > div, & > section {
+      & > div,
+      & > section {
         display: inline-grid;
         width: 100%;
         height: 100%;

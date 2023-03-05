@@ -18,4 +18,10 @@
 @import 'src/assets/scss/core/icon';
 
 /*Components*/
-@import "src/assets/scss/components/button";
+@import 'src/assets/scss/components/button';
+@import 'src/assets/scss/components/link';
+@import 'src/assets/scss/components/radio';
+
+/*Modules*/
+@import 'src/assets/scss/modules/plyr';
+@import 'src/assets/scss/modules/swiper';

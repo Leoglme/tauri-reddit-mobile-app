@@ -1,10 +1,10 @@
-@import "functions";
+@import 'functions';
 
 $max: 20;
 
 @for $i from 1 through $max {
   .gap-#{$i} {
-    gap: space($i)
+    gap: space($i);
   }
   .p-#{$i} {
     padding: space($i);
@@ -30,14 +30,17 @@ $max: 20;
     padding-bottom: space($i);
   }
   .ml-#{$i} {
-    margin-left: space($i)
+    margin-left: space($i);
+  }
+  .mr-#{$i} {
+    margin-right: space($i);
   }
   .mx-#{$i} {
     margin-left: space($i);
-    margin-right: space($i)
+    margin-right: space($i);
   }
   .mb-#{$i} {
-    margin-bottom: space($i)
+    margin-bottom: space($i);
   }
   .mt-#{$i} {
     margin-top: space($i);

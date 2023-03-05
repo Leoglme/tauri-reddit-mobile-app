@@ -18,7 +18,6 @@
   position: inherit;
 }
 
-
 $max: 10;
 
 /*top, left, right, bottom*/
@@ -31,7 +30,7 @@ $max: 10;
   }
   .right-#{$i} {
     right: $i * 1px;
-   }
+  }
   .left-#{$i} {
     left: $i * 1px;
   }

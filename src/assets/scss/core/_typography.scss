@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 .text-2xl {
   font-size: 54px;
@@ -20,6 +20,10 @@
   font-size: 12px;
 }
 
+.text-xs {
+  font-size: 10px;
+}
+
 /* mixin for multiline */
 .block-with-text {
   display: -webkit-box;
@@ -39,7 +43,7 @@
 
 /* Color */
 @each $key, $value in $variants {
-  .text-#{ "" + $key} {
+  .text-#{ '' + $key} {
     color: $value;
   }
 }

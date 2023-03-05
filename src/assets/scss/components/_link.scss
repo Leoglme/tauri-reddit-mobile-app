@@ -1,0 +1,14 @@
+@use 'sass:color';
+@import 'src/assets/scss/core/variables';
+
+@each $key, $value in $variants {
+  .link-#{ '' + $key} {
+    $color: color.adjust($value, $saturation: 15%, $lightness: 10%);
+    color: $color;
+    &:hover {
+      $color: color.adjust($value, $saturation: 20%, $lightness: 15%);
+      color: $color;
+      text-decoration: underline;
+    }
+  }
+}

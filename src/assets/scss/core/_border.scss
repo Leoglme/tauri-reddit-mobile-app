@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 $max: 4;
 
 /*Border width*/
@@ -32,7 +32,7 @@ $max: 4;
 
 /*Border color*/
 @each $key, $value in $variants {
-  .border-#{ "" + $key} {
+  .border-#{ '' + $key} {
     border-color: $value;
   }
 }

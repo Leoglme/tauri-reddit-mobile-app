@@ -15,11 +15,11 @@
 }
 
 .rotate-up {
-  transition: all .2s linear;
+  transition: all 0.2s linear;
   transform: rotateZ(180deg);
 }
 
 .rotate-reset {
-  transition: all .2s linear;
+  transition: all 0.2s linear;
   transform: rotateZ(0);
 }

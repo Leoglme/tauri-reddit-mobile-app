@@ -1,8 +1,12 @@
 <template>
   <div class="switch-container">
     <label class="switch">
-      <input type="checkbox" :checked="checked" @change="toggleSwitch">
-      <span class="slider round"></span>
+      <input
+        type="checkbox"
+        :checked="checked"
+        @change="toggleSwitch"
+      />
+      <span class="slider round" />
     </label>
   </div>
 </template>
@@ -10,7 +14,7 @@
 <script lang="ts" setup>
 /*REFS*/
 const props = defineProps({
-  checked: {type: Boolean, required: true}
+  checked: { type: Boolean, required: true },
 })
 
 /*EMIT*/
@@ -48,18 +52,18 @@ const toggleSwitch = () => {
   right: 0;
   bottom: 0;
   background-color: var(--grey-400);
-  transition: .2s;
+  transition: 0.2s;
 }
 
-.slider:before {
+.slider::before {
   position: absolute;
-  content: "";
+  content: '';
   height: 24px;
   width: 24px;
   left: 4px;
   bottom: 3px;
   background-color: var(--white);
-  transition: .2s;
+  transition: 0.2s;
 }
 
 input:checked + .slider {
@@ -70,7 +74,7 @@ input:focus + .slider {
   box-shadow: 0 0 1px var(--blue);
 }
 
-input:checked + .slider:before {
+input:checked + .slider::before {
   transform: translateX(24px);
 }
 
@@ -79,7 +83,7 @@ input:checked + .slider:before {
   border-radius: 34px;
 }
 
-.slider.round:before {
+.slider.round::before {
   border-radius: 50%;
 }
 </style>

@@ -1,14 +1,24 @@
 <template>
-  <button @click="emit('follow', !follow)" class="btn-outlined gap-1" data-variant="white">
-    <CheckIcon fill-color="var(--white)" :size="20" v-if="props.follow"/> {{props.follow ? 'Abonné' : 'Suivre'}}
+  <button
+    class="btn-outlined gap-1 btn-small"
+    style="border-radius: 80px"
+    data-variant="white"
+    @click="emit('follow', !follow)"
+  >
+    <CheckIcon
+      v-if="props.follow"
+      fill-color="var(--white)"
+      :size="16"
+    />
+    {{ props.follow ? 'Abonné' : 'Suivre' }}
   </button>
 </template>
 
 <script lang="ts" setup>
-import CheckIcon from 'vue-material-design-icons/Check.vue';
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 /*¨Props*/
 const props = defineProps({
-   follow: {type: Boolean, default: false}
+  follow: { type: Boolean, default: false },
 })
 
 /*EMIT*/

@@ -1,24 +1,23 @@
 <template>
   <div class="loader">
-    <div class="center-spin"></div>
+    <div class="center-spin" />
     <div class="inner-spin">
-      <div class="inner-arc inner-arc_start-a"></div>
-      <div class="inner-arc inner-arc_end-a"></div>
+      <div class="inner-arc inner-arc_start-a" />
+      <div class="inner-arc inner-arc_end-a" />
 
-      <div class="inner-arc inner-arc_start-b"></div>
-      <div class="inner-arc inner-arc_end-b"></div>
-      <div class="inner-moon-a"></div>
-      <div class="inner-moon-b"></div>
-
+      <div class="inner-arc inner-arc_start-b" />
+      <div class="inner-arc inner-arc_end-b" />
+      <div class="inner-moon-a" />
+      <div class="inner-moon-b" />
     </div>
     <div class="outer-spin">
-      <div class="outer-arc outer-arc_start-a"></div>
-      <div class="outer-arc outer-arc_end-a"></div>
+      <div class="outer-arc outer-arc_start-a" />
+      <div class="outer-arc outer-arc_end-a" />
 
-      <div class="outer-arc outer-arc_start-b"></div>
-      <div class="outer-arc outer-arc_end-b"></div>
-      <div class="outer-moon-a"></div>
-      <div class="outer-moon-b"></div>
+      <div class="outer-arc outer-arc_start-b" />
+      <div class="outer-arc outer-arc_end-b" />
+      <div class="outer-moon-a" />
+      <div class="outer-moon-b" />
     </div>
   </div>
 </template>
@@ -42,13 +41,15 @@ $inner-moon-left: 16px;
   border-radius: 50%;
   transform: var(--center);
 }
-.outer-spin, .inner-spin {
+.outer-spin,
+.inner-spin {
   position: absolute;
 }
 .outer-spin {
   animation: spin 3.5s linear infinite;
 }
-.outer-arc, .inner-arc {
+.outer-arc,
+.inner-arc {
   position: absolute;
   border-radius: 50%;
   border: 4px solid;
@@ -134,5 +135,4 @@ $inner-moon-left: 16px;
   left: $inner-moon-left;
   transform: var(--center) translate(-33px, 0);
 }
-
 </style>
