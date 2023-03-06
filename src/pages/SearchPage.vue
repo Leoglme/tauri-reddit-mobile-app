@@ -1,6 +1,9 @@
 <template>
-  <div class="bg-black px-3 py-2 flex items-center justify-center">
+  <div class="bg-black px-3 py-2 flex gap-3 items-center justify-center">
     <TextInput show-reset type="search" id="search" v-model:value="searchInput" />
+    <router-link class="btnAnnuler" to="/">
+      Annuler
+    </router-link>
   </div>
   <SearchResultList :searchInput="searchInput"/>
 </template>
@@ -16,5 +19,10 @@ let searchInput = ref("")
 
 
 <style scoped>
+.btnAnnuler{
+  width: 10vh;
+  font-size: 12px;
+  color: var(--grey-700);
+}
 
 </style>
