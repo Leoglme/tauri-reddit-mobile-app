@@ -16,7 +16,18 @@ export class Post extends BaseApi {
   }
 
   static async homePage() {
-    return await axios.get(super.oauthRedditUrl, this.getOption())
+    const posts = await axios.get(super.oauthRedditUrl, this.getOption())
+    let children = posts.data?.data?.children
+
+    if (children) {
+      const subreddits = getSubredditNamesInPosts(children)
+      const communitiesIcons = await Community.getCommunitiesIcons(subreddits)
+      children = addAvatarToPosts(children, communitiesIcons)
+
+      posts.data.data.children = children
+    }
+
+    return posts
   }
 
   static async getPostUser(username: string) {
