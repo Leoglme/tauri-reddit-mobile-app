@@ -1,0 +1,26 @@
+{
+  "version": "0.0.2",
+  "notes": "Release notes testtt",
+  "platforms": {
+    "darwin-x86_64": {
+      "signature": "",
+      "url": "https://crzgames.com/releases/download/0.0.2/macos/x64/app.app.tar.gz"
+    },
+    "darwin-aarch64": {
+      "signature": "",
+      "url": "https://crzgames.com/releases/download/0.0.2/macos/aarch64/app.app.tar.gz"
+    },
+    "linux-x86_64": {
+      "signature": "",
+      "url": "https://crzgames.com/releases/download/0.0.2/linux/x64/app.AppImage.tar.gz"
+    },
+    "windows-x86_64": {
+      "signature": "",
+      "url": "https://crzgames.com/releases/download/0.0.2/windows/x64/app.x64.msi.zip"
+    },
+    "windows-i686": {
+      "signature": "",
+      "url": "https://crzgames.com/releases/download/0.0.2/windows/x86/app.x86.msi.zip"
+    }
+  }
+}

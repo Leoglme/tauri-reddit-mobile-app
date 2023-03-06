@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_compile:
+  build_release:
     strategy:
       fail-fast: false
       matrix:
@@ -47,10 +47,10 @@ jobs:
           rustup target add x86_64-pc-windows-msvc
           npm run tauri build -- --target i686-pc-windows-msvc
           npm run tauri build -- --target x86_64-pc-windows-msvc
-        env:
+        env: 
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
-
+          
       - name: Upload Artifact Windows
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v3
@@ -68,7 +68,7 @@ jobs:
           rustup target add x86_64-apple-darwin
           npm run tauri build -- --target aarch64-apple-darwin
           npm run tauri build -- --target x86_64-apple-darwin
-        env:
+        env: 
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
 
@@ -105,7 +105,7 @@ jobs:
           rustup target add i686-unknown-linux-gnu
           rustup target add x86_64-unknown-linux-gnu
           npm run tauri build -- --target x86_64-unknown-linux-gnu
-        env:
+        env: 
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
 
@@ -119,7 +119,7 @@ jobs:
             src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/deb/
           if-no-files-found: warn
 
-  deploy:
+  publish_release:
     needs: [build_release]
     runs-on: ubuntu-latest
     steps:
@@ -139,7 +139,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
           name: 'v*'
-          body: 'Reddit Application - Distribution for Windows / MacOS / Linux'
+          body: 'Crzgames Launcher - Distribution for Windows / MacOS / Linux'
           draft: false
           prerelease: false
           files: |
