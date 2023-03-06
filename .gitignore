@@ -13,6 +13,15 @@ dist
 dist-ssr
 *.local
 
+# Cypress
+/cypress/e2e/test-reports/
+/cypress/videos/
+/cypress/screenshots/
+/cypress/downloads/
+
+# Vitest
+/vitest/unit/test-reports/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
