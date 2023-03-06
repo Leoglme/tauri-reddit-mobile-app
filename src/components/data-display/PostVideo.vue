@@ -89,7 +89,9 @@ onMounted(() => {
     })
 
     videoPlayer.value.addEventListener('seeked', () => {
-      audioPlayer.value.currentTime = videoPlayer.value.currentTime
+      if (audioPlayer.value) {
+        audioPlayer.value.currentTime = videoPlayer.value.currentTime
+      }
     })
   }
 })
