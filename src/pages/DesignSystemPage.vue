@@ -54,7 +54,7 @@
     <SelectFilter/>
     <h3 class="text-grey-800">Text Input</h3>
     <Form class="w-full">
-      <TextInput prefix="/r" sid="label" label="Nom de la communauté" rules="required|max:20"/>
+      <TextInput prefix="r/" sid="label" label="Nom de la communauté" rules="required|max:20"/>
       <TextInput round placeholder="John Doe" id="label-round" label="Nom de la communauté" rules="required|max:20"/>
       <TextInput id="password" type="password" label="Mot de passe" rules="required|max:20"/>
       <TextInput show-reset id="name" label="Name" rules="required"/>

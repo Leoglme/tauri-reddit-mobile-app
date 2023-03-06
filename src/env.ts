@@ -1,19 +1,16 @@
 export const SITE_NAME = "Redditech"
+import AccountCircleOutline from 'vue-material-design-icons/AccountCircleOutline.vue';
+import LockOutline from 'vue-material-design-icons/LockOutline.vue';
 
 export const visibilities = [
     {
-        value: 'Pubique',
-        label: 'Pubique',
+        icon: AccountCircleOutline,
+        value: 'Publique',
         description: 'Tout le monde peut consulter, publier et commenter dans cette communauté'
     },
     {
-        value: 'Restreinte',
-        label: 'Restreinte',
-        description: 'Tout le monde peut voir cette communauté, mais seuls les utilisateurs approuvés peuvent publier'
-    },
-    {
+        icon: LockOutline,
         value: 'Privée',
-        label: 'Privée',
         description: 'Seuls les utilisateurs approuvés peuvent consulter et soumettre à cette communauté'
     }
 ]

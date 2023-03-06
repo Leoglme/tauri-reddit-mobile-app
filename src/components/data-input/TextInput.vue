@@ -96,7 +96,7 @@ const hasIcon = !!slot["default"];
 <style lang="scss">
 .prefix {
   position: absolute;
-  top: 26px;
+  top: 10px;
   left: 8px;
 }
 

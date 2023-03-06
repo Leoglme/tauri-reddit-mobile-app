@@ -17,6 +17,7 @@
     "@tauri-apps/api": "^2.0.0-alpha.0",
     "@vee-validate/i18n": "^4.7.3",
     "@vee-validate/rules": "^4.7.3",
+    "@webzlodimir/vue-bottom-sheet": "^2.0.2",
     "dotenv": "^16.0.3",
     "pinia": "^2.0.31",
     "vee-validate": "^4.7.4",
