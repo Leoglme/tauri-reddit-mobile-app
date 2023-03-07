@@ -14,18 +14,21 @@
 
 <script lang="ts" setup>
 import { Post } from '@/api/post/post'
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import type { PostModel } from '@/api/post/post.model'
+import {useAppStore} from "@/stores/app.store";
 /*STORE*/
 
 const posts = ref<PostModel[]>([])
 const showLoading = ref(true)
 
+const appStore = useAppStore()
+
 const getHomePosts = () => {
-  Post.homePage()
+  Post.homePage(appStore.getCurrentFilter)
     .then((res) => {
-      posts.value = posts.value.concat(res.data.data.children)
+      posts.value = res.data.data.children
       showLoading.value = false
       console.log(posts.value)
     })
@@ -33,6 +36,10 @@ const getHomePosts = () => {
       console.log(err)
     })
 }
+
+watch(() => appStore.getCurrentFilter, () => {
+  getHomePosts();
+});
 
 getHomePosts()
 </script>
