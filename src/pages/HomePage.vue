@@ -18,7 +18,7 @@ import { Post } from '@/api/post/post'
 import { ref } from 'vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import type { PostModel } from '@/api/post/post.model'
-import { useAppStore } from "@/stores/app.store";
+import { useAppStore } from '@/stores/app.store'
 import Loader from '@/components/ui/Loader.vue'
 
 /*STORE*/

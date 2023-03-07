@@ -1,60 +1,145 @@
 <template>
-  <section id="user-profile">
-    <div class="w-full user__header relative bg-blue">
-      <div class="p-3 d-grid gap-1 relative z-index-2">
-        <div class="flex justify-between items-center">
+  <Loader v-if="appStore.loading" />
+  <section
+    v-else
+    id="community-profile"
+  >
+    <div
+      class="w-full relative bg-blue"
+      :style="
+        community.mobile_banner_image
+          ? `background-image: url('${community.mobile_banner_image}'); background-size: contain; background-repeat: no-repeat;`
+          : null
+      "
+    >
+      <div class="h-full d-grid relative z-index-2">
+        <div class="flex justify-between items-center px-3 py-2">
           <Avatar
-            :image="Info.urlIcon"
-            :size="80"
-          />
-          <FollowButton
-            :follow="Info.userIsSubscribe"
-            @follow="followCommunity"
+            :image="community.community_icon"
+            :size="90"
           />
         </div>
 
-        <h1 class="font-semibold text-xl">r/{{ route.params.community }}</h1>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-grey-800"
-            >{{ numberWithSpaces(Info.nbrSubscribers) }} subscribers <span class="mx-1">•</span>
-            {{ numberWithSpaces(Info.nbrSubscribersOnline) }} onlines</span
-          >
+        <div class="bg-grey-200 flex flex-col justify-center p-3">
+          <div>
+            <h1 class="font-semibold text-lg">
+              {{ community.display_name }}
+            </h1>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-grey-800"
+                >{{ numberWithSpaces(community.subscribers) }} abonné<span v-if="community.subscribers > 1">s</span>
+                <span class="mx-1">•</span> {{ numberWithSpaces(community.accounts_active) }} en ligne</span
+              >
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-sm text-grey-800 font-medium">
+              {{ timestampToDate(community.created_utc) }}
+            </span>
+            <FollowButton
+              :color="community.key_color"
+              :follow="community.user_is_subscriber"
+              @follow="followCommunity"
+            />
+          </div>
         </div>
       </div>
-      <div class="linear__mask w-full absolute bottom-0" />
     </div>
     <Tabs :tabs="tabs">
       <section
         id="posts"
         class="gap-2"
       >
-        <PostCard
-          v-for="(post, i) in posts"
-          :key="`${Info.communityName}-post-${i}`"
-          :post="post"
-        />
+        <div class="d-grid gap-2">
+          <PostCard
+            v-for="(post, i) in posts"
+            :key="`${community.display_name}-post-${i}`"
+            :post="post"
+          />
+        </div>
       </section>
-      <section>
-        <p>{{ Info.description }}</p>
-        <p>{{ Info.createdAt }}</p>
+      <section
+        id="about"
+        class="gap-4"
+      >
+        <div
+          v-if="community.public_description"
+          id="descriptions"
+          class="gap-3 px-4 py-5 bb-1 border-grey-400 bg-grey-100"
+        >
+          <p class="text-grey-800 font-medium">{{ community.public_description }}</p>
+        </div>
+
+        <div
+          v-if="rules && rules.length"
+          class="d-grid gap-4"
+        >
+          <h4 class="text-grey-800 font-medium pl-2">Règles</h4>
+
+          <div
+            id="rules"
+            class="d-grid gap-4 px-4 py-5 by-1 border-grey-400 bg-grey-100"
+          >
+            <Spoiler
+              v-for="rule in rules"
+              :key="rule.short_name"
+              :title="rule.short_name"
+              :content="rule.description"
+            />
+          </div>
+        </div>
+
+        <div
+          v-if="moderators && moderators.length"
+          class="d-grid gap-4"
+        >
+          <h4 class="text-grey-800 font-medium pl-2">Modérateurs</h4>
+
+          <div
+            id="moderators"
+            class="d-grid gap-3 by-1 border-grey-400 bg-grey-100"
+          >
+            <router-link
+              v-for="moderator in moderators"
+              :key="moderator.name"
+              :to="`/u/${moderator.name}`"
+              class="px-4 py-2 text-grey-800 font-medium moderator cursor-pointer flex items-center justify-between"
+            >
+              {{ moderator.name }} <ChevronRightIcon />
+            </router-link>
+          </div>
+        </div>
       </section>
     </Tabs>
   </section>
 </template>
 
 <script lang="ts" setup>
+import Loader from '@/components/ui/Loader.vue'
 import Avatar from '@/components/data-display/Avatar.vue'
+import Spoiler from '@/components/data-display/Spoiler.vue'
 import FollowButton from '@/components/actions/FollowButton.vue'
 import Tabs from '@/components/navigation/Tabs.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import { ref } from 'vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import { Community } from '@/api/community/community'
 import { useRoute } from 'vue-router'
 import { removeAmpUrl } from '@/utils/urlUtils'
-import { timestampToDate } from '@/utils/dateUtils'
 import { numberWithSpaces } from '@/utils/numberUtils'
 import { BaseApi } from '@/api/BaseApi'
+import type { PostModel } from '@/api/post/post.model'
+import { useAppStore } from '@/stores/app.store'
+import type { CommunityModel, CommunityModeratorModel, CommunityRuleModel } from '@/api/community/community.model'
+import { SITE_NAME } from '@/env'
+import { timestampToDate } from '@/utils/dateUtils'
 
+/*Hooks*/
+const route = useRoute()
+
+/*DATA*/
+const communityName = ref(route.params.community)
 const tabs = [
   {
     label: 'Publications',
@@ -64,57 +149,105 @@ const tabs = [
   },
 ]
 
-const Info = ref({
-  communityName: '',
-  nbrSubscribers: 0,
-  nbrSubscribersOnline: 0,
-  urlIcon: '',
-  urlImgBackground: '',
-  createdAt: null as string | null,
-  description: '',
-  userIsSubscribe: false,
-})
+/*STORE*/
+const appStore = useAppStore()
 
+/*REFS*/
+const posts = ref<PostModel[]>([])
+const rules = ref<CommunityRuleModel[]>([])
+const moderators = ref<CommunityModeratorModel[]>([])
+const community = ref({} as CommunityModel)
+
+/*API METHODS*/
 const followCommunity = (isFollow: boolean) => {
   if (isFollow) {
-    BaseApi.subscribe(Info.value.communityName)
+    BaseApi.subscribe(community.value.display_name)
   } else {
-    Community.unsubscribe(Info.value.communityName)
+    Community.unsubscribe(community.value.display_name)
   }
-  Info.value.userIsSubscribe = isFollow
+  community.value.user_is_subscriber = isFollow
 }
 
-const posts = ref([])
+const refreshDatas = async () => {
+  appStore.setLoading(true)
+  /*DOM*/
+  document.title = `Chargement... | ${SITE_NAME}`
 
-const route = useRoute()
-Community.getCommunityInfo(route.params.community.toString()).then((res) => {
-  Info.value.communityName = res.data.data.display_name
-  Info.value.nbrSubscribers = res.data.data.subscribers
-  Info.value.nbrSubscribersOnline = res.data.data.accounts_active
-  Info.value.urlIcon = removeAmpUrl(res.data.data.community_icon)
-  Info.value.urlImgBackground = res.data.data.banner_img
-  Info.value.createdAt = timestampToDate(res.data.data.created_utc)
-  Info.value.description = res.data.data.public_description
-  Info.value.userIsSubscribe = res.data.data.user_is_subscriber
-})
+  await Community.getCommunityInfo(communityName.value.toString())
+    .then(async (res) => {
+      const {
+        display_name,
+        subscribers,
+        accounts_active,
+        community_icon,
+        mobile_banner_image,
+        created_utc,
+        public_description,
+        user_is_subscriber,
+        key_color,
+      } = res.data.data
+      community.value = {
+        display_name,
+        subscribers,
+        accounts_active,
+        created_utc,
+        public_description,
+        user_is_subscriber,
+        key_color,
+      }
 
-Community.hotPostCommunity(route.params.community.toString()).then((res) => {
-  posts.value = res.data.data.children
-})
+      community.value.community_icon = removeAmpUrl(community_icon)
+      community.value.mobile_banner_image = removeAmpUrl(mobile_banner_image)
+
+      document.title = `${display_name} -  ${SITE_NAME}`
+
+      await Community.hotPostCommunity(communityName.value.toString())
+        .then((res) => {
+          posts.value = res.data.data.children
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
+  await Community.getModerators(communityName.value.toString())
+    .then((res) => {
+      console.log(res.data.data?.children)
+      moderators.value = res.data.data?.children
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  await Community.getRules(communityName.value.toString())
+    .then((res) => {
+      rules.value = res.data.rules
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  appStore.setLoading(false)
+}
+
+refreshDatas()
 </script>
 
 <style lang="scss" scoped>
-$header_height: 200px;
-.user__header {
-  height: $header_height;
-}
-
-.linear__mask {
-  height: calc($header_height / 2.78);
-  background: var(--linear);
-}
-
 #posts {
   white-space: normal;
+}
+
+#about {
+  position: relative;
+  top: -8px;
+}
+
+.moderator:hover {
+  background: var(--grey-200);
+}
+.moderator:active {
+  background: var(--grey-400);
 }
 </style>

@@ -2,9 +2,11 @@ import axios from 'axios'
 import type { CommunityCommand } from './community.model'
 import { BaseApi } from '@/api/BaseApi'
 import { removeAmpUrl } from '@/utils/urlUtils'
+import { getSubredditNamesInPosts } from '@/utils/imageUtils'
+import { addAvatarToPosts } from '@/utils/formatUtils'
 export class Community extends BaseApi {
-  static async searchCommunity(communityName: string) {
-    const url = 'https://www.reddit.com/subreddits/search.json?q=' + communityName + '&limit=8'
+  static async searchCommunity(communityName: string, limit = 8) {
+    const url = `${super.redditCommonUrl}/subreddits/search.json?q=${communityName}&limit=${limit}`
     return await axios.get(url)
   }
 
@@ -14,7 +16,7 @@ export class Community extends BaseApi {
   }
 
   static async getCommunitiesIcons(srNames: string[]) {
-    const url = `https://www.reddit.com/api/info.json?sr_name=${srNames.join(',')}`
+    const url = `${super.redditCommonUrl}/api/info.json?sr_name=${srNames.join(',')}`
     const icons: Record<string, string | null> = {}
 
     await axios
@@ -50,7 +52,26 @@ export class Community extends BaseApi {
   }
 
   static async hotPostCommunity(communityName: string) {
-    const url = 'https://www.reddit.com/r/' + communityName + '/hot.json'
-    return await axios.get(url)
+    const url = `${super.redditCommonUrl}/r/${communityName}/hot.json`
+    const posts = await axios.get(url)
+    let children = posts.data?.data?.children
+
+    if (children) {
+      const subreddits = getSubredditNamesInPosts(children)
+      const communitiesIcons = await Community.getCommunitiesIcons(subreddits)
+      children = addAvatarToPosts(children, communitiesIcons)
+
+      posts.data.data.children = children
+    }
+    return posts
+  }
+
+  static async getModerators(communityName: string) {
+    const url = `${super.oauthRedditUrl}/r/${communityName}/about/moderators.json`
+    return await axios.get(url, super.getOption())
+  }
+  static async getRules(communityName: string) {
+    const url = `${super.oauthRedditUrl}/r/${communityName}/about/rules.json`
+    return await axios.get(url, super.getOption())
   }
 }

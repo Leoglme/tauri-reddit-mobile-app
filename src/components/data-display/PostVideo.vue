@@ -1,41 +1,41 @@
 <template>
   <div
-      v-show="videoRendered"
-      :style="`width: min(100vw, ${video.width}px);`"
-      class="plyr__video-embed mt-2"
+    v-show="videoRendered"
+    :style="`width: min(95vw, ${video.width}px);`"
+    class="plyr__video-embed mt-2"
   >
     <video
-        ref="videoPlayer"
-        :width="video.width"
-        :height="video.height"
-        autoplay
-        muted
-        loop
-        controls
-        crossorigin
-        playsinline
+      ref="videoPlayer"
+      :width="video.width"
+      :height="video.height"
+      autoplay
+      muted
+      loop
+      controls
+      crossorigin
+      playsinline
     >
       <source
-          :src="videoSrc"
-          type="video/mp4"
+        :src="videoSrc"
+        type="video/mp4"
       />
       <audio
-          v-if="audioSrc"
-          ref="audioPlayer"
-          controls
+        v-if="audioSrc"
+        ref="audioPlayer"
+        controls
       >
         <source
-            :src="audioSrc"
-            type="audio/mp4"
+          :src="audioSrc"
+          type="audio/mp4"
         />
       </audio>
     </video>
   </div>
   <div
-      v-show="!videoRendered"
-      class="video__loader w-full flex items-center justify-center"
+    v-show="!videoRendered"
+    class="video__loader w-full flex items-center justify-center"
   >
-    <Loader/>
+    <Loader />
   </div>
 </template>
 
@@ -75,28 +75,34 @@ onMounted(() => {
 
   player.muted = true
 
-  if (audioPlayer.value) {
-    document?.addEventListener('click', () => {
-      videoPlayer.value.addEventListener('volumechange', () => {
+  document?.addEventListener('click', () => {
+    videoPlayer.value?.addEventListener('volumechange', () => {
+      if (audioPlayer.value && videoPlayer.value) {
         audioPlayer.value.volume = videoPlayer.value.volume
         audioPlayer.value.muted = videoPlayer.value.muted
-      })
+      }
+    })
 
-      videoPlayer.value.addEventListener('play', () => {
-        audioPlayer.value?.play()
-      })
+    videoPlayer.value?.addEventListener('play', () => {
+      if (audioPlayer.value) {
+        audioPlayer.value.play()
+        audioPlayer.value.volume = videoPlayer.value.volume
+        audioPlayer.value.muted = videoPlayer.value.muted
+      }
+    })
 
-      videoPlayer.value.addEventListener('pause', () => {
-        audioPlayer.value?.pause()
-      })
+    videoPlayer.value?.addEventListener('pause', () => {
+      if (audioPlayer.value) {
+        audioPlayer.value.pause()
+      }
+    })
 
-      videoPlayer.value.addEventListener('seeked', () => {
-        if (audioPlayer.value) {
-          audioPlayer.value.currentTime = videoPlayer.value.currentTime
-        }
-      })
-    });
-  }
+    videoPlayer.value?.addEventListener('seeked', () => {
+      if (audioPlayer.value) {
+        audioPlayer.value.currentTime = videoPlayer.value?.currentTime
+      }
+    })
+  })
 })
 </script>
 

@@ -23,3 +23,11 @@
   transition: all 0.2s linear;
   transform: rotateZ(0);
 }
+
+.rotate-up-instant {
+  transform: rotateZ(180deg);
+}
+
+.rotate-reset-instant {
+  transform: rotateZ(0);
+}
