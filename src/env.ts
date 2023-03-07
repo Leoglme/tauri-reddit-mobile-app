@@ -1,6 +1,6 @@
 export const SITE_NAME = 'Redditech'
 import AccountCircleOutline from 'vue-material-design-icons/AccountCircleOutline.vue'
-import LockOutline from 'vue-material-design-icons/LockOutline.vue'
+import LockOutline from 'vue-material-design-icons/AccountLockOutline.vue'
 
 export const visibilities = [
   {

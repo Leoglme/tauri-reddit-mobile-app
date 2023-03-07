@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PostCommand } from './post.model'
+import type { PostCommand } from './post.model'
 import { Community } from '@/api/community/community'
 import { getSubredditNamesInPosts } from '@/utils/imageUtils'
 import { addAvatarToPosts } from '@/utils/formatUtils'
@@ -16,16 +16,23 @@ export class Post extends BaseApi {
   }
 
   static async homePage(filter: string) {
-    if(filter === undefined){
-      return await axios.get(super.oauthRedditUrl, this.getOption())
-    }else{
-      const url = `${super.oauthRedditUrl}/${filter}`
-      return await axios.get(url, this.getOption())
+    const url = filter ? `${this.oauthRedditUrl}/${filter}` : this.oauthRedditUrl
+    const posts = await axios.get(url, this.getOption())
+    let children = posts.data?.data?.children
+
+    if (children) {
+      const subreddits = getSubredditNamesInPosts(children)
+      const communitiesIcons = await Community.getCommunitiesIcons(subreddits)
+      children = addAvatarToPosts(children, communitiesIcons)
+
+      posts.data.data.children = children
     }
+
+    return posts
   }
 
   static async getPostUser(username: string) {
-    const url = `${super.oauthRedditUrl}/user/${username}/submitted`
+    const url = `${this.oauthRedditUrl}/user/${username}/submitted`
     const posts = await axios.get(url, this.getOption())
     let children = posts.data?.data?.children
 
@@ -51,7 +58,7 @@ export class Post extends BaseApi {
       nsfw: post.nsfw,
       kind: 'self',
     }
-    const url = `${super.oauthRedditUrl}/api/submit`
+    const url = `${this.oauthRedditUrl}/api/submit`
     return await axios.post(url, body, this.getOption())
   }
 
@@ -59,7 +66,7 @@ export class Post extends BaseApi {
     const body = {
       id: idPost,
     }
-    const url = `${super.oauthRedditUrl}/api/del`
+    const url = `${this.oauthRedditUrl}/api/del`
     return await axios.post(url, body, this.getOption())
   }
 }

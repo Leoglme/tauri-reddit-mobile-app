@@ -1,5 +1,5 @@
 <template>
-  <div class="d-grid gap-2 px-3 py-2 bg-grey-100">
+  <div class="d-grid gap-2 px-3 py-2 bg-grey-100 post-card">
     <!-- Header -->
 
     <div class="flex justify-between items-center">
@@ -157,5 +157,9 @@ onMounted(() => {
   width: 100%;
   border: 1px solid var(--grey-600);
   background: var(--grey-800);
+}
+
+.post-card {
+  max-width: calc(100% - 4px);
 }
 </style>

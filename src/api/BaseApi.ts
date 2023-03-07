@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export abstract class BaseApi {
+  static redditCommonUrl = 'https://www.reddit.com'
   static redditApiUrl = 'https://www.reddit.com/api/v1'
   static oauthRedditUrl = 'https://oauth.reddit.com'
   static oauthRedditApiUrl = this.oauthRedditUrl + '/api/v1'
@@ -8,11 +9,15 @@ export abstract class BaseApi {
   static redditClientId = import.meta.env.VITE_REDDIT_CLIENT_ID
   static redditSecret = import.meta.env.VITE_REDDIT_SECRET
 
+  static getAccessToken() {
+    return localStorage.getItem('access_token')
+  }
+
   static getOption() {
     return {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        Authorization: 'Bearer ' + this.getAccessToken(),
       },
     }
   }

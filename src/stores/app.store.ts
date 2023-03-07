@@ -3,19 +3,19 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('app', {
   state: () => ({
     loading: false,
-    currentFilter: ""
+    currentFilter: '',
   }),
   getters: {
-    getCurrentFilter(state){
-      return state.currentFilter;
-    }
+    getCurrentFilter(state) {
+      return state.currentFilter
+    },
   },
   actions: {
     setLoading(loading: boolean) {
       this.loading = loading
     },
-    setCurrentFilter(newFilter: string){
+    setCurrentFilter(newFilter: string) {
       this.currentFilter = newFilter
-    }
+    },
   },
 })

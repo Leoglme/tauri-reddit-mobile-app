@@ -5,7 +5,7 @@ export class User extends BaseApi {
   static sr = localStorage.getItem('sr') || ''
 
   static async getUserInfo(username: string) {
-    const url = `${super.oauthRedditUrl}/user/${username}/about.json`
+    const url = `${this.oauthRedditUrl}/user/${username}/about.json`
     return await axios.get(url, super.getOption())
   }
 
@@ -18,12 +18,12 @@ export class User extends BaseApi {
       sr: this.sr,
       link_type: 'any',
     }
-    const url = `${super.oauthRedditUrl}/api/site_admin`
+    const url = `${this.oauthRedditUrl}/api/site_admin`
     await axios.post(url, new URLSearchParams(body), super.getOption())
   }
 
   static async getUserTrophies(username: string) {
-    const url = `${super.oauthRedditUrl}/user/${username}/trophies.json`
+    const url = `${this.oauthRedditUrl}/user/${username}/trophies.json`
     return await axios.get(url, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token'),

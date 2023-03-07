@@ -11,6 +11,7 @@ import BottomNavigation from '@/components/navigation/BottomNavigation.vue'
 import Navbar from '@/components/navigation/Navbar.vue'
 import Search from '@/pages/SearchPage.vue'
 import { useAuthStore } from '@/stores/auth.store'
+import { Auth } from '@/api/auth/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,8 +84,16 @@ router.beforeEach(async (to) => {
   const pageWithoutConnection = ['/login', '/design-system', '/access-token']
   const auth = useAuthStore()
 
-  if (!auth.access_token && !pageWithoutConnection.includes(to.path)) {
-    await router.push('/login')
+  if (!pageWithoutConnection.includes(to.path)) {
+    if (auth.access_token) {
+      Auth.getUserConnected(auth.access_token).catch(async (err) => {
+        if (err.response?.status === 401) {
+          await router.push('/login')
+        }
+      })
+    } else {
+      await router.push('/login')
+    }
   }
 })
 

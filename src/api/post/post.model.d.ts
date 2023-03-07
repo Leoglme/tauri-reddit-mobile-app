@@ -76,7 +76,7 @@ export type PostModel = {
     media_metadata: ImageInfoMap
     poll_data?: PollData
     media?: {
-      reddit_video: Video
+      reddit_video: VideoModel
     }
   }
 }

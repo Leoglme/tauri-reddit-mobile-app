@@ -3,7 +3,6 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "exclude": ["vitest/unit/**/*"],
   "compilerOptions": {
-    "composite": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

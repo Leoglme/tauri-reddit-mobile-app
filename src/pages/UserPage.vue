@@ -5,7 +5,7 @@
     id="user-profile"
   >
     <div
-      class="w-full user__header relative bg-blue"
+      class="w-full relative bg-blue"
       :style="
         user.banner_img
           ? `background-image: url('${user.banner_img}'); background-size: contain; background-repeat: no-repeat;`
@@ -250,13 +250,6 @@ refreshDatas()
 
 <style lang="scss" scoped>
 @import '@/assets/scss/core/_mixins.scss';
-$header_height: 200px;
-
-.linear__mask {
-  height: 100px;
-  background: var(--linear);
-}
-
 #posts {
   white-space: normal;
 }
