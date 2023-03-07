@@ -52,16 +52,24 @@
         </div>
       </div>
     </div>
-    <Tabs :tabs="tabs">
+    <Tabs
+      :tabs="tabs"
+      @change="handleTab"
+    >
       <section
         id="posts"
         class="gap-2"
       >
-        <PostCard
-          v-for="(post, i) in posts"
-          :key="`${username}-post-${i}`"
-          :post="post"
-        />
+        <div
+          v-if="currentTab === 0"
+          class="d-grid gap-2"
+        >
+          <PostCard
+            v-for="(post, i) in posts"
+            :key="`${username}-post-${i}`"
+            :post="post"
+          />
+        </div>
       </section>
       <section
         id="about"
@@ -161,7 +169,7 @@ const posts = ref([])
 const user = ref({} as UserModel)
 const trophies = ref([] as Trophy[])
 const displayName = ref()
-
+const currentTab = ref(0)
 /*WATCHERS*/
 watch(
   () => route,
@@ -171,6 +179,11 @@ watch(
   },
   { deep: true }
 )
+
+/*METHODS*/
+const handleTab = (indexTab: number) => {
+  currentTab.value = indexTab
+}
 
 /*API METHODS*/
 const followUser = (isFollow: boolean) => {
