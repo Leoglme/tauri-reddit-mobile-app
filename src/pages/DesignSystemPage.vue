@@ -103,8 +103,8 @@
     <h3 class="text-grey-800">Text Input</h3>
     <Form class="d-grid gap-2 w-full">
       <TextInput
+        id="label"
         prefix="/r"
-        sid="label"
         label="Nom de la communauté"
         rules="required|max:20"
       />

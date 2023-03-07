@@ -1,0 +1,145 @@
+.bottom-sheet {
+  z-index: 99999;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.bottom-sheet * {
+  box-sizing: border-box;
+}
+
+.bottom-sheet__content {
+  overflow-y: scroll;
+  height: var(--55aabca4);
+  padding-bottom: 10px;
+}
+
+.bottom-sheet__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.bottom-sheet__card {
+  width: 100%;
+  pointer-events: all;
+  position: fixed;
+  background: var(--grey-500);
+  border-radius: 14px 14px 0 0;
+  left: 50%;
+  z-index: 9999;
+  margin: 0 auto;
+  height: 100% !important;
+}
+
+.bottom-sheet__card.square {
+  border-radius: 0;
+}
+
+.bottom-sheet__card.stripe {
+}
+
+.bottom-sheet__card.fx-default {
+  transform: translate(-50%);
+  transition: bottom 0.3s ease;
+}
+
+.bottom-sheet__card.fx-fadein-scale {
+  transform: translate(-50%) scale(0.7);
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.bottom-sheet__card.fx-slide-from-right {
+  transform: translate(100%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
+}
+
+.bottom-sheet__card.fx-slide-from-left {
+  transform: translate(-100%);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
+}
+
+.bottom-sheet__pan {
+  padding-bottom: 20px;
+  padding-top: 15px;
+  height: 38px;
+  border-radius: 15px 15px 0 0;
+}
+
+.bottom-sheet__bar {
+  display: block;
+  width: 50px;
+  height: 3px;
+  border-radius: 14px;
+  margin: 0 auto;
+  cursor: pointer;
+  background: #898d8f;
+}
+
+.bottom-sheet.closed {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.bottom-sheet.closed .bottom-sheet__backdrop {
+  animation: hide 0.3s ease;
+}
+
+.bottom-sheet.moving .bottom-sheet__card {
+  transition: none;
+}
+
+.bottom-sheet.opened {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bottom-sheet.opened .bottom-sheet__backdrop {
+  animation: show 0.3s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+.bottom-sheet.opened .bottom-sheet__card.fx-fadein-scale {
+  transform: translate(-50%) scale(1);
+  opacity: 1;
+}
+
+.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-right,
+.bottom-sheet.opened .bottom-sheet__card.fx-slide-from-left {
+  transform: translate(-50%);
+  opacity: 1;
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes hide {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
