@@ -15,8 +15,13 @@ export class Post extends BaseApi {
     }
   }
 
-  static async homePage() {
-    return await axios.get(super.oauthRedditUrl, this.getOption())
+  static async homePage(filter: string) {
+    if(filter === undefined){
+      return await axios.get(super.oauthRedditUrl, this.getOption())
+    }else{
+      const url = `${super.oauthRedditUrl}/${filter}`
+      return await axios.get(url, this.getOption())
+    }
   }
 
   static async getPostUser(username: string) {
