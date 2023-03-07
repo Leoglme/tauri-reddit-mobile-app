@@ -6,6 +6,7 @@ import { addAvatarToPosts } from '@/utils/formatUtils'
 import { BaseApi } from '@/api/BaseApi'
 
 export class Post extends BaseApi {
+
   static getOption() {
     return {
       headers: {
@@ -15,11 +16,26 @@ export class Post extends BaseApi {
     }
   }
 
-  static async homePage(filter: string) {
-    if(filter === undefined){
+  static async homePage(filter: string, after?: string) {
+    const hasFilter = filter && filter !== ""
+    console.log({filter, after})
+    if(!hasFilter && !after){
+      console.log("1")
       return await axios.get(super.oauthRedditUrl, this.getOption())
-    }else{
+    }
+    else if (!hasFilter && after){
+      console.log("2")
+      const url = `${super.oauthRedditUrl}/?count=2&after=${after}`
+      return await axios.get(url, this.getOption())
+    }
+    else if (hasFilter && !after){
+      console.log("3")
       const url = `${super.oauthRedditUrl}/${filter}`
+      return await axios.get(url, this.getOption())
+    }
+    else{
+      console.log("4")
+      const url = `${super.oauthRedditUrl}/${filter}/count=2&after=${after}`
       return await axios.get(url, this.getOption())
     }
   }
