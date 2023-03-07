@@ -8,7 +8,10 @@ export function removeLinkInSelfText(inputString: string) {
   return inputString.replace(/\[.*?\]\([^)]+\)/g, '').trim()
 }
 
-export const removeAmpUrl = (url: string) => url.replace(/amp;/g, '')
+export const removeAmpUrl = (url?: string) => {
+  if (!url) return null
+  return url.replace(/amp;/g, '')
+}
 
 export function extractDomain(url: string): string | null {
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']

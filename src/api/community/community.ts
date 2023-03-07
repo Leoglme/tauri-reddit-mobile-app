@@ -23,7 +23,8 @@ export class Community extends BaseApi {
       .get(url)
       .then((response) => {
         for (const subreddit of response.data.data.children) {
-          icons[subreddit.data.display_name] = removeAmpUrl(subreddit.data.community_icon || subreddit.data.icon_img)
+          const icon = removeAmpUrl(subreddit.data.community_icon || subreddit.data.icon_img)
+          icons[subreddit.data.display_name] = icon || null
         }
       })
       .catch((error) => {
