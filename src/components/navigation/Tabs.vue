@@ -73,6 +73,9 @@ const getAngle = (dx: number, dy: number) => {
   return (360 * Math.atan(dy / dx)) / (2 * Math.PI)
 }
 
+/*EMITS*/
+const emit = defineEmits(['change'])
+
 const select = (index: number) => {
   tabIndex.value = index
 }
@@ -124,9 +127,6 @@ const resizeWidth = () => {
   width.value = titles.value.clientWidth
   tabWidth.value = Math.round(width.value / props.tabs.length)
 }
-
-/*EMITS*/
-const emit = defineEmits(['change'])
 
 /*WATCHERS*/
 watch(

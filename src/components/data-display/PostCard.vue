@@ -158,8 +158,4 @@ onMounted(() => {
   border: 1px solid var(--grey-600);
   background: var(--grey-800);
 }
-
-.post-card {
-  max-width: calc(100% - 4px);
-}
 </style>

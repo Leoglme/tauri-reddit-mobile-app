@@ -46,12 +46,18 @@
         </div>
       </div>
     </div>
-    <Tabs :tabs="tabs">
+    <Tabs
+      :tabs="tabs"
+      @change="handleTab"
+    >
       <section
         id="posts"
         class="gap-2"
       >
-        <div class="d-grid gap-2">
+        <div
+          v-if="currentTab === 0"
+          class="d-grid gap-2"
+        >
           <PostCard
             v-for="(post, i) in posts"
             :key="`${community.display_name}-post-${i}`"
@@ -157,6 +163,11 @@ const posts = ref<PostModel[]>([])
 const rules = ref<CommunityRuleModel[]>([])
 const moderators = ref<CommunityModeratorModel[]>([])
 const community = ref({} as CommunityModel)
+const currentTab = ref(0)
+/*METHODS*/
+const handleTab = (indexTab: number) => {
+  currentTab.value = indexTab
+}
 
 /*API METHODS*/
 const followCommunity = (isFollow: boolean) => {

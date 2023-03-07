@@ -9,7 +9,7 @@ export function removeLinkInSelfText(inputString: string) {
 }
 
 export const removeAmpUrl = (url?: string) => {
-  if (!url) return null
+  if (!url) return undefined
   return url.replace(/amp;/g, '')
 }
 
