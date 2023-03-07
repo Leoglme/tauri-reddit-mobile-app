@@ -1,4 +1,4 @@
-# Reddit - Application Mobile/Desktop
+# Crzgames - Launcher
 
 ## <span style="color: green;">Tech Stack 🛠</span>
 
@@ -6,18 +6,19 @@
 - Vue.js (framework front-end in Tauri)
 - Rust (back-end in Tauri)
 - NodeJS (environnement)
+- Mercure-SSE
 
-<br />
+<br /><br />
 
 ## Infos for dependances / environment
 
 It shows a concise list of information about the environment, Rust, Node.js and their versions as well as some relevant configurations.
 
 ```bash
-npm run tauri info
+npm run tauri:info:dependencies
 ```
 
-<br />
+<br /><br />
 
 ## Icons - Generate icons for application
 
@@ -41,8 +42,10 @@ default name file : ./app-icon.png
 3. Generate icons plateforms all :
 
 ```bash
-npm run tauri icon
+npm run tauri:generate:icon
 ```
+
+4. Add files path icon in src-tauri/tauri.conf.json.
 
 <br /><br />
 
@@ -51,6 +54,11 @@ npm run tauri icon
 1. Install Microsoft Visual Studio 2022 (MSVC v143 + Windows 10 SDK): https://visualstudio.microsoft.com/fr/vs/
 2. Install WebView2 (if windows <= 10) : https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 3. Install Rust : https://www.rust-lang.org/tools/install
+4. Install targets rust for build/compile Tauri :
+
+```bash
+npm run rust:install:target:windows
+```
 
 ## Setup Tauri for macOS
 
@@ -65,6 +73,12 @@ xcode-select --install
 ```bash
 #curl
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+```
+
+3. Install targets rust for build/compile Tauri :
+
+```bash
+npm run rust:install:target:macos
 ```
 
 ## Setup Tauri for Linux
@@ -90,73 +104,10 @@ sudo apt install libwebkit2gtk-4.0-dev \
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-<br /><br />
-
-## Setup Tauri Mobile to Android for Windows
-
-1. Install AndroidStudio : https://developer.android.com/studio
-2. Supprimez simplement le dossier jre dans : C:\Program Files\Android\Android Studio
-3. Create device emulator in AndroidStudio : Pixel 3a
-4. Set MSVC Toolchain as default :
+3. Install targets rust for build/compile Tauri :
 
 ```bash
-rustup default stable-msvc
-```
-
-5. Android - First make sure to install the required rust android targets :
-
-```bash
-rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
-```
-
-6. Open PowerShell (Administrator) - Installing Java-JDK :
-
-```bash
-Invoke-WebRequest https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip -o openjdk-11.zip
-Expand-Archive openjdk-11.zip -d .
-mkdir $env:LocalAppData\Java
-mv jdk-11.0.2 $env:LocalAppData\Java
-```
-
-7. Set the JAVA_HOME environment variable (PowerShell) :
-
-```bash
-[System.Environment]::SetEnvironmentVariable("JAVA_HOME", "$env:LocalAppData\Java\jdk-11.0.2", "User")
-```
-
-8. Install the Android SDK and NDK (PowerShell) :
-
-```bash
-Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip -o cmdline-tools.zip
-Expand-Archive cmdline-tools.zip -d .
-mkdir $HOME\.android\cmdline-tools\latest
-mv cmdline-tools\* $HOME\.android\cmdline-tools\latest
-rm cmdline-tools
-```
-
-9. Set the ANDROID_HOME and NDK_HOME environment variables (PowerShell) :
-
-```bash
-[System.Environment]::SetEnvironmentVariable("ANDROID_HOME", "$HOME\.android", "User")
-[System.Environment]::SetEnvironmentVariable("NDK_HOME", "$HOME\.android\ndk\25.0.8775105", "User")
-```
-
-10. Fermer le PowerShell et le reouvrir.
-11. Install required SDK and NDK components (PowerShell) :
-
-```bash
-& "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" "platforms;android-33" "platform-tools" "ndk;25.0.8775105" "build-tools;33.0.0"
-```
-
-<br />
-
-## Setup Tauri Mobile to iOS for macOS
-
-1. Install xCode.
-2. Then install the required rust iOS targets :
-
-```bash
-rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
+npm run rust:install:target:linux
 ```
 
 <br /><br />
@@ -171,7 +122,7 @@ npm install -g npm
 
 ```bash
 # npm
-# Install dependances
+# Install dependencies
 npm install
 ```
 
@@ -179,122 +130,148 @@ npm install
 
 ## Updating Dependencies
 
-Install a global package, to update major/minor versions of available packages npm :
+### NPM :
+
+Pour voir les mise à jour des packages disponible de npm :
 
 ```bash
 # npm
-npm install -g npm-check-updates
+npm run npm:check:dependencies
 ```
 
-Pour voir mise à jour des packages disponible de npm, exécutez ce qui suit à la racine :
+Update depencencies to npm (Vue.js/Tauri) :
 
 ```bash
-ncu
-```
-
-Updating Dependencies Vue.js/Tauri, pour mettre à jour les dépendances npm, exécutez ce qui suit à la racine :
-
-```bash
-ncu -u && npm install
+# npm
+npm run npm:update:all-packages-major
 ```
 
 <br />
 
-Updating Rust :
+### Rust :
+
+Update Rust (Rust language) :
 
 ```bash
-rustup update
+# npm
+npm run rust:update
+
+# print version rust (rustc = compiler rust)
+npm run rust:print:version
 ```
 
 <br />
 
-Updating Dependencies Rust/Tauri, pour mettre à jour les dépendances Cargo, exécutez ce qui suit dans le dossier 'src-tauri' :
+### Cargo :
+
+Pour voir les mise à jour des packages disponible de cargo :
 
 ```bash
-#cargo
-cargo update
+# npm
+# list the installed libraries
+npm run cargo:check:dependencies
+
+# npm
+# lists installed libraries to see deep details
+npm run cargo:check2:dependencies
+```
+
+Update depencencies to cargo (Rust/Tauri) :
+
+```bash
+# npm
+# update just minors
+npm run cargo:update:all-packages-minors
+
+# npm
+# update minors/major
+npm run cargo:update:all-packages-major
 ```
 
 <br /><br />
 
-## Development Server - Mobile
+## Development Server
 
-Cette commande vérifie rapidement votre code pour s'assurer qu'il se compile mais ne produit pas d'exécutable et ne lance pas l'application (seulement pour s'assurer que le projet Rust compile). <br /> A faire dans le dossier 'src-tauri' :
-
-```bash
-#cargo
-cargo check
-```
-
-Application Type : Android / iOS <br />
-
-1. Exécuter l'application à un appareil connecté au PC :
+Cette commande vérifie rapidement votre code pour s'assurer qu'il se compile mais ne produit pas d'exécutable et ne lance pas l'application (seulement pour s'assurer que le projet Rust compile) :
 
 ```bash
 # npm
-# Android
-npm run tauri android dev
-
-# npm
-# iOS
-npm run tauri ios dev
-```
-
-1. Exécuter l'application dans AndroidStudio ou xCode :
-
-```bash
-# npm
-# Android
-npm run tauri android dev --open
-
-# npm
-# iOS
-npm run tauri ios dev --open
-```
-
-<br />
-
-## Development Server - Desktop
-
-Cette commande vérifie rapidement votre code pour s'assurer qu'il se compile mais ne produit pas d'exécutable et ne lance pas l'application (seulement pour s'assurer que le projet Rust compile). <br /> A faire dans le dossier 'src-tauri' :
-
-```bash
-#cargo
-cargo check
+npm run dev:check-compile
 ```
 
 Application type : Desktop (.exe)
 
 ```bash
-#npm
-npm run tauri dev
+# npm
+npm run dev:desktop
 ```
 
 Application type : WebApp <br />
-Start the development server on http://localhost:1420/
+Start the development server on http://localhost:1473/
 
 ```bash
-#npm
-npm run dev
+# npm
+npm run dev:web
 ```
 
 <br /><br />
 
-## Production - Mobile :
+## Test unitaire/e2e
 
-```bash
+### Informations sur Cypress / Vitest et Test unitaire / e2e :
+
+1. Cypress = Test e2e, Cypress est principalement utilisé pour les tests d'interface utilisateur et d'API, ce qui signifie qu'il est plus adapté pour tester le comportement global de votre application, y compris l'interaction de l'utilisateur avec l'interface utilisateur et les appels d'API.<br /><br />
+2. Vitest = Test unitaire, test les components de Vue.js. Vitest utilise : Vitest + Vue test utils <br />
+   Vitest watch les fichiers de test unitaire (\*.spec.ts) a chaque changement dans le code de vos test unitaire.
+
+### Informations sur les rapports de test générer avec Cypress et Vitest :
+
+1. Cypress/e2e : Les rapports de test sont générer dans le dossier 'cypress/e2e/reports' (il ne sont pas générer avec les command 'npm run test:e2e:dev:..' il faut qu'il sois lancer en mode 'prod'. Le rapport de test générer est un fichier \*.html<br /><br />
+2. Vitest/unitaire : Les rapports de test sont générer dans le dossier 'vitest/unit/reports', et le rapport de test générer est un fichier \*.html
+
+### Development :
+
+```sh
 # npm
-# Android
-npm run tauri android build
+# run test e2e and unit (Cypress / Vitest)
+npm run test:unit-e2e:dev:chrome
+npm run test:unit-e2e:dev:firefox
+npm run test:unit-e2e:dev:edge
 
 # npm
-# iOS
-npm run tauri ios build
+# run test e2e (Cypress)
+npm run test:e2e:dev:chrome
+npm run test:e2e:dev:firefox
+npm run test:e2e:dev:edge
+
+# npm
+# run test unit (Vitest)
+npm run test:unit:dev
 ```
 
-<br />
+### Production :
 
-## Production - Desktop
+```sh
+# npm
+# run test e2e and unit (Cypress / Vitest)
+npm run test:unit-e2e:prod:chrome
+npm run test:unit-e2e:prod:firefox
+npm run test:unit-e2e:prod:edge
+
+# npm
+# run test e2e (Cypress)
+npm run test:e2e:prod:chrome
+npm run test:e2e:prod:firefox
+npm run test:e2e:prod:edge
+
+# npm
+# run test unit (Vitest)
+npm run test:unit:prod
+```
+
+<br /><br />
+
+## Production
 
 ### Install for production - Windows / macOS / Linux :
 
@@ -354,14 +331,6 @@ Documentation : https://tauri.app/fr/v1/guides/building/app-size#rust-build-time
 
 <br />
 
-### Pour build un système qui est le même que notre pc utilisé pour compiler, il faudra utiliser :
-
-```bash
-npm run tauri build
-```
-
-<br />
-
 ### Après avoir build, récupérer le binaires et/ou le programme d'installation pour le système d'exploitation ciblé :
 
 Cette commande intègre vos ressources Web dans un seul binaire avec votre code Rust. <br />
@@ -379,34 +348,34 @@ src-tauri/target/release/bundle/
 
 <br />
 
-### Build - Windows - .msi :
+### Build - Windows - .msi / .exe :
 
 <span style="color: red;">IMPORTANT</span> : Veuillez noter que les installateurs de .msi ne peuvent être créés que sous Windows car la compilation croisée ne fonctionne pas encore.
 <br />
 
-<span style="color: red;">IMPORTANT (2)</span> : Windows 10/11 sont compatible nativement, mais en-dessous de Windows 10 il n'y as pas WebView2 installer par défault. <br />
+<span style="color: red;">IMPORTANT (2)</span> : Windows 11 sont compatible nativement, mais en-dessous de Windows 11 il n'y as pas WebView2 installer par défault. <br />
 Il faudra le packager dans l'installeur .msi pour que ce sois compatible à partir de Windows7 et +.
 
 Dossier src-tauri : <br />
 
-![img_2.png](imgReadme/img_2.png)
-![img_4.png](imgReadme/img_4.png)
+![img_2.png](docs/readme/screenshots/img_2.png)
+![img_4.png](docs/readme/screenshots/img_4.png)
 
 64-bit Windows (Windows 7+) :
 
 ```bash
-npm run tauri build -- --target x86_64-pc-windows-msvc
+npm run build:windows:x64
 ```
 
 32-bit Windows (Windows 7+) :
 
 ```bash
-npm run tauri build -- --target i686-pc-windows-msvc
+npm run build:windows:x86
 ```
 
 <br />
 
-### Build - Linux - .deb / .appimage :
+### Build - Linux - .deb / .AppImage :
 
 <span style="color: red;">IMPORTANT</span> : Veuillez noter que les paquets .deb / .appimage ne peuvent être créés que sur Linux car la compilation croisée ne fonctionne pas encore. <br />
 
@@ -416,19 +385,19 @@ npm run tauri build -- --target i686-pc-windows-msvc
 ARM64 Linux (kernel 4.1, glibc 2.17+) :
 
 ```bash
-npm run tauri build -- --target aarch64-unknown-linux-gnu
+npm run build:linux:arm64
 ```
 
 32-bit Linux (kernel 3.2+, glibc 2.17+) :
 
 ```bash
-npm run tauri build -- --target i686-unknown-linux-gnu
+npm run build:linux:x86
 ```
 
 64-bit Linux (kernel 3.2+, glibc 2.17+) :
 
 ```bash
-npm run tauri build -- --target x86_64-unknown-linux-gnu
+npm run build:linux:x64
 ```
 
 <br />
@@ -442,28 +411,28 @@ npm run tauri build -- --target x86_64-unknown-linux-gnu
 <span style="color: red;">IMPORTANT (3)</span> : La version minimale du système d'exploitation nécessaire pour qu'une application Tauri puisse fonctionner sur macOS est 10.13. Si vous avez besoin du support pour les nouvelles API macOS comme window.print qui n'est pris en charge que depuis la version macOS 11. <br />
 
 Dossier src-tauri : <br />
-![img.png](imgReadme/img.png)
+![img.png](docs/readme/screenshots/img.png)
 <br /><br />
 
 ARM64 macOS (11.0+, Big Sur+) :
 produit un binaire macOS pour les machines Apple en silicium.
 
 ```bash
-npm run tauri build -- --target aarch64-apple-darwin
+npm run build:macos:arm64_silicium
 ```
 
 64-bit macOS (10.7+, Lion+) :
 produit un binaire macOS pour les machines Apple basé sur Intel.
 
 ```bash
-npm run tauri build -- --target x86_64-apple-darwin
+npm run build:macos:x64_intel
 ```
 
 ARM64/64-bit macOS (11.0+, Big Sur+ / 10.7+, Lion+) :
 produit un binaire macOS universel qui s'exécute à la fois sur le silicium Apple et sur les Mac à processeur Intel.
 
 ```bash
-npm run tauri build -- --target universal-apple-darwin
+npm run build:macos:universal
 ```
 
 Checkout the [deployment documentation](https://tauri.app/v1/guides/building/) for more information.

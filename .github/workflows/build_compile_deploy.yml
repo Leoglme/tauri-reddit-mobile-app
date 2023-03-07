@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_compile:
+  build_release:
     strategy:
       fail-fast: false
       matrix:
@@ -119,7 +119,7 @@ jobs:
             src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/deb/
           if-no-files-found: warn
 
-  deploy:
+  publish_release:
     needs: [build_release]
     runs-on: ubuntu-latest
     steps:
@@ -139,7 +139,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
           name: 'v*'
-          body: 'Reddit Application - Distribution for Windows / MacOS / Linux'
+          body: 'Crzgames Launcher - Distribution for Windows / MacOS / Linux'
           draft: false
           prerelease: false
           files: |

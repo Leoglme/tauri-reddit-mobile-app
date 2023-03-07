@@ -1,0 +1,46 @@
+name: Deploy Vue.js project to O2Switch
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    container: cypress/browsers:node16.16.0-chrome107-ff107-edge
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies for development/test
+        run: npm i --ignore-scripts
+
+      - name: Install Cypress and run test e2e to chrome (Cypress)
+        uses: cypress-io/github-action@v5
+        with:
+          build: npm run build
+          start: npm run test:e2e:prod:chrome
+          browser: chrome
+
+      - name: Test unit (Vitest)
+        run: npm run test:unit:prod
+
+      - name: Deploy files to Server O2Switch
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.O2SWITCH_SSH_PRIVATE_KEY }}
+          ARGS: '-avzr -i --delete'
+          SOURCE: 'dist/'
+          REMOTE_HOST: ${{ secrets.O2SWITCH_HOST }}
+          REMOTE_USER: ${{ secrets.O2SWITCH_USERNAME }}
+          REMOTE_PORT: ${{ secrets.O2SWITCH_PORT }}
+          TARGET: ${{ secrets.O2SWITCH_TARGETDIRECTORY }}
+          EXCLUDE: '/dist/, /node_modules/'

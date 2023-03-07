@@ -1,4 +1,18 @@
 {
+  "files": [],
+  "include": ["vitest/unit/**/*.spec.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.vitest.json"
+    },
+    { "path": "./tsconfig.node.json" }
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -17,7 +31,5 @@
       "@/*": ["./src/*"],
       "~/*": ["./src/*"]
     }
-  },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  }
 }
