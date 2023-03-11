@@ -31,5 +31,11 @@ configure({
     names: {},
   }),
 })
+import { App as CapacitorApp } from '@capacitor/app'
+import { BaseApi } from '@/api/BaseApi'
+CapacitorApp.addListener('appUrlOpen', async (data: { url: string }) => {
+  const url = '/access-token' + data.url.replace(BaseApi.redirectUri, '')
+  await router.push(url)
+})
 
 createApp(App).use(router).use(pinia).mount('#app')

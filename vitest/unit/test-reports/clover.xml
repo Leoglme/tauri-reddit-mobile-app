@@ -1,19 +1,94 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1678112618646" clover="3.2.0">
-  <project timestamp="1678112618646" name="All files">
-    <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0" elements="12" coveredelements="12" complexity="0" loc="10" ncloc="10" packages="1" files="1" classes="1"/>
-    <file name="ExempleVitest.spec.ts" path="C:\Users\Corentin\Desktop\Nouveau dossier\vitest\unit\ExempleVitest.spec.ts">
-      <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
-      <line num="1" count="1" type="stmt"/>
-      <line num="2" count="1" type="stmt"/>
-      <line num="3" count="1" type="stmt"/>
-      <line num="4" count="1" type="stmt"/>
-      <line num="5" count="1" type="cond" truecount="1" falsecount="0"/>
-      <line num="6" count="1" type="cond" truecount="1" falsecount="0"/>
-      <line num="7" count="1" type="stmt"/>
-      <line num="8" count="1" type="stmt"/>
-      <line num="9" count="1" type="stmt"/>
-      <line num="10" count="1" type="stmt"/>
+<?xml version="1.0" encoding="UTF-8" ?>
+<coverage
+  generated="1678112618646"
+  clover="3.2.0"
+>
+  <project
+    timestamp="1678112618646"
+    name="All files"
+  >
+    <metrics
+      statements="10"
+      coveredstatements="10"
+      conditionals="2"
+      coveredconditionals="2"
+      methods="0"
+      coveredmethods="0"
+      elements="12"
+      coveredelements="12"
+      complexity="0"
+      loc="10"
+      ncloc="10"
+      packages="1"
+      files="1"
+      classes="1"
+    />
+    <file
+      name="ExempleVitest.spec.ts"
+      path="C:\Users\Corentin\Desktop\Nouveau dossier\vitest\unit\ExempleVitest.spec.ts"
+    >
+      <metrics
+        statements="10"
+        coveredstatements="10"
+        conditionals="2"
+        coveredconditionals="2"
+        methods="0"
+        coveredmethods="0"
+      />
+      <line
+        num="1"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="2"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="3"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="4"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="5"
+        count="1"
+        type="cond"
+        truecount="1"
+        falsecount="0"
+      />
+      <line
+        num="6"
+        count="1"
+        type="cond"
+        truecount="1"
+        falsecount="0"
+      />
+      <line
+        num="7"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="8"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="9"
+        count="1"
+        type="stmt"
+      />
+      <line
+        num="10"
+        count="1"
+        type="stmt"
+      />
     </file>
   </project>
 </coverage>

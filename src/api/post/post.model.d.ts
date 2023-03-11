@@ -63,6 +63,7 @@ export type PostModel = {
     subreddit_name_prefixed: string
     author?: string
     title: string
+    name: string
     subreddit: string
     url: string
     url_overridden_by_dest: string

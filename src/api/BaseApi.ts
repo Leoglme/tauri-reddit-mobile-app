@@ -1,13 +1,19 @@
 import axios from 'axios'
+import platform from 'platform'
 
 export abstract class BaseApi {
+  static isInMobile = platform.os?.family === 'Android'
   static redditCommonUrl = 'https://www.reddit.com'
   static redditApiUrl = 'https://www.reddit.com/api/v1'
   static oauthRedditUrl = 'https://oauth.reddit.com'
   static oauthRedditApiUrl = this.oauthRedditUrl + '/api/v1'
-  static redirectUri = 'http://localhost:1420/access-token'
-  static redditClientId = import.meta.env.VITE_REDDIT_CLIENT_ID
-  static redditSecret = import.meta.env.VITE_REDDIT_SECRET
+  static redirectUri = this.isInMobile
+    ? import.meta.env.VITE_REDDIT_REDIRECT_URI_MOBILE
+    : import.meta.env.VITE_REDDIT_REDIRECT_URI
+  static redditClientId = this.isInMobile
+    ? import.meta.env.VITE_REDDIT_CLIENT_ID_MOBILE
+    : import.meta.env.VITE_REDDIT_CLIENT_ID
+  static redditSecret = this.isInMobile ? import.meta.env.VITE_REDDIT_SECRET_MOBILE : import.meta.env.VITE_REDDIT_SECRET
 
   static getAccessToken() {
     return localStorage.getItem('access_token')
