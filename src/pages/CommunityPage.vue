@@ -58,11 +58,16 @@
           v-if="currentTab === 0"
           class="d-grid gap-2"
         >
-          <PostCard
-            v-for="(post, i) in posts"
-            :key="`${community.display_name}-post-${i}`"
-            :post="post"
-          />
+          <ScrollPagination
+            :current-posts="currentPosts"
+            @refresh="refreshPosts"
+          >
+            <PostCard
+              v-for="(post, i) in posts"
+              :key="`${community.display_name}-post-${i}`"
+              :post="post"
+            />
+          </ScrollPagination>
         </div>
       </section>
       <section
@@ -140,7 +145,7 @@ import { useAppStore } from '@/stores/app.store'
 import type { CommunityModel, CommunityModeratorModel, CommunityRuleModel } from '@/api/community/community.model'
 import { SITE_NAME } from '@/env'
 import { timestampToDate } from '@/utils/dateUtils'
-
+import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
 /*Hooks*/
 const route = useRoute()
 
@@ -164,6 +169,9 @@ const rules = ref<CommunityRuleModel[]>([])
 const moderators = ref<CommunityModeratorModel[]>([])
 const community = ref({} as CommunityModel)
 const currentTab = ref(0)
+const after = ref()
+const currentPosts = ref(0)
+
 /*METHODS*/
 const handleTab = (indexTab: number) => {
   currentTab.value = indexTab
@@ -177,6 +185,26 @@ const followCommunity = (isFollow: boolean) => {
     Community.unsubscribe(community.value.display_name)
   }
   community.value.user_is_subscriber = isFollow
+}
+
+const getCommunityPosts = async () => {
+  await Community.hotPostCommunity(communityName.value.toString(), after.value)
+    .then((res) => {
+      posts.value = posts.value.concat(res.data.data.children)
+      after.value = res.data.data.after
+      if (appStore.loading) {
+        appStore.setLoading(false)
+      }
+      currentPosts.value += 10
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+const refreshPosts = () => {
+  getCommunityPosts()
+  currentPosts.value = 0
 }
 
 const refreshDatas = async () => {
@@ -212,13 +240,7 @@ const refreshDatas = async () => {
 
       document.title = `${display_name} -  ${SITE_NAME}`
 
-      await Community.hotPostCommunity(communityName.value.toString())
-        .then((res) => {
-          posts.value = res.data.data.children
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      await getCommunityPosts()
     })
     .catch((err) => {
       console.log(err)
