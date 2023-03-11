@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('app', {
   state: () => ({
     loading: false,
+    openDeleteSwipe: false,
     currentFilter: '',
   }),
   getters: {
@@ -16,6 +17,9 @@ export const useAppStore = defineStore('app', {
     },
     setCurrentFilter(newFilter: string) {
       this.currentFilter = newFilter
+    },
+    async setOpenDeleteSwipe(open: boolean) {
+      this.openDeleteSwipe = open
     },
   },
 })

@@ -62,9 +62,9 @@ export class Post extends BaseApi {
     return await axios.post(url, body, this.getOption())
   }
 
-  static async deletePost(idPost: string) {
+  static async deletePost(postID?: string) {
     const body = {
-      id: idPost,
+      id: postID,
     }
     const url = `${this.oauthRedditUrl}/api/del`
     return await axios.post(url, body, this.getOption())
