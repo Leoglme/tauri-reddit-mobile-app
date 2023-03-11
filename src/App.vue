@@ -10,11 +10,14 @@
     </main>
 
     <RouterView name="BottomNavigation" />
+
+    <DeleteSwipe :open="appStore.openDeleteSwipe" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useAppStore } from '@/stores/app.store'
+import DeleteSwipe from '@/components/actions/DeleteSwipe.vue'
 
 /*STORE*/
 const appStore = useAppStore()

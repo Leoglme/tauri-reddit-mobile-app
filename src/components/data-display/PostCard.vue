@@ -13,9 +13,12 @@
           style="gap: 1px"
         >
           <div class="flex items-center gap-2">
-            <h4 class="text-sm font-medium text-grey-800">
+            <router-link
+              :to="'/' + props.post.data.subreddit_name_prefixed"
+              class="text-sm font-medium text-grey-800"
+            >
               {{ props.post.data.subreddit_name_prefixed }}
-            </h4>
+            </router-link>
             <span
               v-if="!hasAuthor"
               class="font-medium text-grey-700 flex items-center gap-2"
@@ -26,7 +29,12 @@
             v-if="hasAuthor"
             class="flex items-center gap-2"
           >
-            <h4 class="text-sm font-medium text-grey-800">u/{{ props.post.data.author }}</h4>
+            <router-link
+              :to="'/u/' + props.post.data.author"
+              class="text-sm font-medium text-grey-800"
+            >
+              u/{{ props.post.data.author }}
+            </router-link>
             <span class="font-medium text-grey-700 flex items-center gap-2"
               ><span>•</span>{{ formatElapsedTime(props.post.data.created_utc) }}</span
             >
@@ -34,9 +42,12 @@
         </div>
       </div>
 
-      <DotsHorizontalIcon
-        class="clickable-icon"
-        fill-color="var(--grey-800)"
+      <MinusCircleOutlineIcon
+        v-if="props.post.data.can_mod_post"
+        class="clickable-icon-red"
+        :size="22"
+        fill-color="var(--red)"
+        @click="openDeleteSwipe"
       />
     </div>
     <!-- Body -->
@@ -91,7 +102,7 @@ import MediaEmbed from '@/components/data-display/MediaEmbed.vue'
 import Swiper from '@/components/data-display/Swiper.vue'
 import Poll from '@/components/data-display/Poll.vue'
 import PostVideo from '@/components/data-display/PostVideo.vue'
-import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
+import MinusCircleOutlineIcon from 'vue-material-design-icons/MinusCircleOutline.vue'
 import type { PropType } from 'vue'
 import type { PostModel, VideoModel } from '@/api/post/post.model'
 import { computed, onMounted, ref } from 'vue'
@@ -99,6 +110,12 @@ import { getBestImages, getImageInPreview } from '@/utils/imageUtils'
 import { extractDomain, removeLinkInSelfText, selfTextIsLinkFormat } from '@/utils/urlUtils'
 import SelfTextLink from '@/components/data-display/SelfTextLink.vue'
 import { formatElapsedTime } from '@/utils/dateUtils'
+import { useAppStore } from '@/stores/app.store'
+import { usePostStore } from '@/stores/post.store'
+
+/*STORE*/
+const appStore = useAppStore()
+const postStore = usePostStore()
 
 /*PROPS*/
 const props = defineProps({
@@ -137,6 +154,10 @@ const images = computed(() => {
 })
 
 /*METHODS*/
+const openDeleteSwipe = () => {
+  appStore.setOpenDeleteSwipe(!appStore.openDeleteSwipe)
+  postStore.setDeletePostId(props.post?.data.name)
+}
 const getImage = () => {
   if (props.post?.data.preview) {
     image.value = getImageInPreview(props.post.data.preview)

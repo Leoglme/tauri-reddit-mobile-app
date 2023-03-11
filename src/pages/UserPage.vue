@@ -70,7 +70,7 @@
             @refresh="refreshPosts"
           >
             <PostCard
-              v-for="(post, i) in posts"
+              v-for="(post, i) in postStore.posts"
               :key="`${username}-post-${i}`"
               :post="post"
             />
@@ -190,6 +190,7 @@ import { Trophy } from '@/api/user/user.model'
 import { Community } from '@/api/community/community'
 import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
 import type { PostModel } from '@/api/post/post.model'
+import { usePostStore } from '@/stores/post.store'
 
 /*Hooks*/
 const route = useRoute()
@@ -199,9 +200,9 @@ const username = ref(route.params.username)
 
 /*STORE*/
 const appStore = useAppStore()
+const postStore = usePostStore()
 
 /*REFS*/
-const posts = ref<PostModel[]>([])
 const user = ref({} as UserModel)
 const trophies = ref([] as Trophy[])
 const displayName = ref()
@@ -260,11 +261,11 @@ const getPosts = async () => {
             if (post.data.name === firstPostId.value) {
               break
             }
-            posts.value.push(post)
+            postStore.posts.push(post)
           }
           stopScrollPaginate.value = true
         } else {
-          posts.value = posts.value.concat(requestsPosts)
+          postStore.setPosts(postStore.posts.concat(requestsPosts))
           afters.value.push(after.value)
         }
 
@@ -283,6 +284,7 @@ const refreshPosts = () => {
 
 const refreshDatas = async () => {
   appStore.setLoading(true)
+  postStore.setPosts([])
   /*DOM*/
   document.title = `Chargement... | ${SITE_NAME}`
 

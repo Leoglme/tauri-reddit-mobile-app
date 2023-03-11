@@ -1,5 +1,4 @@
 <template>
-  <!--  https://github.com/vaban-ru/vue-bottom-sheet -->
   <div class="flex flex-col justify-center gap-2 cursor-pointer user-select-none select__visibility">
     <span class="text-sm font-medium text-grey-800">Type de communauté</span>
     <div class="flex flex-col justify-center gap-1">
@@ -45,7 +44,7 @@
 import { ref } from 'vue'
 import MenuDownIcon from 'vue-material-design-icons/MenuDown.vue'
 import { visibilities } from '@/env'
-
+import { VueBottomSheet } from '@webzlodimir/vue-bottom-sheet'
 type Visibility = {
   icon: {
     name: string
@@ -59,8 +58,6 @@ type Visibility = {
   value: string
   description: string
 }
-
-import { VueBottomSheet } from '@webzlodimir/vue-bottom-sheet'
 
 const myBottomSheet = ref()
 
