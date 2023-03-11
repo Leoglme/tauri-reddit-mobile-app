@@ -78,6 +78,10 @@ onMounted(() => {
   document?.addEventListener('click', () => {
     videoPlayer.value?.addEventListener('volumechange', () => {
       if (audioPlayer.value && videoPlayer.value) {
+        if (audioPlayer.value.paused) {
+          audioPlayer.value.play()
+        }
+
         audioPlayer.value.volume = videoPlayer.value.volume
         audioPlayer.value.muted = videoPlayer.value.muted
       }

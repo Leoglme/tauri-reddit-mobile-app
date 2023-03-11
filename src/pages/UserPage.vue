@@ -210,6 +210,7 @@ const currentPosts = ref(0)
 const after = ref<string>()
 const afters = ref<string[]>([])
 const stopScrollPaginate = ref(false)
+const firstPostId = ref()
 const tabs = ref([
   {
     label: 'Publications',
@@ -248,27 +249,26 @@ const getPosts = async () => {
   if (!stopScrollPaginate.value) {
     await Post.getPostUser(username.value.toString(), after.value)
       .then((res) => {
-        const requestsPosts = res.data.data.children
-        posts.value = posts.value.concat(requestsPosts)
+        const requestsPosts: PostModel[] = res.data.data.children
+        if (!firstPostId.value) {
+          firstPostId.value = requestsPosts[0].data?.name
+        }
+
         after.value = res.data.data.after
-        if (after.value) {
-          if (afters.value.includes(after.value)) {
-            requestsPosts.forEach((post: PostModel) => {
-              if (posts.value.find((p) => p.data.name === post.data.name)) {
-                console.log("j'ajoute poas", post.data.title)
-                return
-              }
-              console.log("j'ajoute", post.data.title)
-              posts.value.push(post)
-            })
-            stopScrollPaginate.value = true
-          } else {
-            afters.value.push(after.value)
+        if (!after.value || afters.value.includes(after.value)) {
+          for (const post of requestsPosts) {
+            if (post.data.name === firstPostId.value) {
+              break
+            }
+            posts.value.push(post)
           }
+          stopScrollPaginate.value = true
+        } else {
+          posts.value = posts.value.concat(requestsPosts)
+          afters.value.push(after.value)
         }
 
         currentPosts.value += 10
-        console.log(posts.value)
       })
       .catch((err) => {
         console.log(err)
