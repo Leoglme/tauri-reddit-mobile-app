@@ -64,11 +64,17 @@
           v-if="currentTab === 0"
           class="d-grid gap-2"
         >
-          <PostCard
-            v-for="(post, i) in posts"
-            :key="`${username}-post-${i}`"
-            :post="post"
-          />
+          <ScrollPagination
+            :stop="stopScrollPaginate"
+            :current-posts="currentPosts"
+            @refresh="refreshPosts"
+          >
+            <PostCard
+              v-for="(post, i) in posts"
+              :key="`${username}-post-${i}`"
+              :post="post"
+            />
+          </ScrollPagination>
         </div>
       </section>
       <section
@@ -182,6 +188,8 @@ import { timestampToDate } from '@/utils/dateUtils'
 import { BaseApi } from '@/api/BaseApi'
 import { Trophy } from '@/api/user/user.model'
 import { Community } from '@/api/community/community'
+import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
+import type { PostModel } from '@/api/post/post.model'
 
 /*Hooks*/
 const route = useRoute()
@@ -193,11 +201,15 @@ const username = ref(route.params.username)
 const appStore = useAppStore()
 
 /*REFS*/
-const posts = ref([])
+const posts = ref<PostModel[]>([])
 const user = ref({} as UserModel)
 const trophies = ref([] as Trophy[])
 const displayName = ref()
 const currentTab = ref(0)
+const currentPosts = ref(0)
+const after = ref<string>()
+const afters = ref<string[]>([])
+const stopScrollPaginate = ref(false)
 const tabs = ref([
   {
     label: 'Publications',
@@ -231,6 +243,44 @@ const followUser = (isFollow: boolean) => {
   }
   user.value.user_is_subscriber = isFollow
 }
+
+const getPosts = async () => {
+  if (!stopScrollPaginate.value) {
+    await Post.getPostUser(username.value.toString(), after.value)
+      .then((res) => {
+        const requestsPosts = res.data.data.children
+        posts.value = posts.value.concat(requestsPosts)
+        after.value = res.data.data.after
+        if (after.value) {
+          if (afters.value.includes(after.value)) {
+            requestsPosts.forEach((post: PostModel) => {
+              if (posts.value.find((p) => p.data.name === post.data.name)) {
+                console.log("j'ajoute poas", post.data.title)
+                return
+              }
+              console.log("j'ajoute", post.data.title)
+              posts.value.push(post)
+            })
+            stopScrollPaginate.value = true
+          } else {
+            afters.value.push(after.value)
+          }
+        }
+
+        currentPosts.value += 10
+        console.log(posts.value)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+}
+
+const refreshPosts = () => {
+  getPosts()
+  currentPosts.value = 0
+}
+
 const refreshDatas = async () => {
   appStore.setLoading(true)
   /*DOM*/
@@ -273,14 +323,7 @@ const refreshDatas = async () => {
 
       document.title = `${title} (${display_name_prefixed}) -  ${SITE_NAME}`
 
-      await Post.getPostUser(username.value.toString())
-        .then((res) => {
-          posts.value = res.data.data.children
-          console.log(posts.value)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      await getPosts()
     })
     .catch((err) => {
       console.log(err)

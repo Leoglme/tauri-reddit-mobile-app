@@ -5,17 +5,23 @@
     id="home"
     class="bg-black d-grid gap-2"
   >
-    <PostCard
-      v-for="(post, i) in posts"
-      :key="`post-${i}`"
-      :post="post"
-    />
+    <ScrollPagination
+      :current-posts="currentPosts"
+      @refresh="refreshPosts"
+    >
+      <PostCard
+        v-for="(post, i) in posts"
+        :key="`post-${i}`"
+        :post="post"
+      />
+    </ScrollPagination>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { Post } from '@/api/post/post'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
+import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import type { PostModel } from '@/api/post/post.model'
 import { useAppStore } from '@/stores/app.store'
@@ -46,18 +52,10 @@ const getHomePosts = () => {
     })
 }
 
-/*LIFECYCLE*/
-onMounted(() => {
-  window.addEventListener('scroll', () => {
-    const pageHeight = window.scrollY + window.innerHeight
-    const totalHeight = document.body.scrollHeight
-
-    if (pageHeight >= totalHeight * 0.7 && currentPosts.value >= 7) {
-      getHomePosts()
-      currentPosts.value = 0
-    }
-  })
-})
+const refreshPosts = () => {
+  getHomePosts()
+  currentPosts.value = 0
+}
 
 /*WATCHERS*/
 watch(

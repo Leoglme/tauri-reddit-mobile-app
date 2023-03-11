@@ -10,5 +10,3 @@
 import RedditButton from '@/components/actions/RedditButton.vue'
 import Logo from '@/components/ui/Logo.vue'
 </script>
-
-<style lang="scss" scoped></style>
