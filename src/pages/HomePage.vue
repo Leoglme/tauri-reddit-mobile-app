@@ -5,17 +5,23 @@
     id="home"
     class="bg-black d-grid gap-2"
   >
-    <PostCard
-      v-for="(post, i) in posts"
-      :key="`post-${i}`"
-      :post="post"
-    />
+    <ScrollPagination
+      :current-posts="currentPosts"
+      @refresh="refreshPosts"
+    >
+      <PostCard
+        v-for="(post, i) in posts"
+        :key="`post-${i}`"
+        :post="post"
+      />
+    </ScrollPagination>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { Post } from '@/api/post/post'
 import { ref, watch } from 'vue'
+import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import type { PostModel } from '@/api/post/post.model'
 import { useAppStore } from '@/stores/app.store'
@@ -25,21 +31,33 @@ import Loader from '@/components/ui/Loader.vue'
 const appStore = useAppStore()
 appStore.setLoading(true)
 
-/*Refs*/
+/*REFS*/
 const posts = ref<PostModel[]>([])
+const after = ref()
+const currentPosts = ref(0)
 
+/* API METHODS */
 const getHomePosts = () => {
-  Post.homePage(appStore.getCurrentFilter)
+  Post.homePage(appStore.getCurrentFilter, after.value)
     .then((res) => {
-      posts.value = res.data.data.children
-      appStore.setLoading(false)
-      console.log(posts.value)
+      posts.value = posts.value.concat(res.data.data.children)
+      after.value = res.data.data.after
+      if (appStore.loading) {
+        appStore.setLoading(false)
+      }
+      currentPosts.value += 10
     })
     .catch((err) => {
       console.log(err)
     })
 }
 
+const refreshPosts = () => {
+  getHomePosts()
+  currentPosts.value = 0
+}
+
+/*WATCHERS*/
 watch(
   () => appStore.getCurrentFilter,
   () => {

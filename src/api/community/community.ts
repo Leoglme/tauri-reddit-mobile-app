@@ -52,8 +52,8 @@ export class Community extends BaseApi {
     return await axios.get(url, super.getOption())
   }
 
-  static async hotPostCommunity(communityName: string) {
-    const url = `${this.redditCommonUrl}/r/${communityName}/hot.json`
+  static async hotPostCommunity(communityName: string, after?: string, limit = 10) {
+    const url = `${this.redditCommonUrl}/r/${communityName}/hot.json?limit=${limit}&after=${after}`
     const posts = await axios.get(url)
     let children = posts.data?.data?.children
 

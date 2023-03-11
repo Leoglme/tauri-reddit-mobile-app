@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Reddit</string>
+    <string name="title_activity_main">Reddit</string>
+    <string name="package_name">com.redditech</string>
+    <string name="custom_url_scheme">com.redditech</string>
+</resources>

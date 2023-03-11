@@ -15,8 +15,8 @@ export class Post extends BaseApi {
     }
   }
 
-  static async homePage(filter: string) {
-    const url = filter ? `${this.oauthRedditUrl}/${filter}` : this.oauthRedditUrl
+  static async homePage(filter: string, after?: string, limit = 10) {
+    const url = `${this.oauthRedditUrl}/${filter}?limit=${limit}&after=${after}`
     const posts = await axios.get(url, this.getOption())
     let children = posts.data?.data?.children
 
@@ -31,8 +31,8 @@ export class Post extends BaseApi {
     return posts
   }
 
-  static async getPostUser(username: string) {
-    const url = `${this.oauthRedditUrl}/user/${username}/submitted`
+  static async getPostUser(username: string, after?: string, limit = 10) {
+    const url = `${this.oauthRedditUrl}/user/${username}/submitted?limit=${limit}&after=${after}`
     const posts = await axios.get(url, this.getOption())
     let children = posts.data?.data?.children
 

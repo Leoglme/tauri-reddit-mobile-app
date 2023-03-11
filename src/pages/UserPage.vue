@@ -52,16 +52,62 @@
         </div>
       </div>
     </div>
-    <Tabs :tabs="tabs">
+    <Tabs
+      :tabs="tabs"
+      @change="handleTab"
+    >
       <section
         id="posts"
         class="gap-2"
       >
-        <PostCard
-          v-for="(post, i) in posts"
-          :key="`${username}-post-${i}`"
-          :post="post"
-        />
+        <div
+          v-if="currentTab === 0"
+          class="d-grid gap-2"
+        >
+          <ScrollPagination
+            :stop="stopScrollPaginate"
+            :current-posts="currentPosts"
+            @refresh="refreshPosts"
+          >
+            <PostCard
+              v-for="(post, i) in posts"
+              :key="`${username}-post-${i}`"
+              :post="post"
+            />
+          </ScrollPagination>
+        </div>
+      </section>
+      <section
+        v-if="user.user_is_moderator"
+        id="subs"
+      >
+        <span
+          v-if="!subs || !subs.length"
+          class="text-center font-medium"
+          >Aucun abonnements :(</span
+        >
+        <div
+          v-if="currentTab === 1"
+          class="d-grid gap-3 by-1 border-grey-400 bg-grey-100"
+        >
+          <router-link
+            v-for="sub in subs"
+            :key="sub.data.display_name_prefixed"
+            :append="true"
+            :to="`/${sub.data.display_name_prefixed}`"
+            class="px-4 py-2 text-grey-800 font-medium sub cursor-pointer flex items-center justify-between"
+          >
+            <span class="flex items-center gap-3">
+              <Avatar
+                :image="removeAmpUrl(sub.data.icon_img || sub.data.community_icon)"
+                :title="sub.data.display_name_prefixed"
+                :size="30"
+              />
+              {{ sub.data.display_name_prefixed }}
+            </span>
+            <ChevronRightIcon />
+          </router-link>
+        </div>
       </section>
       <section
         id="about"
@@ -95,10 +141,12 @@
         >
           {{ user.public_description }}
         </div>
-        <div class="d-grid gap-2">
+        <div
+          v-if="trophies && trophies.length"
+          class="d-grid gap-2"
+        >
           <h4 class="text-grey-800 font-medium text-sm pl-2">TROPHÉES</h4>
           <div
-            v-if="trophies && trophies.length"
             id="trophies"
             class="d-grid gap-4 px-4 py-4 by-1 border-grey-400 bg-grey-100"
           >
@@ -126,6 +174,7 @@ import FollowButton from '@/components/actions/FollowButton.vue'
 import DisconnectButton from '@/components/actions/DisconnectButton.vue'
 import Loader from '@/components/ui/Loader.vue'
 import Tabs from '@/components/navigation/Tabs.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import { ref, watch } from 'vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import { useRoute } from 'vue-router'
@@ -138,30 +187,39 @@ import { SITE_NAME } from '@/env'
 import { timestampToDate } from '@/utils/dateUtils'
 import { BaseApi } from '@/api/BaseApi'
 import { Trophy } from '@/api/user/user.model'
+import { Community } from '@/api/community/community'
+import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
+import type { PostModel } from '@/api/post/post.model'
 
 /*Hooks*/
 const route = useRoute()
 
 /*DATA*/
 const username = ref(route.params.username)
-const tabs = [
+
+/*STORE*/
+const appStore = useAppStore()
+
+/*REFS*/
+const posts = ref<PostModel[]>([])
+const user = ref({} as UserModel)
+const trophies = ref([] as Trophy[])
+const displayName = ref()
+const currentTab = ref(0)
+const currentPosts = ref(0)
+const after = ref<string>()
+const afters = ref<string[]>([])
+const stopScrollPaginate = ref(false)
+const firstPostId = ref()
+const tabs = ref([
   {
     label: 'Publications',
   },
   {
     label: 'À Propos',
   },
-]
-
-/*STORE*/
-const appStore = useAppStore()
-
-/*REFS*/
-const posts = ref([])
-const user = ref({} as UserModel)
-const trophies = ref([] as Trophy[])
-const displayName = ref()
-
+])
+const subs = ref<{ data: { display_name_prefixed: string; icon_img?: string; community_icon?: string } }[]>([])
 /*WATCHERS*/
 watch(
   () => route,
@@ -172,6 +230,11 @@ watch(
   { deep: true }
 )
 
+/*METHODS*/
+const handleTab = (indexTab: number) => {
+  currentTab.value = indexTab
+}
+
 /*API METHODS*/
 const followUser = (isFollow: boolean) => {
   if (isFollow) {
@@ -181,6 +244,43 @@ const followUser = (isFollow: boolean) => {
   }
   user.value.user_is_subscriber = isFollow
 }
+
+const getPosts = async () => {
+  if (!stopScrollPaginate.value) {
+    await Post.getPostUser(username.value.toString(), after.value)
+      .then((res) => {
+        const requestsPosts: PostModel[] = res.data.data.children
+        if (!firstPostId.value) {
+          firstPostId.value = requestsPosts[0].data?.name
+        }
+
+        after.value = res.data.data.after
+        if (!after.value || afters.value.includes(after.value)) {
+          for (const post of requestsPosts) {
+            if (post.data.name === firstPostId.value) {
+              break
+            }
+            posts.value.push(post)
+          }
+          stopScrollPaginate.value = true
+        } else {
+          posts.value = posts.value.concat(requestsPosts)
+          afters.value.push(after.value)
+        }
+
+        currentPosts.value += 10
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+}
+
+const refreshPosts = () => {
+  getPosts()
+  currentPosts.value = 0
+}
+
 const refreshDatas = async () => {
   appStore.setLoading(true)
   /*DOM*/
@@ -223,14 +323,7 @@ const refreshDatas = async () => {
 
       document.title = `${title} (${display_name_prefixed}) -  ${SITE_NAME}`
 
-      await Post.getPostUser(username.value.toString())
-        .then((res) => {
-          posts.value = res.data.data.children
-          console.log(posts.value)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      await getPosts()
     })
     .catch((err) => {
       console.log(err)
@@ -242,6 +335,21 @@ const refreshDatas = async () => {
     .catch((err) => {
       console.log(err)
     })
+
+  if (user.value.user_is_moderator) {
+    tabs.value.splice(1, 0, {
+      label: 'Abonnements',
+    })
+    await Community.userCommunityList()
+      .then((res) => {
+        subs.value = res.data.data?.children
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  } else {
+    tabs.value = tabs.value.filter((tab) => tab.label !== 'Abonnements')
+  }
   appStore.setLoading(false)
 }
 
@@ -250,6 +358,7 @@ refreshDatas()
 
 <style lang="scss" scoped>
 @import '@/assets/scss/core/_mixins.scss';
+
 #posts {
   white-space: normal;
 }
@@ -268,5 +377,13 @@ refreshDatas()
   @include down(330px) {
     --columns: 1;
   }
+}
+
+.sub:hover {
+  background: var(--grey-200);
+}
+
+.sub:active {
+  background: var(--grey-400);
 }
 </style>

@@ -3,6 +3,7 @@ import { BaseApi } from '@/api/BaseApi'
 
 export class Auth extends BaseApi {
   static oauthRedditLoginUrl = `${this.redditApiUrl}/authorize?client_id=${this.redditClientId}&response_type=code&state=redditech&redirect_uri=${this.redirectUri}&duration=permanent&scope=*`
+  static oauthRedditLoginUrlTwo = `${this.redditApiUrl}/authorize?client_id=${this.redditClientId}&response_type=code&state=redditech&redirect_uri=${window.location.origin}&duration=permanent&scope=*`
 
   static option = {
     headers: {

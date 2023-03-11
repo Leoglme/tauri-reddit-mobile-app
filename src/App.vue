@@ -2,7 +2,10 @@
   <div>
     <RouterView name="Navbar" />
 
-    <main :class="{ 'vh-100 centered': appStore.loading }">
+    <main
+      :style="appStore.loading ? 'padding-bottom: 0;' : null"
+      :class="{ 'vh-100 centered': appStore.loading }"
+    >
       <RouterView />
     </main>
 
