@@ -2,7 +2,7 @@
 
 ## Table des matières
 - [Introduction](#introduction)
-- [Test unitaire/e2e](#Test unitaire/e2e)
+- [Setup Tauri for Windows](#setup-tauri-for-windows)
 - [Utilisation](#utilisation)
 - [Contributions](#contributions)
 - [Licence](#licence)
