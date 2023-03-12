@@ -1,5 +1,12 @@
 # Crzgames - Launcher
 
+## Table des matières
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Utilisation](#utilisation)
+- [Contributions](#contributions)
+- [Licence](#licence)
+
 ## <span style="color: green;">Tech Stack 🛠</span>
 
 - Tauri (framework)
