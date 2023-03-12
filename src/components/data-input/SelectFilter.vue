@@ -101,23 +101,28 @@ const handleClick = () => {
 <style lang="scss" scoped>
 .menu {
   top: var(--navbar-height);
-  background: var(--grey-200);
+  background: var(--grey-100);
   left: 0;
   width: 100%;
   max-width: 500px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--grey-500);
 
   li {
     display: flex;
-    margin: 3px;
+    gap: 8px;
+    margin-top: 8px;
+    border-radius: 8px;
+    padding: 8px;
   }
 
   li:hover {
-    background: black;
+    background: var(--grey-200);
     cursor: pointer;
   }
 
   li.active {
-    background: black;
+    background: var(--grey-500);
   }
 }
 </style>

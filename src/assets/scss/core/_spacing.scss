@@ -39,6 +39,10 @@ $max: 20;
     margin-left: space($i);
     margin-right: space($i);
   }
+  .my-#{$i} {
+    margin-bottom: space($i);
+    margin-top: space($i);
+  }
   .mb-#{$i} {
     margin-bottom: space($i);
   }

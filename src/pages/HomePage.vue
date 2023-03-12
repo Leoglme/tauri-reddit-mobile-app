@@ -3,7 +3,8 @@
   <section
     v-else
     id="home"
-    class="bg-black d-grid gap-2"
+    class="bg-black d-grid"
+    :class="isCardLayout ? 'gap-2' : null"
   >
     <ScrollPagination
       :current-posts="currentPosts"
@@ -27,15 +28,17 @@ import { useAppStore } from '@/stores/app.store'
 import Loader from '@/components/ui/Loader.vue'
 import { usePostStore } from '@/stores/post.store'
 import { SITE_NAME } from '@/env'
+import { useAuthStore } from '@/stores/auth.store'
 
 /*STORE*/
 const appStore = useAppStore()
 const postStore = usePostStore()
+const authStore = useAuthStore()
 
 /*REFS*/
 const after = ref()
 const currentPosts = ref(0)
-
+const isCardLayout = ref(authStore.prefs?.layout === 'card')
 /* API METHODS */
 const getHomePosts = () => {
   Post.homePage(appStore.getCurrentFilter, after.value)
@@ -44,6 +47,7 @@ const getHomePosts = () => {
       after.value = res.data.data.after
       if (appStore.loading) {
         appStore.setLoading(false)
+        document.title = SITE_NAME
       }
       currentPosts.value += 10
     })

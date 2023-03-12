@@ -1,8 +1,10 @@
 export type PostCommand = {
+  sr: string
   title: string
-  text: string
-  spoiler: boolean
-  nsfw: boolean
+  text?: string
+  spoiler?: boolean
+  submit_type: 'profile' | 'subreddit'
+  nsfw?: boolean
 }
 
 export type Preview = {

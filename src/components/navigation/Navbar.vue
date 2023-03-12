@@ -6,25 +6,19 @@
     <SelectFilter />
 
     <div class="flex items-center gap-4">
-      <router-link to="/search">
-        <MagnifyIcon
-          class="cursor-pointer"
-          fill-color="var(--grey-700)"
-          :size="28"
+      <router-link :to="'/u/' + authStore.username">
+        <Avatar
+          :image="authStore.userImage"
+          :size="32"
         />
       </router-link>
-      <Avatar
-        :image="authStore.userImage"
-        :size="32"
-      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import SelectFilter from '../../components/data-input/SelectFilter.vue'
-import Avatar from '../../components/data-display/Avatar.vue'
-import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
+import SelectFilter from '@/components/data-input/SelectFilter.vue'
+import Avatar from '@/components/data-display/Avatar.vue'
 import { useAuthStore } from '@/stores/auth.store'
 
 const authStore = useAuthStore()

@@ -30,6 +30,7 @@
       "@types/platform",
       "@vee-validate/i18n",
       "@vee-validate/rules",
+      "@types/axios-mock-adapter",
       "@types/node"
     ],
     "esModuleInterop": true,
