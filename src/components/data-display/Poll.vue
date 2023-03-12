@@ -79,7 +79,8 @@
         v-if="poll.voting_end_timestamp"
         class="text-sm"
       >
-        Temps restant : {{ timestampToRemainingTime(poll.voting_end_timestamp) }}
+        <span v-if="poll.voting_end_timestamp - Date.now() <= 0">Le temp est écoulé</span>
+        <span v-else>Temps restant : {{ timestampToRemainingTime(poll.voting_end_timestamp) }}</span>
       </p>
     </div>
   </div>

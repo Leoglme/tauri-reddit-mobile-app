@@ -1,19 +1,37 @@
-# Crzgames - Launcher
+<p align="center">
+<img width="100" height="100" alt="logo redditech" src="https://dibodev-files.s3.eu-west-3.amazonaws.com/redditech-logo.png">
+</p>
 
-## Table des matières
-- [Introduction](#introduction)
+<h2 align="center">Redditech - Tauri</h2>
+<p>Reddit mobile, web and desktop application created with tauri, vuejs, capacitor, oauth and the reddit api </p>
+
+> Source code for the demo page can be found on the [tauri-reddit-mobile-app repo](https://github.com/Leoglme/tauri-reddit-mobile-app)
+
+<p align="center">
+<img height="auto" width="40%" src="https://dibodev-files.s3.eu-west-3.amazonaws.com/firefox_ML8tg14TL2.gif">
+</p>
+
+## Menu
+
 - [Setup Tauri for Windows](#setup-tauri-for-windows)
-- [Utilisation](#utilisation)
-- [Contributions](#contributions)
-- [Licence](#licence)
+- [Setup Tauri for macOS](#setup-tauri-for-macos)
+- [Setup Tauri for Linux](#setup-tauri-for-linux)
+- [Setup for Vue.js](#setup-for-vuejs)
+- [Icons - Generate icons for application](#icons---generate-icons-for-application)
+- [Updating Dependencies](#updating-dependencies)
+- [Check Compile](#check-compile)
+- [Test unitaire/e2e](#test-unitairee2e)
+- [Test unitaire vitest](#test-unitaire-vitest)
+- [Tauri Production](#tauri-production)
+- [Capacitor build and run application](#capacitor-build-and-run-application)
 
-## <span style="color: green;">Tech Stack 🛠</span>
+## <span>Tech Stack 🛠</span>
 
 - Tauri (framework)
 - Vue.js (framework front-end in Tauri)
 - Rust (back-end in Tauri)
 - NodeJS (environnement)
-- Mercure-SSE
+- Cordova
 
 <br /><br />
 
@@ -24,35 +42,6 @@ It shows a concise list of information about the environment, Rust, Node.js and 
 ```bash
 npm run tauri:info:dependencies
 ```
-
-<br /><br />
-
-## Icons - Generate icons for application
-
-1. Informations - Type files :
-
-```bash
-icon.icns=macOS
-icon.ico=Windows
-*.png=Linux
-Square*Logo.png& StoreLogo.png=Actuellement inutilisé mais destiné aux cibles AppX/MS Store.
-```
-
-2. Informations - Icon de base :
-
-```bash
-default format: .png
-default size : 1024x1024px with transparency
-default name file : ./app-icon.png
-```
-
-3. Generate icons plateforms all :
-
-```bash
-npm run tauri:generate:icon
-```
-
-4. Add files path icon in src-tauri/tauri.conf.json.
 
 <br /><br />
 
@@ -133,6 +122,33 @@ npm install -g npm
 npm install
 ```
 
+## Icons - Generate icons for application
+
+1. Informations - Type files :
+
+```bash
+icon.icns=macOS
+icon.ico=Windows
+*.png=Linux
+Square*Logo.png& StoreLogo.png=Actuellement inutilisé mais destiné aux cibles AppX/MS Store.
+```
+
+2. Informations - Icon de base :
+
+```bash
+default format: .png
+default size : 1024x1024px with transparency
+default name file : ./app-icon.png
+```
+
+3. Generate icons plateforms all :
+
+```bash
+npm run tauri:generate:icon
+```
+
+4. Add files path icon in src-tauri/tauri.conf.json.
+
 <br /><br />
 
 ## Updating Dependencies
@@ -197,7 +213,7 @@ npm run cargo:update:all-packages-major
 
 <br /><br />
 
-## Development Server
+## Check Compile
 
 Cette commande vérifie rapidement votre code pour s'assurer qu'il se compile mais ne produit pas d'exécutable et ne lance pas l'application (seulement pour s'assurer que le projet Rust compile) :
 
@@ -278,7 +294,16 @@ npm run test:unit:prod
 
 <br /><br />
 
-## Production
+### Test unitaire vitest
+
+```bash
+npm run test
+npm run test:unit:dev
+npm run test:unit:dev:gui
+npm run test:unit:prod
+```
+
+## Tauri Production
 
 ### Install for production - Windows / macOS / Linux :
 
@@ -443,12 +468,11 @@ npm run build:macos:universal
 ```
 
 Checkout the [deployment documentation](https://tauri.app/v1/guides/building/) for more information.
-<br /><br /><br />
+<br /><br />
 
-### Updater Application Tauri - Key :
+### Capacitor build and run application
 
-TAURI_PUBLIC_KEY=dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDEzMkY2MkREMTNFRTgxNEQKUldSTmdlNFQzV0l2RTgzdGNCbFBramJtSUFGa0ZLamwrUHBXeTltU3VmanRUWFdhRnVqVSs1VkEK
-
-TAURI_PRIVATE_KEY=dW50cnVzdGVkIGNvbW1lbnQ6IHJzaWduIGVuY3J5cHRlZCBzZWNyZXQga2V5ClJXUlRZMEl5b0xsbzRNVE5OOS9HTUhjd0t1VnBRRDNPMjVPTXR2RW1tcWZnNFloMWE5WUFBQkFBQUFBQUFBQUFBQUlBQUFBQVVnbldZUlFzSFprNG5TSC92Wk05YnBXbml6RUt0dnVEeTVHRWF5OFUwV0RwbUdGenlJUE8xTUorZG8wV2RzRk4rdzM0enhXL2t6TTJzMDZPUDJWMHdTMmwxUmsrM3RHSFcwNmJ3UG9tZlRpaDQ3WnpvdDBvcXNsOHJhajZWcWU0dlZ1VFMwajg4emM9Cg==
-
-TAURI_KEY_PASSWORD=Marylene59!
+```bash
+npm run android
+npm run android:studio
+```
