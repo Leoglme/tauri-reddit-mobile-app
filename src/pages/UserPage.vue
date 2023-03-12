@@ -44,7 +44,7 @@
             </span>
             <DisconnectButton v-if="user.user_is_moderator" />
             <FollowButton
-              v-else
+              v-if="!user.user_is_moderator && user.accept_followers"
               :follow="user.user_is_subscriber"
               @follow="followUser"
             />
@@ -62,15 +62,31 @@
       >
         <div
           v-if="currentTab === 0"
-          class="d-grid gap-2"
+          class="d-grid"
+          :class="isCardLayout ? 'gap-2' : null"
         >
+          <div
+            v-if="user.user_is_moderator"
+            class="flex items-center justify-center py-4 bg-grey-200"
+          >
+            <router-link
+              class="btn btn-small fit-content"
+              role="button"
+              data-variant="primary"
+              :to="{ path: user.name + '/create-post' }"
+              append
+            >
+              <PlusIcon /> Créer une publication
+            </router-link>
+          </div>
+
           <ScrollPagination
             :stop="stopScrollPaginate"
             :current-posts="currentPosts"
             @refresh="refreshPosts"
           >
             <PostCard
-              v-for="(post, i) in posts"
+              v-for="(post, i) in postStore.posts"
               :key="`${username}-post-${i}`"
               :post="post"
             />
@@ -187,9 +203,12 @@ import { SITE_NAME } from '@/env'
 import { timestampToDate } from '@/utils/dateUtils'
 import { BaseApi } from '@/api/BaseApi'
 import { Trophy } from '@/api/user/user.model'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { Community } from '@/api/community/community'
 import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
 import type { PostModel } from '@/api/post/post.model'
+import { usePostStore } from '@/stores/post.store'
+import { useAuthStore } from '@/stores/auth.store'
 
 /*Hooks*/
 const route = useRoute()
@@ -199,9 +218,10 @@ const username = ref(route.params.username)
 
 /*STORE*/
 const appStore = useAppStore()
+const authStore = useAuthStore()
+const postStore = usePostStore()
 
 /*REFS*/
-const posts = ref<PostModel[]>([])
 const user = ref({} as UserModel)
 const trophies = ref([] as Trophy[])
 const displayName = ref()
@@ -210,6 +230,7 @@ const currentPosts = ref(0)
 const after = ref<string>()
 const afters = ref<string[]>([])
 const stopScrollPaginate = ref(false)
+const isCardLayout = ref(authStore.prefs?.layout === 'card')
 const firstPostId = ref()
 const tabs = ref([
   {
@@ -260,11 +281,11 @@ const getPosts = async () => {
             if (post.data.name === firstPostId.value) {
               break
             }
-            posts.value.push(post)
+            postStore.posts.push(post)
           }
           stopScrollPaginate.value = true
         } else {
-          posts.value = posts.value.concat(requestsPosts)
+          postStore.setPosts(postStore.posts.concat(requestsPosts))
           afters.value.push(after.value)
         }
 
@@ -283,12 +304,13 @@ const refreshPosts = () => {
 
 const refreshDatas = async () => {
   appStore.setLoading(true)
+  postStore.setPosts([])
   /*DOM*/
   document.title = `Chargement... | ${SITE_NAME}`
 
   await UserApi.getUserInfo(username.value.toString())
     .then(async (res) => {
-      const { name, comment_karma, awardee_karma, awarder_karma, link_karma } = res.data.data
+      const { name, comment_karma, awardee_karma, awarder_karma, link_karma, accept_followers } = res.data.data
       const {
         icon_img,
         title,
@@ -310,6 +332,7 @@ const refreshDatas = async () => {
         createdAt: res.data.data.created_utc,
         user_is_subscriber,
         user_is_moderator,
+        accept_followers,
         name,
         comment_karma,
         awardee_karma,
@@ -366,11 +389,6 @@ refreshDatas()
 #about {
   position: relative;
   top: -6px;
-}
-
-#user-profile {
-  max-width: 640px;
-  margin: 0 auto;
 }
 
 #karmas {

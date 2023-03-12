@@ -1,8 +1,10 @@
 export type PostCommand = {
+  sr: string
   title: string
-  text: string
-  spoiler: boolean
-  nsfw: boolean
+  text?: string
+  spoiler?: boolean
+  submit_type: 'profile' | 'subreddit'
+  nsfw?: boolean
 }
 
 export type Preview = {
@@ -64,6 +66,7 @@ export type PostModel = {
     author?: string
     title: string
     name: string
+    id: string
     subreddit: string
     url: string
     url_overridden_by_dest: string
@@ -72,6 +75,7 @@ export type PostModel = {
     created_utc: number
     selftext?: string
     is_video: boolean
+    can_mod_post: boolean
     preview?: Preview
     avatarUrl?: string
     media_metadata: ImageInfoMap

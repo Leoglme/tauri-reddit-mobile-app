@@ -1,5 +1,8 @@
 <template>
-  <div class="d-grid gap-2 px-3 py-2 bg-grey-100 post-card">
+  <div
+    class="d-grid gap-2 px-3 py-2 bg-grey-100 post-card"
+    :class="!isCardLayout ? 'bb-1 border-grey-500' : null"
+  >
     <!-- Header -->
 
     <div class="flex justify-between items-center">
@@ -13,9 +16,12 @@
           style="gap: 1px"
         >
           <div class="flex items-center gap-2">
-            <h4 class="text-sm font-medium text-grey-800">
+            <router-link
+              :to="'/' + props.post.data.subreddit_name_prefixed"
+              class="text-sm font-medium text-grey-800"
+            >
               {{ props.post.data.subreddit_name_prefixed }}
-            </h4>
+            </router-link>
             <span
               v-if="!hasAuthor"
               class="font-medium text-grey-700 flex items-center gap-2"
@@ -26,7 +32,12 @@
             v-if="hasAuthor"
             class="flex items-center gap-2"
           >
-            <h4 class="text-sm font-medium text-grey-800">u/{{ props.post.data.author }}</h4>
+            <router-link
+              :to="'/u/' + props.post.data.author"
+              class="text-sm font-medium text-grey-800"
+            >
+              u/{{ props.post.data.author }}
+            </router-link>
             <span class="font-medium text-grey-700 flex items-center gap-2"
               ><span>•</span>{{ formatElapsedTime(props.post.data.created_utc) }}</span
             >
@@ -34,9 +45,12 @@
         </div>
       </div>
 
-      <DotsHorizontalIcon
-        class="clickable-icon"
-        fill-color="var(--grey-800)"
+      <MinusCircleOutlineIcon
+        v-if="props.post.data.can_mod_post"
+        class="clickable-icon-red"
+        :size="22"
+        fill-color="var(--red)"
+        @click="openDeleteSwipe"
       />
     </div>
     <!-- Body -->
@@ -91,7 +105,7 @@ import MediaEmbed from '@/components/data-display/MediaEmbed.vue'
 import Swiper from '@/components/data-display/Swiper.vue'
 import Poll from '@/components/data-display/Poll.vue'
 import PostVideo from '@/components/data-display/PostVideo.vue'
-import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
+import MinusCircleOutlineIcon from 'vue-material-design-icons/MinusCircleOutline.vue'
 import type { PropType } from 'vue'
 import type { PostModel, VideoModel } from '@/api/post/post.model'
 import { computed, onMounted, ref } from 'vue'
@@ -99,7 +113,14 @@ import { getBestImages, getImageInPreview } from '@/utils/imageUtils'
 import { extractDomain, removeLinkInSelfText, selfTextIsLinkFormat } from '@/utils/urlUtils'
 import SelfTextLink from '@/components/data-display/SelfTextLink.vue'
 import { formatElapsedTime } from '@/utils/dateUtils'
+import { useAppStore } from '@/stores/app.store'
+import { usePostStore } from '@/stores/post.store'
+import { useAuthStore } from '@/stores/auth.store'
 
+/*STORE*/
+const appStore = useAppStore()
+const postStore = usePostStore()
+const authStore = useAuthStore()
 /*PROPS*/
 const props = defineProps({
   post: { type: Object as PropType<PostModel>, required: true },
@@ -111,6 +132,7 @@ const video = ref(props.post?.data.media?.reddit_video as VideoModel)
 const poll = ref(props.post?.data.poll_data)
 const isLink = ref(selfTextIsLinkFormat(props.post.data.selftext) && !poll.value)
 const isVideo = ref(props.post.data.is_video)
+const isCardLayout = ref(authStore.prefs?.layout === 'card')
 const iframeUrl = ref(props.post?.data.secure_media_embed?.content)
 const hasAuthor = ref(
   props.post.data.author && 'u/' + props.post.data.author !== props.post.data.subreddit_name_prefixed
@@ -137,6 +159,10 @@ const images = computed(() => {
 })
 
 /*METHODS*/
+const openDeleteSwipe = () => {
+  appStore.setOpenDeleteSwipe(!appStore.openDeleteSwipe)
+  postStore.setDeletePostId(props.post?.data.name)
+}
 const getImage = () => {
   if (props.post?.data.preview) {
     image.value = getImageInPreview(props.post.data.preview)

@@ -2,7 +2,7 @@ import type { ImageInfoMap, PostModel, Preview } from '@/api/post/post.model'
 import { removeAmpUrl } from '@/utils/urlUtils'
 
 type Image = {
-  src: string
+  src?: string
   alt: string
 }
 
@@ -33,20 +33,22 @@ export const getBestImages = (previewData: ImageInfoMap): Image[] => {
 
   for (const key in previewData) {
     const resolutions = previewData[key].p
-    let bestFitImage = resolutions[0]
-    for (let i = 1; i < resolutions.length; i++) {
-      const resolution = resolutions[i]
-      if (resolution.x > bestFitImage.x && resolution.x <= screenWidth) {
-        bestFitImage = resolution
+    if (resolutions) {
+      let bestFitImage = resolutions[0]
+      for (let i = 1; i < resolutions.length; i++) {
+        const resolution = resolutions[i]
+        if (resolution.x > bestFitImage.x && resolution.x <= screenWidth) {
+          bestFitImage = resolution
+        }
       }
-    }
+      const isGif = previewData[key].m === 'image/gif'
+      const src = isGif ? previewData[key].s.gif : bestFitImage.u
 
-    const isGif = previewData[key].m === 'image/gif'
-    const src = isGif ? previewData[key].s.gif : bestFitImage.u
-    images.push({
-      src: removeAmpUrl(src),
-      alt: key,
-    })
+      images.push({
+        src: removeAmpUrl(src),
+        alt: key,
+      })
+    }
   }
 
   return images

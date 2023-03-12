@@ -22,9 +22,11 @@ export class Community extends BaseApi {
     await axios
       .get(url)
       .then((response) => {
-        for (const subreddit of response.data.data.children) {
-          const icon = removeAmpUrl(subreddit.data.community_icon || subreddit.data.icon_img)
-          icons[subreddit.data.display_name] = icon || null
+        if (response.data.data) {
+          for (const subreddit of response.data.data.children) {
+            const icon = removeAmpUrl(subreddit.data.community_icon || subreddit.data.icon_img)
+            icons[subreddit.data.display_name] = icon || null
+          }
         }
       })
       .catch((error) => {
@@ -53,8 +55,8 @@ export class Community extends BaseApi {
   }
 
   static async hotPostCommunity(communityName: string, after?: string, limit = 10) {
-    const url = `${this.redditCommonUrl}/r/${communityName}/hot.json?limit=${limit}&after=${after}`
-    const posts = await axios.get(url)
+    const url = `${this.oauthRedditUrl}/r/${communityName}/hot.json?limit=${limit}&after=${after}`
+    const posts = await axios.get(url, this.getOption())
     let children = posts.data?.data?.children
 
     if (children) {
@@ -69,10 +71,10 @@ export class Community extends BaseApi {
 
   static async getModerators(communityName: string) {
     const url = `${this.oauthRedditUrl}/r/${communityName}/about/moderators.json`
-    return await axios.get(url, super.getOption())
+    return await axios.get(url, Community.getOption())
   }
   static async getRules(communityName: string) {
     const url = `${this.oauthRedditUrl}/r/${communityName}/about/rules.json`
-    return await axios.get(url, super.getOption())
+    return await axios.get(url, Community.getOption())
   }
 }

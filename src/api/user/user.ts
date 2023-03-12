@@ -9,6 +9,21 @@ export class User extends BaseApi {
     return await axios.get(url, super.getOption())
   }
 
+  static async getPreferences() {
+    const url = `${this.oauthRedditUrl}/api/v1/prefs`
+    return await axios.get(url, this.getOption())
+  }
+
+  static async setPreferences(prefs: Record<string, boolean | string>) {
+    const url = `${this.oauthRedditUrl}/api/v1/prefs`
+    const options = {
+      headers: {
+        Authorization: 'Bearer ' + this.getAccessToken(),
+      },
+    }
+    await axios.patch(url, prefs, options)
+  }
+
   static async updateUserInfo(newDescription: string, newTitle: string) {
     const body = {
       public_description: newDescription,
