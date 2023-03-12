@@ -38,7 +38,7 @@
               {{ timestampToDate(community.created_utc) }}
             </span>
             <FollowButton
-              :color="community.key_color"
+              :color="authStore.prefs.show_stylesheets ? community.key_color : null"
               :follow="community.user_is_subscriber"
               @follow="followCommunity"
             />
@@ -56,8 +56,20 @@
       >
         <div
           v-if="currentTab === 0"
-          class="d-grid gap-2"
+          class="d-grid"
+          :class="isCardLayout ? 'gap-2' : null"
         >
+          <div class="flex items-center justify-center py-4 bg-grey-200">
+            <router-link
+              class="btn btn-small fit-content"
+              role="button"
+              data-variant="primary"
+              :to="{ path: community.display_name + '/create-post' }"
+              append
+            >
+              <PlusIcon /> Créer une publication
+            </router-link>
+          </div>
           <ScrollPagination
             :current-posts="currentPosts"
             @refresh="refreshPosts"
@@ -128,6 +140,7 @@
 
 <script lang="ts" setup>
 import Loader from '@/components/ui/Loader.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import Avatar from '@/components/data-display/Avatar.vue'
 import Spoiler from '@/components/data-display/Spoiler.vue'
 import FollowButton from '@/components/actions/FollowButton.vue'
@@ -146,6 +159,7 @@ import { SITE_NAME } from '@/env'
 import { timestampToDate } from '@/utils/dateUtils'
 import ScrollPagination from '@/components/navigation/ScrollPagination.vue'
 import { usePostStore } from '@/stores/post.store'
+import { useAuthStore } from '@/stores/auth.store'
 /*Hooks*/
 const route = useRoute()
 
@@ -163,6 +177,7 @@ const tabs = [
 /*STORE*/
 const appStore = useAppStore()
 const postStore = usePostStore()
+const authStore = useAuthStore()
 
 /*REFS*/
 const rules = ref<CommunityRuleModel[]>([])
@@ -170,6 +185,7 @@ const moderators = ref<CommunityModeratorModel[]>([])
 const community = ref({} as CommunityModel)
 const currentTab = ref(0)
 const after = ref()
+const isCardLayout = ref(authStore.prefs?.layout === 'card')
 const currentPosts = ref(0)
 
 /*METHODS*/

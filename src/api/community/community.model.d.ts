@@ -16,6 +16,7 @@ export type CommunityModel = {
   created_utc: number
   public_description: string
   user_is_subscriber: boolean
+  user_is_moderator?: boolean
   community_icon?: string
   banner_img?: string
   mobile_banner_image?: string

@@ -49,9 +49,10 @@ export class Post extends BaseApi {
 
   static async createPost(post: PostCommand) {
     const body = {
+      sr: post.sr,
       title: post.title,
       text: post.text,
-      submit_type: 'profile',
+      submit_type: post.submit_type,
       api_type: 'json',
       show_error_list: true,
       spoiler: post.spoiler,

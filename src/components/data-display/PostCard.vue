@@ -1,5 +1,8 @@
 <template>
-  <div class="d-grid gap-2 px-3 py-2 bg-grey-100 post-card">
+  <div
+    class="d-grid gap-2 px-3 py-2 bg-grey-100 post-card"
+    :class="!isCardLayout ? 'bb-1 border-grey-500' : null"
+  >
     <!-- Header -->
 
     <div class="flex justify-between items-center">
@@ -112,11 +115,12 @@ import SelfTextLink from '@/components/data-display/SelfTextLink.vue'
 import { formatElapsedTime } from '@/utils/dateUtils'
 import { useAppStore } from '@/stores/app.store'
 import { usePostStore } from '@/stores/post.store'
+import { useAuthStore } from '@/stores/auth.store'
 
 /*STORE*/
 const appStore = useAppStore()
 const postStore = usePostStore()
-
+const authStore = useAuthStore()
 /*PROPS*/
 const props = defineProps({
   post: { type: Object as PropType<PostModel>, required: true },
@@ -128,6 +132,7 @@ const video = ref(props.post?.data.media?.reddit_video as VideoModel)
 const poll = ref(props.post?.data.poll_data)
 const isLink = ref(selfTextIsLinkFormat(props.post.data.selftext) && !poll.value)
 const isVideo = ref(props.post.data.is_video)
+const isCardLayout = ref(authStore.prefs?.layout === 'card')
 const iframeUrl = ref(props.post?.data.secure_media_embed?.content)
 const hasAuthor = ref(
   props.post.data.author && 'u/' + props.post.data.author !== props.post.data.subreddit_name_prefixed

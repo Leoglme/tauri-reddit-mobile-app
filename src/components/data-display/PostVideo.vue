@@ -8,7 +8,7 @@
       ref="videoPlayer"
       :width="video.width"
       :height="video.height"
-      autoplay
+      :autoplay="autoplay"
       muted
       loop
       controls
@@ -45,6 +45,10 @@ import Loader from '@/components/ui/Loader.vue'
 import { computed, onMounted, ref } from 'vue'
 import type { PropType } from 'vue'
 import type { VideoModel } from '@/api/post/post.model'
+import { useAuthStore } from '@/stores/auth.store'
+
+/*STORE*/
+const authStore = useAuthStore()
 
 /*PROPS*/
 const props = defineProps({
@@ -55,6 +59,7 @@ const props = defineProps({
 const videoSrc = ref(props.video?.fallback_url)
 const videoPlayer = ref()
 const audioPlayer = ref()
+const autoplay = ref(authStore.prefs?.video_autoplay)
 const videoRendered = ref(false)
 
 /*Computed*/

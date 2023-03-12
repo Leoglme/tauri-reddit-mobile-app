@@ -1,16 +1,11 @@
 <template>
   <div class="flex items-center bb-1 border-grey-500 py-2">
-    <ArrowLeftIcon
-      class="clickable-icon"
-      fill-color="var(--grey-800)"
-      size="32px"
-    />
     <h1 class="w-full text-lg text-center">Créer une communauté</h1>
   </div>
 
   <Form
     v-slot="{ meta }"
-    class="w-full p-3"
+    class="w-full p-3 d-grid gap-3"
     @submit="createCommunity"
   >
     <TextInput
@@ -29,8 +24,15 @@
     <SelectVisibility />
 
     <div class="flex justify-between mb-3 mt-2">
-      <h3 class="text-grey-800">Communauté pour adulte</h3>
-      <Switch v-model:checked="checked" />
+      <label
+        class="font-semibold text-grey-800"
+        for="nfsw"
+        >Communauté pour adulte</label
+      >
+      <Switch
+        id="nfsw"
+        v-model:checked="checked"
+      />
     </div>
 
     <button
@@ -52,7 +54,6 @@
 </template>
 
 <script lang="ts" setup>
-import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import { Form } from 'vee-validate'
 import TextInput from '@/components/data-input/TextInput.vue'
 import SelectVisibility from '@/components/data-input/SelectVisibility.vue'

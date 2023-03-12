@@ -1,3 +1,5 @@
+import type { CommunityModel } from '@/api/community/community.model'
+
 export type UserModel = {
   icon_img?: string
   title: string
@@ -9,6 +11,8 @@ export type UserModel = {
   createdAt?: string
   user_is_subscriber: boolean
 
+  accept_followers: boolean
+  subreddit?: CommunityModel
   user_is_moderator: boolean
   subscribers: number
   comment_karma: number

@@ -10,7 +10,7 @@
       class="btnAnnuler"
       to="/"
     >
-      Annuler
+      <span class="font-semibold">Annuler</span>
     </router-link>
   </div>
   <SearchResultList :searchInput="searchInput" />
@@ -27,7 +27,6 @@ const searchInput = ref('')
 <style scoped>
 .btnAnnuler {
   width: 10vh;
-  font-size: 12px;
   color: var(--grey-700);
 }
 </style>

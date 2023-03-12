@@ -10,7 +10,6 @@
     <Field
       v-slot="{ meta, field }"
       v-model="valueRef"
-      :as="rows ? 'textarea' : undefined"
       :rows="rows"
       :rules="rules"
       class="h-full"
@@ -29,7 +28,24 @@
           class="prefix text-grey-700"
           >{{ prefix }}</span
         >
+        <textarea
+          v-if="rows"
+          v-bind="field"
+          :id="props.id"
+          ref="input"
+          :rows="rows"
+          class="input pr-3 py-2 w-full bg-grey-200 text-grey-800"
+          :style="[hasIcon ? 'padding-left: 40px' : null, round ? '--radius: 50px' : null]"
+          :placeholder="props.placeholder"
+          :class="[
+            meta.validated && !meta.valid ? 'error' : null,
+            type === 'search' ? 'pl-9' : 'pl-3',
+            prefix ? 'pl-5' : 'pl-3',
+          ]"
+        />
+
         <input
+          v-else
           v-bind="field"
           :id="props.id"
           ref="input"
@@ -43,7 +59,7 @@
             prefix ? 'pl-5' : 'pl-3',
           ]"
         />
-        <div class="relative-items flex items-center gap-2">
+        <div class="relative-items flex items-center gap-2 bg-grey-200">
           <span v-if="maxCharacter">{{ maxCharacter - valueRef.length }}</span>
           <CloseCircleOutline
             v-if="showReset"
@@ -163,14 +179,17 @@ const hasIcon = !!slot['default']
   bottom: 10px;
   right: 12px;
 }
+
 .toggle-password {
   cursor: pointer;
 }
+
 .toggle-password,
 .close-icon {
   & svg:hover path {
     fill: var(--grey-800);
   }
+
   & svg:active path {
     fill: var(--grey-700);
   }
@@ -188,6 +207,7 @@ const hasIcon = !!slot['default']
   &:hover:not(.error) {
     border-color: var(--grey-500);
   }
+
   &:focus:not(.error) {
     border-color: var(--primary);
   }
