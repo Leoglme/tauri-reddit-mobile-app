@@ -9,9 +9,9 @@
 }
 
 .bottom-sheet__content {
-  overflow-y: scroll;
-  height: var(--55aabca4);
   padding-bottom: 10px;
+  height: fit-content;
+  overflow-y: auto;
 }
 
 .bottom-sheet__backdrop {

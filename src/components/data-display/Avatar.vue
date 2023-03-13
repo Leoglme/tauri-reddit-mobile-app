@@ -1,6 +1,7 @@
 <template>
   <div
     class="round relative border-grey-200 flex border-grey-200 avatar"
+    :class="{ shadow }"
     :style="`width: ${size}px; height: ${size}px; padding: ${padding};`"
   >
     <div class="inner-round" />
@@ -21,6 +22,7 @@ const props = defineProps({
   size: { type: Number, default: 65 },
   image: { type: String, default: '/avatar.png' },
   title: { type: String, default: null },
+  shadow: { type: Boolean, default: false },
 })
 
 const isDefaultImage = ref(props.image === '/avatar.png')
@@ -46,7 +48,7 @@ const padding = computed(() => {
   top: 0;
 }
 
-.avatar {
+.avatar.shadow {
   box-shadow: rgba(0, 0, 0, 40%) 0 8px 28px 0;
 }
 </style>

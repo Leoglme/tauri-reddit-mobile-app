@@ -15,6 +15,7 @@
       <div class="h-full d-grid relative z-index-2">
         <div class="flex justify-between items-center px-3 py-2">
           <Avatar
+            shadow
             :image="community.community_icon"
             :size="90"
           />
@@ -67,7 +68,8 @@
               :to="{ path: community.display_name + '/create-post' }"
               append
             >
-              <PlusIcon /> Créer une publication
+              <PlusIcon />
+              Créer une publication
             </router-link>
           </div>
           <ScrollPagination
@@ -129,7 +131,8 @@
               :to="`/u/${moderator.name}`"
               class="px-4 py-2 text-grey-800 font-medium moderator cursor-pointer flex items-center justify-between"
             >
-              {{ moderator.name }} <ChevronRightIcon />
+              {{ moderator.name }}
+              <ChevronRightIcon />
             </router-link>
           </div>
         </div>
@@ -308,9 +311,11 @@ watch(
 .moderator:hover {
   background: var(--grey-200);
 }
+
 .moderator:active {
   background: var(--grey-400);
 }
+
 #community-profile {
   padding-top: var(--navbar-height);
 }
