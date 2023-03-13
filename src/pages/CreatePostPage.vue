@@ -1,44 +1,36 @@
 <template>
   <Loader v-if="appStore.loading" />
   <div v-else>
-    <Tabs
+    <div
       v-if="authorize"
-      :tabs="tabs"
+      class="p-3"
     >
-      <section class="p-3">
-        <Form
-          v-slot="{ meta }"
-          @submit="createPost"
+      <Form
+        v-slot="{ meta }"
+        class="d-grid gap-3"
+        @submit="createPost"
+      >
+        <TextInput
+          id="title"
+          label="Titre"
+          rules="required|max:300"
+          show-reset
+        />
+        <TextInput
+          id="text"
+          :rows="5"
+          label="Texte (facultatif)"
+        />
+        <button
+          :disabled="!meta.valid"
+          class="btn w-full mt-2"
+          :data-variant="meta.valid ? 'primary' : null"
+          type="submit"
         >
-          <TextInput
-            id="title"
-            label="Titre"
-            rules="required|max:300"
-            show-reset
-          />
-          <TextInput
-            id="text"
-            :rows="5"
-            label="Texte (facultatif)"
-          />
-          <button
-            :disabled="!meta.valid"
-            class="btn w-full"
-            :data-variant="meta.valid ? 'primary' : null"
-            type="submit"
-          >
-            Continuer
-          </button>
-        </Form>
-      </section>
-      <section>
-        <ImagesUploader />
-      </section>
-      <section></section>
-      <section>
-        <PollForm />
-      </section>
-    </Tabs>
+          Continuer
+        </button>
+      </Form>
+    </div>
     <div
       v-else
       class="p-6"
@@ -59,11 +51,8 @@
 </template>
 
 <script lang="ts" setup>
-import Tabs from '@/components/navigation/Tabs.vue'
 import { Form } from 'vee-validate'
 import TextInput from '@/components/data-input/TextInput.vue'
-import ImagesUploader from '@/components/data-input/ImagesUploader.vue'
-import PollForm from '@/components/data-input/PollForm.vue'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Loader from '@/components/ui/Loader.vue'
@@ -71,22 +60,6 @@ import { useAppStore } from '@/stores/app.store'
 import { User } from '@/api/user/user'
 import { Post } from '@/api/post/post'
 import type { UserModel } from '@/api/user/user.model'
-/*Todo sondage disable ?*/
-/*DATA*/
-const tabs = [
-  {
-    label: 'Publier',
-  },
-  {
-    label: 'Image et Vidéo',
-  },
-  {
-    label: 'Lien',
-  },
-  {
-    label: 'Sondage',
-  },
-]
 
 /*STORE*/
 const appStore = useAppStore()
@@ -129,9 +102,7 @@ getInfos()
 const createPost = async (command: { title: string; text?: string }) => {
   try {
     await Post.createPost({ sr: srName.value, submit_type: submitType.value, ...command })
-    setTimeout(async () => {
-      await router.push(`/${type.value}/${route.params.name}`)
-    }, 3000)
+    await router.push(`/${type.value}/${route.params.name}`)
   } catch (err) {
     console.log(err)
   }

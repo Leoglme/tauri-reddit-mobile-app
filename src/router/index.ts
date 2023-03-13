@@ -49,6 +49,7 @@ const router = createRouter({
       components: {
         default: CommunityPage,
         BottomNavigation: BottomNavigation,
+        Navbar: Navbar,
       },
     },
     {

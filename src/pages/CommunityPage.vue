@@ -146,7 +146,7 @@ import Spoiler from '@/components/data-display/Spoiler.vue'
 import FollowButton from '@/components/actions/FollowButton.vue'
 import Tabs from '@/components/navigation/Tabs.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import PostCard from '@/components/data-display/PostCard.vue'
 import { Community } from '@/api/community/community'
 import { useRoute } from 'vue-router'
@@ -204,7 +204,7 @@ const followCommunity = (isFollow: boolean) => {
 }
 
 const getCommunityPosts = async () => {
-  await Community.hotPostCommunity(communityName.value.toString(), after.value)
+  await Community.getPosts(communityName.value.toString(), appStore.getCurrentFilter, after.value)
     .then((res) => {
       postStore.setPosts(postStore.posts.concat(res.data.data.children))
       after.value = res.data.data.after
@@ -282,6 +282,17 @@ const refreshDatas = async () => {
 }
 
 refreshDatas()
+
+/*WATCHERS*/
+watch(
+  () => appStore.getCurrentFilter,
+  async () => {
+    appStore.setLoading(true)
+    postStore.setPosts([])
+    await getCommunityPosts()
+    appStore.setLoading(false)
+  }
+)
 </script>
 
 <style lang="scss" scoped>
@@ -299,5 +310,8 @@ refreshDatas()
 }
 .moderator:active {
   background: var(--grey-400);
+}
+#community-profile {
+  padding-top: var(--navbar-height);
 }
 </style>
