@@ -88,16 +88,16 @@ describe('Community', () => {
     })
   })
 
-  describe('hotPostCommunity', () => {
+  describe('getPosts', () => {
     it('should call axios.get with correct parameters', async () => {
       const communityName = 'test'
       const after = 'testAfter'
       const limit = 5
 
-      await Community.hotPostCommunity(communityName, after, limit)
+      await Community.getPosts(communityName, 'hot', after, limit)
 
       expect(axios.get).toHaveBeenCalledWith(
-        `${Community.oauthRedditUrl}/r/${communityName}/hot.json?limit=${limit}&after=${after}`,
+        `${Community.oauthRedditUrl}/r/${communityName}/hot?limit=${limit}&after=${after}`,
         Community.getOption()
       )
     })

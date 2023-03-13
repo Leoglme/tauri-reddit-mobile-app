@@ -15,6 +15,7 @@
       <div class="h-full d-grid relative z-index-2">
         <div class="flex justify-between items-center px-3 py-2">
           <Avatar
+            shadow
             :image="user.icon_img"
             :size="90"
           />
@@ -76,7 +77,8 @@
               :to="{ path: user.name + '/create-post' }"
               append
             >
-              <PlusIcon /> Créer une publication
+              <PlusIcon />
+              Créer une publication
             </router-link>
           </div>
 

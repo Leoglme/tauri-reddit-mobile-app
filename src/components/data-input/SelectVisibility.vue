@@ -17,12 +17,12 @@
       style="background: #000"
       max-height="40vh"
     >
-      <div class="d-grid gap-2 px-3">
+      <div class="d-grid gap-2">
         <h1 class="text-center text-white text-lg mb-2">Type de communauté</h1>
         <div
           v-for="visibility in visibilities"
           :key="visibility.value"
-          class="flex items-center gap-3 visibility-item"
+          class="flex items-center gap-3 visibility-item px-3 py-2"
           :class="{ active: visibility.value === activeVisibility.value }"
           @click="setActiveVisibility(visibility)"
         >
@@ -93,6 +93,13 @@ const setActiveVisibility = (visibility: Visibility) => {
     .select__visibility--label {
       color: var(--grey-800);
     }
+  }
+}
+.visibility-item {
+  cursor: pointer;
+
+  &:active {
+    background: var(--grey-600);
   }
 }
 </style>
